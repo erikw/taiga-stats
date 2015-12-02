@@ -11,7 +11,7 @@ $ taiga-stats --help
 
 ## Cumulative Flow Diagram
 
-From a [CFD](http://brodzinski.com/2013/07/cumulative-flow-diagram.html) a lot of interesting insights about your teams progress can be found. Therefore I deiced to write this script to save data on a daily basis with a cron job and a function for generating this diagram. This diagram can the be put on a TV visible in the hallways.
+From a [CFD](http://brodzinski.com/2013/07/cumulative-flow-diagram.html) a lot of interesting insights about your teams progress can be found. However I'm not found of repetive work like counting and enterying numbers in an Excel sheet. This had to be automated! Therefore I deiced to write this script to save data on a daily basis with a cron job and a function for generating this diagram. This diagram can the be put on a TV visible in the hallways.
 
 
 This is an example diagram generated from [mock data](cfd_example.dat):
