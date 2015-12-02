@@ -22,7 +22,8 @@ positional arguments:
                         that you have access to read.
     burnup              Print burn(up|down) statistics. Typically used for
                         entering in an Excel sheet or such that plots a bunup.
-    store_daily         Generate a Cumulative Flow Diagram from stored data.
+    store_daily         Store the current state of a project on file so that
+                        the cfd command can generate a diagram with this data.
     cfd                 Generate a Cumulative Flow Diagram from stored data.
     deps                Print user stories in .dot file format.
     deps_dot            Print US in .dot file format with dependencies too!
