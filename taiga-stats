@@ -485,7 +485,7 @@ def main():
 
     if args['command'] not in COMMAND2FUNC:
         print("Misconfiguration for argparse: subcommand not mapped to a function")
-        sys.exit(1)
+        return 1
     command_func = COMMAND2FUNC[args['command']]
     args.pop('command')
 
