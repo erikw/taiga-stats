@@ -55,6 +55,26 @@ This is an example diagram generated from [mock data](cfd_example.dat):
 ![Example CFD](cfd_example.png)
 
 
+To save the data and generate the diagram each working day I have this cronjob:
+
+```console
+$ crontab -l | grep taiga
+0 18 * * 1-5            $HOME/bin/taiga-stats_cron.sh
+```
+
+and the script `taiga-stats_cron.sh`:
+
+```bash
+#!/usr/bin/env bash
+
+source $HOME/dev/virtualenvs/py3env/bin/activate
+cd $HOME/dev/taiga-stats
+
+./taiga-stats store_daily --tag some_feature_tag
+./taiga-stats cfd --tag some_feature_tag
+```
+
+
 # Setup
 
 ## Virtual environment (optional)
