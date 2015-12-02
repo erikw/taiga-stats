@@ -1,8 +1,8 @@
 # Taiga Statistics Tool
 
-This is a scipt for all you "Kanban masters" who use Taiga and are interested in visualizing progress and generate some automated statistics.
+This is a script for all you "Kanban masters" who use Taiga and are interested in visualizing progress and generate some automated statistics.
 
-# Featurs
+# Features
 
 ```console
 $ taiga-stats --help
@@ -47,7 +47,7 @@ optional arguments:
 
 ## Cumulative Flow Diagram
 
-From a [CFD](http://brodzinski.com/2013/07/cumulative-flow-diagram.html) a lot of interesting insights about your teams progress can be found. Therefore I deciced to write this script to save data on a daily basis with a cron job and a function for generating this diagram. This diagram can the be put on a TV visible in the hallways.
+From a [CFD](http://brodzinski.com/2013/07/cumulative-flow-diagram.html) a lot of interesting insights about your teams progress can be found. Therefore I deiced to write this script to save data on a daily basis with a cron job and a function for generating this diagram. This diagram can the be put on a TV visible in the hallways.
 
 
 This is an example diagram generated from [mock data](cfd_example.dat):
