@@ -1,0 +1,498 @@
+#!/usr/bin/env python3
+
+import sys
+import os
+import re
+import argparse
+import datetime as dt
+from pprint import pprint
+from datetime import datetime, timezone
+import configparser
+
+import taiga
+import numpy
+import matplotlib.pyplot as pyplot
+import matplotlib.dates as mplotdates
+from matplotlib.dates import MONDAY
+from matplotlib.dates import MonthLocator, WeekdayLocator, DateFormatter
+
+################# Constants #####################
+
+
+CFD_DATA_FILE_TEMPLATE='cfd_{:s}.dat'
+CFD_OUT_PNG_TEMPLATE='cfd_{:s}.png'
+NO_ANNOTATION='NONE'
+TAG_MATCH_ALL='*'
+CUST_ATTRIB_DEPENDSON_NAME='Depends On'
+
+CONF_FILE_PATH='~/.taiga-stats.conf'
+CONF_FILE_NAME_TEMPLATE='taiga.conf.template'
+
+DOT_HEADER_TEMPLATE = """
+digraph {:s} {{
+  labelloc="t";
+  //labelfontsize="40"
+  label="{:s}";
+  //size="7.5,10"
+  ratio="compress"
+  //orientation=landscape
+"""
+
+
+################# Helper functions #####################
+
+def get_tag_str(tag):
+    return "" if tag == TAG_MATCH_ALL else tag
+
+
+def get_stories_with_tag(project, tag):
+    uss = project.list_user_stories()
+    ret_uss = None
+    if tag == TAG_MATCH_ALL:
+        ret_uss = uss
+    else:
+        ret_uss = []
+        for us in uss:
+            if us.tags and tag in us.tags:
+                ret_uss.append(us)
+
+    if ret_uss is None or len(ret_uss) == 0:
+        print("Warning: no userstories matching '{:s}' was found.".format(tag), file=sys.stderr)
+        sys.exit(1)
+    return ret_uss
+
+def get_us_stauts_id_from_name(project, name):
+    statuses = project.list_user_story_statuses()
+    for status in statuses:
+        if status.name == name:
+            return status.id
+    return None
+
+def get_us_status_name_from_id(project, status_id):
+    statuses = project.list_user_story_statuses()
+    for status in statuses:
+        if status.id == status_id:
+            return status.name
+    return None
+
+def remove_archived_stories(project, uss):
+    statuses = project.list_user_story_statuses()
+    archived_ids = [status.id for status in statuses if status.is_archived]
+    return [us for us in uss if us.status not in archived_ids]
+
+def remove_closed_stories(project, uss):
+    ret_uss = []
+    for us in uss:
+        if not us.is_closed:
+            ret_uss.append(us)
+    return ret_uss
+
+
+def get_statuses_sorted(project):
+    statuses = project.list_user_story_statuses()
+    return sorted(statuses, key=lambda status: status.order)
+
+def get_status_id_sorted(project):
+    return [status.id for status in get_statuses_sorted(project)]
+
+def get_status_and_names_sorted(project):
+    status_ids = get_status_id_sorted(project)[::-1]
+    status_names = []
+    for status_id in status_ids:
+        status_names.append(get_us_status_name_from_id(project, status_id))
+
+    return status_ids, status_names
+
+
+def get_dot_header(name, title):
+    return DOT_HEADER_TEMPLATE.format(name, title)
+
+
+def get_dot_footer():
+    return "}"
+
+def read_daily_cfd(path, tag):
+    data_file = CFD_DATA_FILE_TEMPLATE.format(get_tag_str(tag))
+    data_path = "{:s}/{:s}".format(path, data_file)
+    data = []
+    try:
+        with open(data_path, 'r') as fdata:
+            row = 0
+            for line in fdata:
+                line = line.rstrip()
+                parts = line.split('\t')
+                if row == 0:
+                    data  = [[] for _ in range(len(parts))]
+                else:
+                    for col in range(len(parts)):
+                        value = parts[col]
+                        if col == 0: # First col is dates
+                            value = dt.datetime.strptime(value, "%Y-%m-%d")
+                        elif col == 1: # Second col is annotations
+                            pass
+                        else:
+                            value = int(value)
+                        data[col].append(value)
+
+                row += 1
+    except IOError as e:
+        print("Could not read {:s}, error: {:s}".format(data_path, str(e)), file=sys.stderr)
+        sys.exit(2)
+
+    return data
+
+
+class assert_args(object):
+    """
+    Assert that the given arguments exists.
+    """
+
+    def __init__(self, *args):
+        self.needed_args = args
+
+    def __call__(self, func):
+        dec = self
+        def wrapper(args):
+            for arg in dec.needed_args:
+                if arg not in args or not args[arg]:
+                    print("Required argument ''{:s}' was not supplied on commandline or set in config file.".format(arg))
+                    sys.exit(1)
+            func(args)
+        return wrapper
+
+
+
+################# Commands #####################
+
+@assert_args('url', 'auth_token')
+def cmd_list_projects(args):
+    api = taiga.TaigaAPI(host=args['url'], token=args['auth_token'])
+
+    print("id\tname")
+    print("--\t----")
+    for proj in api.projects.list():
+        print("{:-3d}\t{:s}".format(proj.id, proj.name))
+
+
+@assert_args('url', 'auth_token', 'project_id', 'tag')
+def cmd_print_us_in_dep_format(args):
+    api = taiga.TaigaAPI(host=args['url'], token=args['auth_token'])
+    project = api.projects.get(args['project_id'])
+    tag = args['tag']
+
+    uss = get_stories_with_tag(project, tag)
+    uss = remove_archived_stories(project, uss)
+
+    for us in uss:
+        if us.is_closed:
+            color="green"
+        else:
+            color="black"
+        subject = re.sub("\"", '', us.subject)
+        print("  \"{:d}\" [label=\"#{:d} {:s}\", color=\"{:s}\"];".format(us.ref, us.ref, subject, color))
+
+@assert_args('url', 'auth_token', 'project_id', 'tag')
+def cmd_print_us_in_dep_format_dot(args):
+# TODO write file
+    api = taiga.TaigaAPI(host=args['url'], token=args['auth_token'])
+    project = api.projects.get(args['project_id'])
+    tag = args['tag']
+
+    titles = []
+    edges = []
+    header = get_dot_header(get_tag_str(tag), "%s US Dependency Graph -- MVP".format(get_tag_str(tag)))
+
+    uss = get_stories_with_tag(project, tag)
+    uss = remove_archived_stories(project, uss)
+
+    depson_attr_id = None
+    proj_attrs = project.list_user_story_attributes()
+    for attr in proj_attrs:
+        if attr.name == CUST_ATTRIB_DEPENDSON_NAME:
+            depson_attr_id = attr.id
+    if not depson_attr_id:
+            print("No custom User Story attribute named '{:s}' found!. Go to Settings>Attributes>Custom Fields and create one.".format(CUST_ATTRIB_DEPENDSON_NAME), file=sys.stderr)
+            sys.exit(1)
+
+    for us in uss:
+        if us.is_closed:
+            color="green"
+        else:
+            color="black"
+        subject = re.sub("\"", '', us.subject)
+
+        attrs = us.get_attributes()
+        if str(depson_attr_id) in attrs['attributes_values']:
+            deps = attrs['attributes_values'][str(depson_attr_id)].split(',')
+            for dep in deps:
+                dep = dep.lstrip('#')
+                edges.append('  "{:s}" -> "{:d}"'.format(dep, us.ref))
+
+        titles.append("  \"{:d}\" [label=\"#{:d} {:s}\", color=\"{:s}\"];".format(us.ref, us.ref, subject, color))
+
+    footer = get_dot_footer()
+    titles.sort()
+    edges.sort()
+
+    print(header)
+    print("\n  // Edges")
+    for edge in edges:
+        print(edge)
+    print("\n  // Titles")
+    for title in titles:
+        print(title)
+    print(footer)
+
+
+@assert_args('url', 'auth_token', 'project_id', 'tag')
+def cmd_print_burnup_data(args):
+    api = taiga.TaigaAPI(host=args['url'], token=args['auth_token'])
+    project = api.projects.get(args['project_id'])
+    tag = args['tag']
+
+    uss = get_stories_with_tag(project, tag)
+    uss = remove_archived_stories(project, uss)
+
+    nbr_done = 0
+    nbr_todo = 0
+    for us in uss:
+        if us.is_closed:
+            nbr_done += 1
+        else:
+            nbr_todo += 1
+
+    tag_str = " for tag {:s}".format(tag) if tag != TAG_MATCH_ALL else ""
+    print("Number of User Stories in categories{:s}.".format(tag_str))
+    print("Total (Archived excluded): {:d}".format(len(uss)))
+    print("Done: {:d}".format(nbr_done))
+    print("TODO: {:d}".format(nbr_todo))
+
+
+@assert_args('url', 'auth_token', 'project_id', 'tag', 'output_path')
+def cmd_store_daily_stats(args):
+    api = taiga.TaigaAPI(host=args['url'], token=args['auth_token'])
+    project = api.projects.get(args['project_id'])
+    tag = args['tag']
+    output_path = args['output_path']
+
+    status_ids, status_names = get_status_and_names_sorted(project)
+    uss = get_stories_with_tag(project, tag)
+    us_by_status = {status_id : [] for status_id in status_ids}
+    for us in uss:
+        us_by_status[us.status].append(us)
+
+    data_file = CFD_DATA_FILE_TEMPLATE.format(get_tag_str(tag))
+    data_path = "{:s}/{:s}".format(output_path, data_file)
+    if not os.path.isfile(data_path):
+        with open(data_path, 'w') as fdata:
+            fdata.write("#date")
+            fdata.write("\tannotation")
+            fdata.write("\tannotation_layer")
+            for status_id in status_ids:
+                fdata.write("\t{:s}".format(get_us_status_name_from_id(project, status_id)))
+            fdata.write("\n")
+
+
+    with open(data_path, 'a') as fdata:
+        fdata.write("{:s}".format(datetime.utcnow().strftime("%Y-%m-%d")))
+        fdata.write("\t{:s}".format(NO_ANNOTATION))
+        fdata.write("\t{:d}".format(0))
+        for status_id in status_ids:
+            no_uss = len(us_by_status[status_id])
+            fdata.write("\t{:d}".format(no_uss))
+        fdata.write("\n")
+
+    tag_str = " for {:s}".format(tag) if tag != TAG_MATCH_ALL else ""
+    print("Daily stats{:s} stored at: {:s}".format(tag_str, output_path))
+
+
+@assert_args('url', 'auth_token', 'project_id', 'tag', 'output_path')
+def cmd_gen_cfd(args):
+    api = taiga.TaigaAPI(host=args['url'], token=args['auth_token'])
+    project = api.projects.get(args['project_id'])
+    tag = args['tag']
+    output_path = args['output_path']
+
+    _, status_names = get_status_and_names_sorted(project)
+
+    data = read_daily_cfd(output_path, tag)
+    dates = data[0]
+    annotations = data[1]
+    annotation_layer = data[2]
+    data = data[3:]
+
+    # Plotting
+    y = numpy.row_stack(tuple(data))
+    x = dates
+
+    fig, ax = pyplot.subplots()
+    fig.set_size_inches(w=18.0, h=10)
+    tag_str = " for {:s}".format(tag) if tag != TAG_MATCH_ALL else ""
+    fig.suptitle("Cumulative Flow Diagram{:s}".format(tag_str))
+    pyplot.xlabel('Week', fontsize=18)
+    pyplot.ylabel('Number of USs', fontsize=16)
+    polys = ax.stackplot(x, y)
+
+
+    # X-axis, plot per week.
+    mondays = WeekdayLocator(MONDAY)
+    # months = MonthLocator(range(1, 13), bymonthday=1, interval=1)
+    # monthsFmt = DateFormatter("%b '%y")
+    weeks = WeekdayLocator(byweekday=MONDAY, interval=1)
+    # weeksFmt = DateFormatter("%W ('%y)")
+    weeksFmt = DateFormatter("%W")
+    ax.xaxis.set_major_locator(weeks)
+    ax.xaxis.set_major_formatter(weeksFmt)
+    ax.xaxis.set_minor_locator(mondays)
+    ax.autoscale_view()
+    # ax.grid(True)
+    fig.autofmt_xdate()
+
+    # Draw annotations of the data.
+    bbox_props = dict(boxstyle="round4,pad=0.3", fc="white", ec="black", lw=2)
+    for i, annotation in enumerate(annotations):
+        if annotation != NO_ANNOTATION:
+            y_coord = 0 # Calculate the Y coordnate by stacking up y values below.
+            for j in range(annotation_layer[i] + 1):
+                y_coord += y[j][i]
+            ax.text(x[i], y_coord, annotation, ha="center", va="center", rotation=30, size=10, bbox=bbox_props)
+
+
+    # Legend
+    legendProxies = []
+    for poly in polys:
+        legendProxies.append(pyplot.Rectangle((0, 0), 1, 1, fc=poly.get_facecolor()[0]))
+    box = ax.get_position()
+    ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+    ax.legend(reversed(legendProxies), reversed(status_names), title="Color chart", loc='center left', bbox_to_anchor=(1, 0.5))
+
+
+    out_file = CFD_OUT_PNG_TEMPLATE.format(get_tag_str(tag))
+    out_path = "{:s}/{:s}".format(output_path, out_file)
+    pyplot.savefig(out_path)
+
+
+@assert_args('output_path')
+def cmd_gen_config_template(args):
+    output_path = args['output_path']
+
+    config = configparser.ConfigParser()
+    config['taiga'] = {
+                        'url': 'https://tree.taiga.io/',
+                        'auth_token': '',
+                      }
+    config['default_values'] = {
+                        'project_id': '',
+                        'tag': '',
+                        'output_path': '',
+                      }
+
+    fpath = "{:s}/{:s}".format(output_path, CONF_FILE_NAME_TEMPLATE)
+    try:
+        with open(fpath, 'w') as configfile:
+            config.write(configfile)
+    except IOError:
+        print("Could not create {:s}".format(fpath), file=sys.stderr)
+        sys.exit(2)
+
+    print("Template created. Rename and edit it:\n$ mv {:s} {:s}".format(fpath, CONF_FILE_PATH))
+
+
+################# Main configuration #####################
+
+def read_config():
+    url = None
+    auth_token = None
+    project_id = None
+    tag = None
+    output_path = None
+
+    config = configparser.ConfigParser()
+    config.read(os.path.expanduser(CONF_FILE_PATH))
+
+    if 'taiga' in config:
+        taiga = config['taiga']
+        if 'url' in taiga:
+            url = taiga['url']
+        if 'auth_token' in taiga:
+            auth_token = taiga['auth_token']
+
+    if 'default_values' in config:
+        def_values = config['default_values']
+        if 'project_id' in def_values:
+            project_id = def_values['project_id']
+            if project_id:
+                project_id = int(project_id)
+        if 'tag' in def_values:
+            tag = def_values['tag']
+        if 'output_path' in def_values:
+            output_path = def_values['output_path']
+
+    return url, auth_token, project_id, tag, output_path
+
+
+COMMAND2FUNC = {
+    'burnup' : cmd_print_burnup_data,
+    'cfd' : cmd_gen_cfd,
+    'config_template' : cmd_gen_config_template,
+    'deps' : cmd_print_us_in_dep_format,
+    'deps_dot' : cmd_print_us_in_dep_format_dot,
+    'list_projects' : cmd_list_projects,
+    'store_daily' : cmd_store_daily_stats,
+}
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Taiga statistic tool. Default values for many options can be set config file; see the command 'gen-config-template'.")
+
+    # General options
+    parser.add_argument('--url', help="URL to Taiga server.")
+    parser.add_argument('--auth-token', help="Authentication token. Instructions on how to get one is found at {:s}".format('https://taigaio.github.io/taiga-doc/dist/api.html#_authentication'))
+
+    # Common options to commands
+    opt_tag = argparse.ArgumentParser(add_help=False)
+    opt_tag.add_argument('--tag', help="Taiga tag to use. Defaults is to not filter which can also be achived by giving the value '*' to this option.")
+
+    opt_project_id = argparse.ArgumentParser(add_help=False)
+    opt_project_id.add_argument('--project-id', help="Project ID in Taiga to get data from.")
+
+    opt_output_path = argparse.ArgumentParser(add_help=False)
+    opt_output_path.add_argument('--output-path', help="Store daily statistics for later usage with the 'cfd' command.")
+
+    # Commands
+    subparsers = parser.add_subparsers(help='Commands. Run $(taiga-stats <func> -h) for more info about a function.', dest='command')
+    subparsers.required = True
+
+    parser_config_template = subparsers.add_parser('config_template', parents=[opt_output_path], help="Generate a template configuration file.")
+    parser_list_projects = subparsers.add_parser('list_projects', help="List all found project IDs and names on the server that you have access to read.")
+    parser_burnup = subparsers.add_parser('burnup', parents=[opt_project_id, opt_tag], help="Print burn(up|down) statistics. Typically used for entering in an Excel sheet or such that plots a bunup.",)
+    parser_store_daily = subparsers.add_parser('store_daily', parents=[opt_project_id, opt_tag, opt_output_path], help="Function: Generate a Cumulative Flow Diagram from stored data.")
+    parser_cfd = subparsers.add_parser('cfd', parents=[opt_project_id, opt_tag, opt_output_path], help="Function: Generate a Cumulative Flow Diagram from stored data.")
+    parser_deps = subparsers.add_parser('deps', parents=[opt_project_id, opt_tag], help="Print US in .dot file format.")
+    parser_deps_dot = subparsers.add_parser('deps_dot', parents=[opt_project_id, opt_tag], help="Print US in .dot file format with dependencies too! Create a custom attribute for User Stories named '{:s}' by going to Settings>Attributes>Custom Fields. Then go to a User Story and put in a comma separated list of stories that this story depends on e.g. '#123,#456'.  How to generate a PNG file from output: $ unflatten -l1 -c5 a.dot | dot -T png -o a.png".format(CUST_ATTRIB_DEPENDSON_NAME))
+
+    return vars(parser.parse_args())
+
+
+def main():
+    args = parse_args()
+    cnf_url, cnf_auth_token, cnf_project_id, cnf_tag, cnf_output_path = read_config()
+
+    args['url'] = args['url'] if 'url' in args and args['url'] else cnf_url
+    args['auth_token'] = args['auth_token'] if 'auth_token' in args and args['auth_token'] else cnf_auth_token
+    args['project_id'] = args['project_id'] if 'project_id' in args and args['project_id'] else cnf_project_id
+    args['tag'] = args['tag'] if 'tag' in args and args['tag'] else cnf_tag if cnf_tag else TAG_MATCH_ALL
+    args['output_path'] = args['output_path'] if 'output_path' in args and args['output_path'] else cnf_output_path if cnf_output_path else "."
+
+    if args['command'] not in COMMAND2FUNC:
+        print("Misconfiguration for argparse: subcommand not mapped to a function")
+        sys.exit(1)
+    command_func = COMMAND2FUNC[args['command']]
+    args.pop('command')
+
+    command_func(args)
+
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())

@@ -1,0 +1,6 @@
+*.dat
+*.png
+taiga.conf
+taiga.conf.template
+build/
+dist/

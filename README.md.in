@@ -1,0 +1,57 @@
+# Taiga Statistics Tool
+
+This is a scipt for all you "Kanban masters" who use Taiga and are interested in visualizing progress and generate some automated statistics.
+
+# Featurs
+
+```console
+$ taiga-stats --help
+<insert-helptext-here>
+```
+
+## Cumulative Flow Diagram
+
+From a [CFD](http://brodzinski.com/2013/07/cumulative-flow-diagram.html) a lot of interesting insights about your teams progress can be found. Therefore I deciced to write this script to save data on a daily basis with a cron job and a function for generating this diagram. This diagram can the be put on a TV visible in the hallways.
+
+
+This is an example diagram generated from [mock data](cfd_example.dat):
+
+![Example CFD](cfd_example.png)
+
+
+# Setup
+
+## Virtual environment (optional)
+
+It is recommended to use virtual environment to not pollute your system.
+
+```console
+$ sudo apt-get install python3-dev
+$ cd some/dev/dir
+$ virtualenv -p /usr/bin/python3 py3env
+$ source py3env/bin/activate
+```
+
+## Dependencies
+
+Use either
+
+pip (recommended)
+
+```console
+$ pip install -r requirements.txt
+```
+
+or setuptools
+
+```console
+$ python setup.py install
+```
+
+## Taiga-stats
+
+```console
+$ git clone TODO
+$ cd taiga-stats
+$ ./taiga-stats
+```
