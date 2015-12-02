@@ -465,9 +465,9 @@ def parse_args():
     parser_config_template = subparsers.add_parser('config_template', parents=[opt_output_path], help="Generate a template configuration file.")
     parser_list_projects = subparsers.add_parser('list_projects', help="List all found project IDs and names on the server that you have access to read.")
     parser_burnup = subparsers.add_parser('burnup', parents=[opt_project_id, opt_tag], help="Print burn(up|down) statistics. Typically used for entering in an Excel sheet or such that plots a bunup.",)
-    parser_store_daily = subparsers.add_parser('store_daily', parents=[opt_project_id, opt_tag, opt_output_path], help="Function: Generate a Cumulative Flow Diagram from stored data.")
-    parser_cfd = subparsers.add_parser('cfd', parents=[opt_project_id, opt_tag, opt_output_path], help="Function: Generate a Cumulative Flow Diagram from stored data.")
-    parser_deps = subparsers.add_parser('deps', parents=[opt_project_id, opt_tag], help="Print US in .dot file format.")
+    parser_store_daily = subparsers.add_parser('store_daily', parents=[opt_project_id, opt_tag, opt_output_path], help="Generate a Cumulative Flow Diagram from stored data.")
+    parser_cfd = subparsers.add_parser('cfd', parents=[opt_project_id, opt_tag, opt_output_path], help="Generate a Cumulative Flow Diagram from stored data.")
+    parser_deps = subparsers.add_parser('deps', parents=[opt_project_id, opt_tag], help="Print user stories in .dot file format.")
     parser_deps_dot = subparsers.add_parser('deps_dot', parents=[opt_project_id, opt_tag], help="Print US in .dot file format with dependencies too! Create a custom attribute for User Stories named '{:s}' by going to Settings>Attributes>Custom Fields. Then go to a User Story and put in a comma separated list of stories that this story depends on e.g. '#123,#456'.  How to generate a PNG file from output: $ unflatten -l1 -c5 a.dot | dot -T png -o a.png".format(CUST_ATTRIB_DEPENDSON_NAME))
 
     return vars(parser.parse_args())

@@ -22,11 +22,9 @@ positional arguments:
                         that you have access to read.
     burnup              Print burn(up|down) statistics. Typically used for
                         entering in an Excel sheet or such that plots a bunup.
-    store_daily         Function: Generate a Cumulative Flow Diagram from
-                        stored data.
-    cfd                 Function: Generate a Cumulative Flow Diagram from
-                        stored data.
-    deps                Print US in .dot file format.
+    store_daily         Generate a Cumulative Flow Diagram from stored data.
+    cfd                 Generate a Cumulative Flow Diagram from stored data.
+    deps                Print user stories in .dot file format.
     deps_dot            Print US in .dot file format with dependencies too!
                         Create a custom attribute for User Stories named
                         'Depends On' by going to Settings>Attributes>Custom
