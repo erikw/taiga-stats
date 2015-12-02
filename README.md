@@ -87,7 +87,7 @@ $ python setup.py install
 ## Taiga-stats
 
 ```console
-$ git clone TODO
+$ git clone https://github.com/erikw/taiga-stats.git
 $ cd taiga-stats
-$ ./taiga-stats
+$ ./taiga-stats -h
 ```
