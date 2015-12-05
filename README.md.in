@@ -106,3 +106,14 @@ $ git clone https://github.com/erikw/taiga-stats.git
 $ cd taiga-stats
 $ ./taiga-stats -h
 ```
+
+## Config file
+
+It is tedious to have to specify the server URL, authentication token everytime. Also you typically work with some project at a time and would like to have default values for the project to use and maybe which tag to filter on. You can genearte a configuration file to set these default values.
+
+
+```console
+$ taiga-stats config_template
+$ mv ./taiga.conf.template ~/.taiga-stats.conf
+$ vi ~/.taiga-stats.conf
+```
