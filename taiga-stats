@@ -378,7 +378,7 @@ def cmd_gen_config_template(args):
 
     config = configparser.ConfigParser()
     config['taiga'] = {
-                        'url': 'https://tree.taiga.io/',
+                        'url': 'https://api.taiga.io/',
                         'auth_token': '',
                       }
     config['default_values'] = {
@@ -459,7 +459,7 @@ def parse_args():
     opt_output_path.add_argument('--output-path', help="Store daily statistics for later usage with the 'cfd' command.")
 
     # Commands
-    subparsers = parser.add_subparsers(help='Commands. Run $(taiga-stats <func> -h) for more info about a function.', dest='command')
+    subparsers = parser.add_subparsers(help='Commands. Run $(taiga-stats <command> -h) for more info about a command.', dest='command')
     subparsers.required = True
 
     parser_config_template = subparsers.add_parser('config_template', parents=[opt_output_path], help="Generate a template configuration file.")

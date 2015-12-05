@@ -15,8 +15,8 @@ see the command 'config_template'.
 
 positional arguments:
   {config_template,list_projects,burnup,store_daily,cfd,deps,deps_dot}
-                        Commands. Run $(taiga-stats <func> -h) for more info
-                        about a function.
+                        Commands. Run $(taiga-stats <command> -h) for more
+                        info about a command.
     config_template     Generate a template configuration file.
     list_projects       List all found project IDs and names on the server
                         that you have access to read.
