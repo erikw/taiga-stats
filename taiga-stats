@@ -157,7 +157,7 @@ class assert_args(object):
             for arg in dec.needed_args:
                 if arg not in args or not args[arg]:
                     print("Required argument ''{:s}' was not supplied on commandline or set in config file.".format(arg))
-                    sys.exit(1)
+                    return 1
             func(args)
         return wrapper
 
@@ -173,6 +173,8 @@ def cmd_list_projects(args):
     print("--\t----")
     for proj in api.projects.list():
         print("{:-3d}\t{:s}".format(proj.id, proj.name))
+
+    return 0
 
 
 @assert_args('url', 'auth_token', 'project_id', 'tag')
@@ -191,6 +193,8 @@ def cmd_print_us_in_dep_format(args):
             color = "black"
         subject = re.sub("\"", '', us.subject)
         print("  \"{:d}\" [label=\"#{:d} {:s}\", color=\"{:s}\"];".format(us.ref, us.ref, subject, color))
+
+    return 0
 
 
 @assert_args('url', 'auth_token', 'project_id', 'tag', 'output_path')
@@ -214,7 +218,7 @@ def cmd_us_in_dep_format_dot(args):
             depson_attr_id = attr.id
     if not depson_attr_id:
             print("No custom User Story attribute named '{:s}' found!. Go to Settings>Attributes>Custom Fields and create one.".format(CUST_ATTRIB_DEPENDSON_NAME), file=sys.stderr)
-            sys.exit(1)
+            return 1
 
     for us in uss:
         if us.is_closed:
@@ -257,7 +261,7 @@ def cmd_us_in_dep_format_dot(args):
         print("Could not write file {:s}: {:s}".format(file_path, str(err)), file=sys.stderr)
         return 1
 
-# TODO return error from function to sys.exit in main() instead of exiting self.
+    return 0
 
 @assert_args('url', 'auth_token', 'project_id', 'tag')
 def cmd_print_burnup_data(args):
@@ -281,6 +285,8 @@ def cmd_print_burnup_data(args):
     print("Total (Archived excluded): {:d}".format(len(uss)))
     print("Done: {:d}".format(nbr_done))
     print("TODO: {:d}".format(nbr_todo))
+
+    return 0
 
 
 @assert_args('url', 'auth_token', 'project_id', 'tag', 'output_path')
@@ -319,6 +325,8 @@ def cmd_store_daily_stats(args):
 
     tag_str = " for {:s}".format(tag) if tag != TAG_MATCH_ALL else ""
     print("Daily stats{:s} stored at: {:s}".format(tag_str, output_path))
+
+    return 0
 
 
 @assert_args('url', 'auth_token', 'project_id', 'tag', 'output_path')
@@ -386,6 +394,8 @@ def cmd_gen_cfd(args):
     out_path = "{:s}/{:s}".format(output_path, out_file)
     pyplot.savefig(out_path)
 
+    return 0
+
 
 @assert_args('output_path')
 def cmd_gen_config_template(args):
@@ -408,9 +418,10 @@ def cmd_gen_config_template(args):
             config.write(configfile)
     except IOError:
         print("Could not create {:s}".format(fpath), file=sys.stderr)
-        sys.exit(2)
+        return 1
 
     print("Template created. Rename and edit it:\n$ mv {:s} {:s}".format(fpath, CONF_FILE_PATH))
+    return 0
 
 
 ################# Main configuration #####################
@@ -504,9 +515,7 @@ def main():
     command_func = COMMAND2FUNC[args['command']]
     args.pop('command')
 
-    command_func(args)
-
-    return 0
+    return command_func(args)
 
 
 if __name__ == '__main__':
