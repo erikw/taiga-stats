@@ -1,0 +1,43 @@
+digraph  {
+  labelloc="t";
+  //labelfontsize="40"
+  label="Example US Dependency Graph";
+  //size="7.5,10"
+  ratio="compress"
+  //orientation=landscape
+
+  // Edges
+  "1" -> "13"
+  "1" -> "16"
+  "10" -> "14"
+  "10" -> "15"
+  "13" -> "14"
+  "13" -> "15"
+  "16" -> "19"
+  "19" -> "15"
+  "2" -> "10"
+  "2" -> "13"
+  "2" -> "20"
+  "21" -> "1"
+  "21" -> "2"
+  "21" -> "3"
+  "22" -> "1"
+  "22" -> "2"
+  "22" -> "3"
+  "3" -> "13"
+  "3" -> "20"
+
+  // Titles
+  "1" [label="#1 Feature N", color="green"];
+  "10" [label="#10 Feature Z", color="black"];
+  "13" [label="#13 Feature A", color="black"];
+  "14" [label="#14 Feature M", color="black"];
+  "15" [label="#15 Feature B", color="black"];
+  "16" [label="#16 Ticket #12", color="green"];
+  "19" [label="#19 Feature X", color="black"];
+  "2" [label="#2 Feature V", color="black"];
+  "20" [label="#20 Feature Y", color="black"];
+  "21" [label="#21 Feature Z", color="green"];
+  "22" [label="#22 Feature C", color="green"];
+  "3" [label="#3 Feature D", color="black"];
+}

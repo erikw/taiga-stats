@@ -7,14 +7,14 @@ This is a script for all you "Kanban masters" who use Taiga and are interested i
 ```console
 $ taiga-stats --help
 usage: taiga-stats [-h] [--url URL] [--auth-token AUTH_TOKEN]
-                   {config_template,list_projects,burnup,store_daily,cfd,deps,deps_dot}
+                   {config_template,list_projects,burnup,store_daily,cfd,deps_dot_nodes,deps_dot}
                    ...
 
 Taiga statistic tool. Default values for many options can be set config file;
 see the command 'config_template'.
 
 positional arguments:
-  {config_template,list_projects,burnup,store_daily,cfd,deps,deps_dot}
+  {config_template,list_projects,burnup,store_daily,cfd,deps_dot_nodes,deps_dot}
                         Commands. Run $(taiga-stats <command> -h) for more
                         info about a command.
     config_template     Generate a template configuration file.
@@ -25,15 +25,13 @@ positional arguments:
     store_daily         Store the current state of a project on file so that
                         the cfd command can generate a diagram with this data.
     cfd                 Generate a Cumulative Flow Diagram from stored data.
-    deps                Print user stories in .dot file format.
+    deps_dot_nodes      Print user stories nodees in .dot file format.
     deps_dot            Print US in .dot file format with dependencies too!
                         Create a custom attribute for User Stories named
                         'Depends On' by going to Settings>Attributes>Custom
                         Fields. Then go to a User Story and put in a comma
                         separated list of stories that this story depends on
-                        e.g. '#123,#456'. How to generate a PNG file from
-                        output: $ unflatten -l1 -c5 a.dot | dot -T png -o
-                        a.png
+                        e.g. '#123,#456'.
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -46,12 +44,12 @@ optional arguments:
 
 ## Cumulative Flow Diagram
 
-From a [CFD](http://brodzinski.com/2013/07/cumulative-flow-diagram.html) a lot of interesting insights about your team's progress [can be found](http://paulklipp.com/images/Interpreting_a_Cumulative_Flow_Diagram.jpg). However I'm not found of repetive work like counting and enterying numbers in an Excel sheet. This had to be automated! Therefore I deiced to write this script to save data on a daily basis with a cron job and a function for generating this diagram. This diagram can the be put on a TV visible in the hallways.
+From a [CFD](http://brodzinski.com/2013/07/cumulative-flow-diagram.html) a lot of interesting insights about your team's progress [can be found](http://paulklipp.com/images/Interpreting_a_Cumulative_Flow_Diagram.jpg). However I'm not found of repetitive work like counting and entering numbers in an Excel sheet. This had to be automated! Therefore I deiced to write this script to save data on a daily basis with a cron job and a function for generating this diagram. This diagram can the be put on a TV visible in the hallways.
 
 
-This is an example diagram generated from [mock data](cfd_example.dat):
+This is an example diagram generated from [mock data](sample_data/cfd_example.dat):
 
-![Example CFD](cfd_example.png)
+![Example CFD](img/cfd_example.png)
 
 
 To save the data and generate the diagram each working day I have this cronjob:
@@ -72,6 +70,30 @@ cd $HOME/dev/taiga-stats
 ./taiga-stats store_daily --tag some_feature_tag
 ./taiga-stats cfd --tag some_feature_tag
 ```
+
+## User Story Dependency Graph
+
+Some stories requires other to be completed before they can be started. I thought it would be handy if you could keep track of these dependencies in Taiga but simply writing for each US a list of other stories that this story depends on. Then from this information a  `.dot` file can be generated that should how you user stories depends on each other. This graph is very useful for work planning i.e. what to start with and how much parallelization is possible and at what stages.
+
+First create a new custom filed in taiga named `Depends on` under Settings > Attributes > Custom Fields:
+
+![Custom Field](img/taiga_custom_field.png)
+
+
+Then go to you stories and enter some dependencies as demonstrated below.
+
+![US dependency](img/us_depends_on.png)
+
+
+Then run the script and generate a png file.
+
+
+```console
+$ taiga-stats deps_dot
+$ dot -T png -o ./dependencies.png ./dependencies.dot
+```
+
+![US Dependency Graph](img/dependencies_example.png)
 
 
 # Setup

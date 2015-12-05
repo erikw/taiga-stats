@@ -28,8 +28,9 @@ CUST_ATTRIB_DEPENDSON_NAME='Depends On'
 CONF_FILE_PATH='~/.taiga-stats.conf'
 CONF_FILE_NAME_TEMPLATE='taiga.conf.template'
 
-DOT_HEADER_TEMPLATE = """
-digraph {:s} {{
+DEPS_DOT_FILE_TEMPLATE='dependencies_{:s}'
+
+DOT_HEADER_TEMPLATE = """digraph {:s} {{
   labelloc="t";
   //labelfontsize="40"
   label="{:s}";
@@ -185,22 +186,23 @@ def cmd_print_us_in_dep_format(args):
 
     for us in uss:
         if us.is_closed:
-            color="green"
+            color = "green"
         else:
-            color="black"
+            color = "black"
         subject = re.sub("\"", '', us.subject)
         print("  \"{:d}\" [label=\"#{:d} {:s}\", color=\"{:s}\"];".format(us.ref, us.ref, subject, color))
 
-@assert_args('url', 'auth_token', 'project_id', 'tag')
+
+@assert_args('url', 'auth_token', 'project_id', 'tag', 'output_path')
 def cmd_print_us_in_dep_format_dot(args):
-# TODO write file
     api = taiga.TaigaAPI(host=args['url'], token=args['auth_token'])
     project = api.projects.get(args['project_id'])
     tag = args['tag']
+    output_path = args['output_path']
 
     titles = []
     edges = []
-    header = get_dot_header(get_tag_str(tag), "%s US Dependency Graph -- MVP".format(get_tag_str(tag)))
+    header = get_dot_header(get_tag_str(tag), "{:s} US Dependency Graph".format(get_tag_str(tag)))
 
     uss = get_stories_with_tag(project, tag)
     uss = remove_archived_stories(project, uss)
@@ -234,15 +236,29 @@ def cmd_print_us_in_dep_format_dot(args):
     titles.sort()
     edges.sort()
 
-    print(header)
-    print("\n  // Edges")
-    for edge in edges:
-        print(edge)
-    print("\n  // Titles")
-    for title in titles:
-        print(title)
-    print(footer)
+    # TODO file output path
+    file_name_base = DEPS_DOT_FILE_TEMPLATE.format(get_tag_str(tag))
+    file_name = file_name_base + ".dot"
+    file_path = "{:s}/{:s}".format(output_path, file_name)
+    try:
+        with open(file_path, 'w') as fh:
+            fh.write(header)
+            fh.write("\n  // Edges\n")
+            for edge in edges:
+                fh.write("{:s}\n".format(edge))
+            fh.write("\n  // Titles\n")
+            for title in titles:
+                fh.write("{:s}\n".format(title))
+            fh.write(footer)
+            print("Dependency graph written to: {:s}\n".format(file_path))
+            print("Generate a png with e.g.")
+            print("$ dot -T png -o {:s}/{:s}.png {:s}".format(output_path, file_name_base, file_path))
+            print("$ unflatten -l1 -c5 {:s} | dot -T png -o {:s}/{:s}.png".format(file_name, output_path, file_name_base))
+    except IOError as err:
+        print("Could not write file {:s}: {:s}".format(file_path, str(err)), file=sys.stderr)
+        return 1
 
+# TODO return error from function to sys.exit in main() instead of exiting self.
 
 @assert_args('url', 'auth_token', 'project_id', 'tag')
 def cmd_print_burnup_data(args):
@@ -468,7 +484,7 @@ def parse_args():
     parser_store_daily = subparsers.add_parser('store_daily', parents=[opt_project_id, opt_tag, opt_output_path], help="Store the current state of a project on file so that the cfd command can generate a diagram with this data.")
     parser_cfd = subparsers.add_parser('cfd', parents=[opt_project_id, opt_tag, opt_output_path], help="Generate a Cumulative Flow Diagram from stored data.")
     parser_deps = subparsers.add_parser('deps_dot_nodes', parents=[opt_project_id, opt_tag], help="Print user stories nodees in .dot file format.")
-    parser_deps_dot = subparsers.add_parser('deps_dot', parents=[opt_project_id, opt_tag], help="Print US in .dot file format with dependencies too! Create a custom attribute for User Stories named '{:s}' by going to Settings>Attributes>Custom Fields. Then go to a User Story and put in a comma separated list of stories that this story depends on e.g. '#123,#456'.  How to generate a PNG file from output: $ unflatten -l1 -c5 a.dot | dot -T png -o a.png".format(CUST_ATTRIB_DEPENDSON_NAME))
+    parser_deps_dot = subparsers.add_parser('deps_dot', parents=[opt_project_id, opt_tag, opt_output_path], help="Print US in .dot file format with dependencies too! Create a custom attribute for User Stories named '{:s}' by going to Settings>Attributes>Custom Fields. Then go to a User Story and put in a comma separated list of stories that this story depends on e.g. '#123,#456'.".format(CUST_ATTRIB_DEPENDSON_NAME))
 
     return vars(parser.parse_args())
 
