@@ -75,6 +75,13 @@ cd $HOME/dev/taiga-stats
 
 Some stories requires other to be completed before they can be started. I thought it would be handy if you could keep track of these dependencies in Taiga but simply writing for each US a list of other stories that this story depends on. Then from this information a  `.dot` file can be generated that should how you user stories depends on each other. This graph is very useful for work planning i.e. what to start with and how much parallelization is possible and at what stages.
 
+![US Dependency Graph](img/dependencies_example.png)
+
+The stories that are marked as Done in Taiga have a green color in the graph.
+
+
+### How to set up the dependency feature
+
 First create a new custom filed in taiga named `Depends on` under Settings > Attributes > Custom Fields:
 
 ![Custom Field](img/taiga_custom_field.png)
@@ -92,10 +99,6 @@ Then run the script and generate a png file.
 $ taiga-stats deps_dot
 $ dot -T png -o ./dependencies.png ./dependencies.dot
 ```
-
-![US Dependency Graph](img/dependencies_example.png)
-
-The stories that are marked as Done in Taiga have a green color in the graph.
 
 
 # Setup
