@@ -20,6 +20,8 @@ This is an example diagram generated from [mock data](sample_data/cfd_example.da
 
 ![Example CFD](img/cfd_example.png)
 
+Textual annotations can be put in the graph by manually editing the `.dat file`.
+
 
 To save the data and generate the diagram each working day I have this cronjob:
 
