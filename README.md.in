@@ -1,6 +1,6 @@
 # Taiga Statistics Tool
 
-This is a script for all you "Kanban masters" who use Taiga and are interested in visualizing progress and generate some automated statistics.
+This is a script for all you "Kanban masters" who use Taiga and are interested in visualizing progress and generate some automated statistics and graphs.
 
 # Features
 
@@ -49,7 +49,7 @@ The stories that are marked as Done in Taiga have a green color in the graph.
 
 ### How to set up the dependency feature
 
-First create a new custom filed in taiga named `Depends on` under Settings > Attributes > Custom Fields:
+First create a new custom filed in taiga named `Depends On` under Settings > Attributes > Custom Fields:
 
 ![Custom Field](img/taiga_custom_field.png)
 
