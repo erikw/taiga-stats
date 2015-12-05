@@ -73,7 +73,7 @@ cd $HOME/dev/taiga-stats
 
 ## User Story Dependency Graph
 
-Some stories requires other to be completed before they can be started. I thought it would be handy if you could keep track of these dependencies in Taiga but simply writing for each US a list of other stories that this story depends on. Then from this information a  `.dot` file can be generated that should how you user stories depends on each other. This graph is very useful for work planning i.e. what to start with and how much parallelization is possible and at what stages.
+Some stories requires other to be completed before they can be started. I thought it would be handy if you could keep track of these dependencies in Taiga but simply writing for each US a list of other stories that this story depends on. Then from this information a [.dot file](sample_data/dependencies_example.dot) can be generated that should how you user stories depends on each other. This graph is very useful for work planning i.e. what to start with and how much parallelization is possible and at what stages.
 
 ![US Dependency Graph](img/dependencies_example.png)
 
