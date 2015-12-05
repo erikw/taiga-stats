@@ -62,6 +62,8 @@ $ dot -T png -o ./dependencies.png ./dependencies.dot
 
 ![US Dependency Graph](img/dependencies_example.png)
 
+The stories that are marked as Done in Taiga have a green color in the graph.
+
 
 # Setup
 
