@@ -194,7 +194,7 @@ def cmd_print_us_in_dep_format(args):
 
 
 @assert_args('url', 'auth_token', 'project_id', 'tag', 'output_path')
-def cmd_print_us_in_dep_format_dot(args):
+def cmd_us_in_dep_format_dot(args):
     api = taiga.TaigaAPI(host=args['url'], token=args['auth_token'])
     project = api.projects.get(args['project_id'])
     tag = args['tag']
@@ -236,7 +236,6 @@ def cmd_print_us_in_dep_format_dot(args):
     titles.sort()
     edges.sort()
 
-    # TODO file output path
     file_name_base = DEPS_DOT_FILE_TEMPLATE.format(get_tag_str(tag))
     file_name = file_name_base + ".dot"
     file_path = "{:s}/{:s}".format(output_path, file_name)
@@ -452,7 +451,7 @@ COMMAND2FUNC = {
     'cfd' : cmd_gen_cfd,
     'config_template' : cmd_gen_config_template,
     'deps_dot_nodes' : cmd_print_us_in_dep_format,
-    'deps_dot' : cmd_print_us_in_dep_format_dot,
+    'deps_dot' : cmd_us_in_dep_format_dot,
     'list_projects' : cmd_list_projects,
     'store_daily' : cmd_store_daily_stats,
 }
