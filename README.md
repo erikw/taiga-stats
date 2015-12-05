@@ -11,7 +11,7 @@ usage: taiga-stats [-h] [--url URL] [--auth-token AUTH_TOKEN]
                    ...
 
 Taiga statistic tool. Default values for many options can be set config file;
-see the command 'gen-config-template'.
+see the command 'config_template'.
 
 positional arguments:
   {config_template,list_projects,burnup,store_daily,cfd,deps,deps_dot}
