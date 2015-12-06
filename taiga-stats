@@ -6,12 +6,12 @@ import re
 import argparse
 import datetime as dt
 from pprint import pprint
-from datetime import datetime, timezone
 import configparser
 
 import taiga
 import numpy
-import matplotlib.pyplot as pyplot
+import matplotlib.lines as mplotlines
+import matplotlib.pyplot as plt
 import matplotlib.dates as mplotdates
 from matplotlib.dates import MONDAY
 from matplotlib.dates import MonthLocator, WeekdayLocator, DateFormatter
@@ -315,7 +315,7 @@ def cmd_store_daily_stats(args):
 
 
     with open(data_path, 'a') as fdata:
-        fdata.write("{:s}".format(datetime.utcnow().strftime("%Y-%m-%d")))
+        fdata.write("{:s}".format(dt.datetime.utcnow().strftime("%Y-%m-%d")))
         fdata.write("\t{:s}".format(NO_ANNOTATION))
         fdata.write("\t{:d}".format(0))
         for status_id in status_ids:
@@ -335,25 +335,28 @@ def cmd_gen_cfd(args):
     project = api.projects.get(args['project_id'])
     tag = args['tag']
     output_path = args['output_path']
+    target_date = None
+    target_layer = None
 
     _, status_names = get_status_and_names_sorted(project)
 
+    # Data
     data = read_daily_cfd(output_path, tag)
     dates = data[0]
     annotations = data[1]
     annotation_layer = data[2]
     data = data[3:]
 
-    # Plotting
     y = numpy.row_stack(tuple(data))
     x = dates
 
-    fig, ax = pyplot.subplots()
-    fig.set_size_inches(w=18.0, h=10)
+    # Plotting
+    fig, ax = plt.subplots()
+    fig.set_size_inches(w=20.0, h=10)
     tag_str = " for {:s}".format(tag) if tag != TAG_MATCH_ALL else ""
     fig.suptitle("Cumulative Flow Diagram{:s}".format(tag_str))
-    pyplot.xlabel('Week', fontsize=18)
-    pyplot.ylabel('Number of USs', fontsize=16)
+    plt.xlabel('Week', fontsize=18)
+    plt.ylabel('Number of USs', fontsize=16)
     polys = ax.stackplot(x, y)
 
 
@@ -381,18 +384,54 @@ def cmd_gen_cfd(args):
             ax.text(x[i], y_coord, annotation, ha="center", va="center", rotation=30, size=10, bbox=bbox_props)
 
 
+
+
+    # Ideal pace line
+    if ('target_date' in args and args['target_date']) and ('target_layer' in args and args['target_layer']):
+        target_date_dt = dt.datetime.strptime(args['target_date'], "%Y-%m-%d")
+        if mplotdates.date2num(target_date_dt) <  mplotdates.date2num(x[0]):
+            print("Target date must be after the first data point stored!", file=sys.stderr)
+
+        target_layer = int(args['target_layer'])
+        if not (0 <= target_layer < len(y)):
+                print("Ideal target layer not in range!", file=sys.stderr)
+                return 1
+
+        y_ideal_start = 0
+        for i in range(target_layer - 1):
+            y_ideal_start += y[i][0]
+        y_ideal_end = 0
+        for i in range(target_layer + 1):
+            y_ideal_end += y[i][-1]
+
+        ideal_line = plt.plot([x[0], target_date_dt], [y_ideal_start, y_ideal_end], color='k', linestyle='--', linewidth=3, label="Ideal pace")
+
+        # Extend last known value of target layer if needed.
+        if mplotdates.date2num(x[-1]) < mplotdates.date2num(target_date_dt):
+            plt.hlines(y_ideal_end, x[-1], target_date_dt, colors='k', linestyles='--',linewidth=3)
+
+
+
+
     # Legend
+    ## Stack plot legend
     legendProxies = []
     for poly in polys:
-        legendProxies.append(pyplot.Rectangle((0, 0), 1, 1, fc=poly.get_facecolor()[0]))
+        legendProxies.append(plt.Rectangle((0, 0), 1, 1, fc=poly.get_facecolor()[0]))
     box = ax.get_position()
     ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+
+    ## Ideal line legend
+    if target_date and target_layer:
+        legendProxies.append(plt.Line2D((0,1),(0,0), color=ideal_line[0].get_color(), linestyle=ideal_line[0].get_linestyle()))
+        status_names.append(ideal_line[0].get_label())
+
     ax.legend(reversed(legendProxies), reversed(status_names), title="Color chart", loc='center left', bbox_to_anchor=(1, 0.5))
 
 
     out_file = CFD_OUT_PNG_TEMPLATE.format(get_tag_str(tag))
     out_path = "{:s}/{:s}".format(output_path, out_file)
-    pyplot.savefig(out_path)
+    plt.savefig(out_path)
 
     return 0
 
@@ -410,6 +449,8 @@ def cmd_gen_config_template(args):
                         'project_id': '',
                         'tag': '',
                         'output_path': '',
+                        'target_date': '',
+                        'target_layer': '',
                       }
 
     fpath = "{:s}/{:s}".format(output_path, CONF_FILE_NAME_TEMPLATE)
@@ -432,6 +473,8 @@ def read_config():
     project_id = None
     tag = None
     output_path = None
+    target_date = None
+    target_layer = None
 
     config = configparser.ConfigParser()
     config.read(os.path.expanduser(CONF_FILE_PATH))
@@ -453,8 +496,12 @@ def read_config():
             tag = def_values['tag']
         if 'output_path' in def_values:
             output_path = def_values['output_path']
+        if 'target_date' in def_values:
+            target_date = def_values['target_date']
+        if 'target_layer' in def_values:
+            target_layer = def_values['target_layer']
 
-    return url, auth_token, project_id, tag, output_path
+    return url, auth_token, project_id, tag, output_path, target_date, target_layer
 
 
 COMMAND2FUNC = {
@@ -484,6 +531,9 @@ def parse_args():
     opt_output_path = argparse.ArgumentParser(add_help=False)
     opt_output_path.add_argument('--output-path', help="Store daily statistics for later usage with the 'cfd' command.")
 
+    opt_target_date = argparse.ArgumentParser(add_help=False)
+    opt_output_path.add_argument('--target-date-and-layer', nargs=2, help="Specify the targetd finish date for the project and a line for the ideal work pace will be drawn. Also specify which layer to draw the line to. e;g; \"2015-10-21 3\"")
+
     # Commands
     subparsers = parser.add_subparsers(help='Commands. Run $(taiga-stats <command> -h) for more info about a command.', dest='command')
     subparsers.required = True
@@ -492,7 +542,7 @@ def parse_args():
     parser_list_projects = subparsers.add_parser('list_projects', help="List all found project IDs and names on the server that you have access to read.")
     parser_burnup = subparsers.add_parser('burnup', parents=[opt_project_id, opt_tag], help="Print burn(up|down) statistics. Typically used for entering in an Excel sheet or such that plots a bunup.",)
     parser_store_daily = subparsers.add_parser('store_daily', parents=[opt_project_id, opt_tag, opt_output_path], help="Store the current state of a project on file so that the cfd command can generate a diagram with this data.")
-    parser_cfd = subparsers.add_parser('cfd', parents=[opt_project_id, opt_tag, opt_output_path], help="Generate a Cumulative Flow Diagram from stored data.")
+    parser_cfd = subparsers.add_parser('cfd', parents=[opt_project_id, opt_tag, opt_output_path, opt_target_date], help="Generate a Cumulative Flow Diagram from stored data.")
     parser_deps = subparsers.add_parser('deps_dot_nodes', parents=[opt_project_id, opt_tag], help="Print user stories nodees in .dot file format.")
     parser_deps_dot = subparsers.add_parser('deps_dot', parents=[opt_project_id, opt_tag, opt_output_path], help="Print US in .dot file format with dependencies too! Create a custom attribute for User Stories named '{:s}' by going to Settings>Attributes>Custom Fields. Then go to a User Story and put in a comma separated list of stories that this story depends on e.g. '#123,#456'.".format(CUST_ATTRIB_DEPENDSON_NAME))
 
@@ -501,13 +551,15 @@ def parse_args():
 
 def main():
     args = parse_args()
-    cnf_url, cnf_auth_token, cnf_project_id, cnf_tag, cnf_output_path = read_config()
+    cnf_url, cnf_auth_token, cnf_project_id, cnf_tag, cnf_output_path, cnf_target_date, cnf_target_layer = read_config()
 
     args['url'] = args['url'] if 'url' in args and args['url'] else cnf_url
     args['auth_token'] = args['auth_token'] if 'auth_token' in args and args['auth_token'] else cnf_auth_token
     args['project_id'] = args['project_id'] if 'project_id' in args and args['project_id'] else cnf_project_id
     args['tag'] = args['tag'] if 'tag' in args and args['tag'] else cnf_tag if cnf_tag else TAG_MATCH_ALL
     args['output_path'] = args['output_path'] if 'output_path' in args and args['output_path'] else cnf_output_path if cnf_output_path else "."
+    args['target_date'] = args['target_date_and_layer'][0] if 'target_date_and_layer' in args and args['target_date_and_layer'] else cnf_target_date if cnf_target_date else None
+    args['target_layer'] = args['target_date_and_layer'][1] if 'target_date_and_layer' in args and args['target_date_and_layer'] else cnf_target_layer if cnf_target_layer else None
 
     if args['command'] not in COMMAND2FUNC:
         print("Misconfiguration for argparse: subcommand not mapped to a function")

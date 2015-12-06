@@ -1,4 +1,5 @@
 *.dat
+*.dot
 *.png
 taiga.conf
 taiga.conf.template
