@@ -56,7 +56,7 @@ This is an example diagram generated from [mock data](sample_data/cfd_example.da
 Textual annotations can be put in the plot by manually editing the `.dat file`.
 
 
-Also a target date for the project deadline can be specified. Then a line will be drawn showing the ideal work pace towards this date, as seen below
+Also a target date for the project deadline can be specified. Then a line will be drawn showing the ideal work pace towards this date, as seen below where the target finish date is in week 46.
 
 ![Example CFD with ideal pace](img/cfd_example_ideal_pace.png)
 
