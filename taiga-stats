@@ -387,8 +387,11 @@ def cmd_gen_cfd(args):
 
 
     # Ideal pace line
+    print_ideal = False
     if ('target_date' in args and args['target_date']) and ('target_layer' in args and args['target_layer']):
-        target_date_dt = dt.datetime.strptime(args['target_date'], "%Y-%m-%d")
+        print_ideal = True
+        target_date = args['target_date']
+        target_date_dt = dt.datetime.strptime(target_date, "%Y-%m-%d")
         if mplotdates.date2num(target_date_dt) <  mplotdates.date2num(x[0]):
             print("Target date must be after the first data point stored!", file=sys.stderr)
 
@@ -404,12 +407,11 @@ def cmd_gen_cfd(args):
         for i in range(target_layer + 1):
             y_ideal_end += y[i][-1]
 
-        ideal_line = plt.plot([x[0], target_date_dt], [y_ideal_start, y_ideal_end], color='k', linestyle='--', linewidth=3, label="Ideal pace")
+        ideal_line = plt.plot([x[0], target_date_dt], [y_ideal_start, y_ideal_end], color='k', linestyle='--', linewidth=3, label="Ideal Pace")
 
         # Extend last known value of target layer if needed.
         if mplotdates.date2num(x[-1]) < mplotdates.date2num(target_date_dt):
             plt.hlines(y_ideal_end, x[-1], target_date_dt, colors='k', linestyles='--',linewidth=3)
-
 
 
 
@@ -422,8 +424,8 @@ def cmd_gen_cfd(args):
     ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
 
     ## Ideal line legend
-    if target_date and target_layer:
-        legendProxies.append(plt.Line2D((0,1),(0,0), color=ideal_line[0].get_color(), linestyle=ideal_line[0].get_linestyle()))
+    if print_ideal:
+        legendProxies.append(plt.Line2D((0,1),(0,0), color=ideal_line[0].get_color(), linestyle=ideal_line[0].get_linestyle(), linewidth=ideal_line[0].get_linewidth()))
         status_names.append(ideal_line[0].get_label())
 
     ax.legend(reversed(legendProxies), reversed(status_names), title="Color chart", loc='center left', bbox_to_anchor=(1, 0.5))
