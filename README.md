@@ -96,7 +96,7 @@ First create a new custom filed in taiga named `Depends On` under Settings > Att
 ![Custom Field](img/taiga_custom_field.png)
 
 
-Then go to you stories and enter some dependencies as demonstrated below.
+Then go to your User Stories and enter some dependencies as demonstrated below.
 
 ![US dependency](img/us_depends_on.png)
 
