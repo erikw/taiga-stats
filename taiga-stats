@@ -256,7 +256,7 @@ def cmd_us_in_dep_format_dot(args):
             print("Dependency graph written to: {:s}\n".format(file_path))
             print("Generate a png with e.g.")
             print("$ dot -T png -o {:s}/{:s}.png {:s}".format(output_path, file_name_base, file_path))
-            print("$ unflatten -l1 -c5 {:s} | dot -T png -o {:s}/{:s}.png".format(file_name, output_path, file_name_base))
+            print("$ unflatten -l1 -c5 {:s}/{:s} | dot -T png -o {:s}/{:s}.png".format(output_path, file_name, output_path, file_name_base))
     except IOError as err:
         print("Could not write file {:s}: {:s}".format(file_path, str(err)), file=sys.stderr)
         return 1
