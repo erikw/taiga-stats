@@ -315,7 +315,7 @@ def cmd_store_daily_stats(args):
     tag = args['tag']
     output_path = args['output_path']
 
-    status_ids, status_names = get_status_and_names_sorted(project)
+    status_ids, _ = get_status_and_names_sorted(project)
     uss = get_stories_with_tag(project, tag)
     us_by_status = {status_id : [] for status_id in status_ids}
     for us in uss:
@@ -454,6 +454,7 @@ def cmd_gen_cfd(args):
     out_path = "{:s}/{:s}".format(output_path, out_file)
     plt.savefig(out_path)
 
+    print("CFD{:s} generated at: {:s}".format(tag_str, out_path))
     return 0
 
 
