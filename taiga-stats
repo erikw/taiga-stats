@@ -89,12 +89,16 @@ def remove_closed_stories(project, uss):
     return ret_uss
 
 
-def get_statuses_sorted(project):
+def get_statuses_sorted_by_order(project):
     statuses = project.list_user_story_statuses()
     return sorted(statuses, key=lambda status: status.order)
 
+def get_statuses_sorted_by_id(project):
+    statuses = project.list_user_story_statuses()
+    return sorted(statuses, key=lambda status: status.id)
+
 def get_status_id_sorted(project):
-    return [status.id for status in get_statuses_sorted(project)]
+    return [status.id for status in get_statuses_sorted_by_order(project)]
 
 def get_status_and_names_sorted(project):
     status_ids = get_status_id_sorted(project)[::-1]
@@ -169,10 +173,25 @@ class assert_args(object):
 def cmd_list_projects(args):
     api = taiga.TaigaAPI(host=args['url'], token=args['auth_token'])
 
+    print("All projects which you have access to:")
     print("id\tname")
     print("--\t----")
     for proj in api.projects.list():
         print("{:-3d}\t{:s}".format(proj.id, proj.name))
+
+    return 0
+
+@assert_args('url', 'auth_token', 'project_id')
+def cmd_list_us_statuses(args):
+    api = taiga.TaigaAPI(host=args['url'], token=args['auth_token'])
+    project = api.projects.get(args['project_id'])
+
+    print("Statuses for project \"{:s}\"".format(project.name))
+    print("order\tid\tname")
+    print("--\t----")
+    statuses = get_statuses_sorted_by_order(project)
+    for status in statuses:
+        print("{:d}\t{:-4d}\t{:s}".format(status.order, status.id, status.name))
 
     return 0
 
@@ -513,6 +532,7 @@ COMMAND2FUNC = {
     'deps_dot_nodes' : cmd_print_us_in_dep_format,
     'deps_dot' : cmd_us_in_dep_format_dot,
     'list_projects' : cmd_list_projects,
+    'list_us_statuses' : cmd_list_us_statuses,
     'store_daily' : cmd_store_daily_stats,
 }
 
@@ -542,6 +562,7 @@ def parse_args():
 
     parser_config_template = subparsers.add_parser('config_template', parents=[opt_output_path], help="Generate a template configuration file.")
     parser_list_projects = subparsers.add_parser('list_projects', help="List all found project IDs and names on the server that you have access to read.")
+    parser_list_us_statuses = subparsers.add_parser('list_us_statuses', parents=[opt_project_id], help="List all the ID and names of User Story statuses.")
     parser_burnup = subparsers.add_parser('burnup', parents=[opt_project_id, opt_tag], help="Print burn(up|down) statistics. Typically used for entering in an Excel sheet or such that plots a bunup.",)
     parser_store_daily = subparsers.add_parser('store_daily', parents=[opt_project_id, opt_tag, opt_output_path], help="Store the current state of a project on file so that the cfd command can generate a diagram with this data.")
     parser_cfd = subparsers.add_parser('cfd', parents=[opt_project_id, opt_tag, opt_output_path, opt_target_date], help="Generate a Cumulative Flow Diagram from stored data.")

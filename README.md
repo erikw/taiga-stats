@@ -9,19 +9,20 @@ This is a script for all you "Kanban masters" who use Taiga and are interested i
 ```console
 $ taiga-stats --help
 usage: taiga-stats [-h] [--url URL] [--auth-token AUTH_TOKEN]
-                   {config_template,list_projects,burnup,store_daily,cfd,deps_dot_nodes,deps_dot}
+                   {config_template,list_projects,list_us_statuses,burnup,store_daily,cfd,deps_dot_nodes,deps_dot}
                    ...
 
 Taiga statistic tool. Default values for many options can be set config file;
 see the command 'config_template'.
 
 positional arguments:
-  {config_template,list_projects,burnup,store_daily,cfd,deps_dot_nodes,deps_dot}
+  {config_template,list_projects,list_us_statuses,burnup,store_daily,cfd,deps_dot_nodes,deps_dot}
                         Commands. Run $(taiga-stats <command> -h) for more
                         info about a command.
     config_template     Generate a template configuration file.
     list_projects       List all found project IDs and names on the server
                         that you have access to read.
+    list_us_statuses    List all the ID and names of User Story statuses.
     burnup              Print burn(up|down) statistics. Typically used for
                         entering in an Excel sheet or such that plots a bunup.
     store_daily         Store the current state of a project on file so that
