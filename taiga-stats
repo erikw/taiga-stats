@@ -159,7 +159,7 @@ class assert_args(object):
         dec = self
         def wrapper(args):
             for arg in dec.needed_args:
-                if arg not in args or not args[arg]:
+                if arg not in args or args[arg] is None:
                     print("Required argument ''{:s}' was not supplied on commandline or set in config file.".format(arg))
                     return 1
             func(args)
@@ -348,7 +348,7 @@ def cmd_store_daily_stats(args):
     return 0
 
 
-@assert_args('url', 'auth_token', 'project_id', 'tag', 'output_path')
+@assert_args('url', 'auth_token', 'project_id', 'tag', 'output_path', 'annotations_off')
 def cmd_gen_cfd(args):
     api = taiga.TaigaAPI(host=args['url'], token=args['auth_token'])
     project = api.projects.get(args['project_id'])
@@ -357,6 +357,7 @@ def cmd_gen_cfd(args):
     target_date = None
     target_layer = None
     status_ids = None
+    annotations_off = args['annotations_off']
 
     # Data
     data = read_daily_cfd(output_path, tag)
@@ -415,14 +416,16 @@ def cmd_gen_cfd(args):
     # ax.grid(True)
     fig.autofmt_xdate()
 
-    # Draw annotations of the data.
-    bbox_props = dict(boxstyle="round4,pad=0.3", fc="white", ec="black", lw=2)
-    for i, annotation in enumerate(annotations):
-        if annotation != NO_ANNOTATION:
-            y_coord = 0 # Calculate the Y coordnate by stacking up y values below.
-            for j in range(annotation_layer[i] + 1):
-                y_coord += y[j][i]
-            ax.text(x[i], y_coord, annotation, ha="center", va="center", rotation=30, size=10, bbox=bbox_props)
+
+    if not annotations_off:
+        # Draw annotations of the data.
+        bbox_props = dict(boxstyle="round4,pad=0.3", fc="white", ec="black", lw=2)
+        for i, annotation in enumerate(annotations):
+            if annotation != NO_ANNOTATION:
+                y_coord = 0 # Calculate the Y coordnate by stacking up y values below.
+                for j in range(annotation_layer[i] + 1):
+                    y_coord += y[j][i]
+                ax.text(x[i], y_coord, annotation, ha="center", va="center", rotation=30, size=10, bbox=bbox_props)
 
 
 
@@ -521,6 +524,7 @@ def read_config():
     target_date = None
     target_layer = None
     status_ids = None
+    annotations_off = None
 
     config = configparser.ConfigParser()
     config.read(os.path.expanduser(CONF_FILE_PATH))
@@ -548,8 +552,10 @@ def read_config():
             target_layer = def_values['target_layer']
         if 'status_ids' in def_values:
             status_ids = def_values['status_ids']
+        if 'annotations_off' in def_values:
+            annotations_off = def_values['annotations_off']
 
-    return url, auth_token, project_id, tag, output_path, target_date, target_layer, status_ids
+    return url, auth_token, project_id, tag, output_path, target_date, target_layer, status_ids, annotations_off
 
 
 COMMAND2FUNC = {
@@ -586,6 +592,9 @@ def parse_args():
     opt_status_ids = argparse.ArgumentParser(add_help=False)
     opt_status_ids.add_argument('--status-ids', help="A comma separated and sorted list of User Story status IDs to use.")
 
+    opt_annotations_off = argparse.ArgumentParser(add_help=False)
+    opt_annotations_off.add_argument('--annotations-off', dest='annotations_off', action='store_true', help="Turn off user user defined annotations. Default is on.")
+
     # Commands
     subparsers = parser.add_subparsers(help='Commands. Run $(taiga-stats <command> -h) for more info about a command.', dest='command')
     subparsers.required = True
@@ -595,7 +604,7 @@ def parse_args():
     parser_list_us_statuses = subparsers.add_parser('list_us_statuses', parents=[opt_project_id], help="List all the ID and names of User Story statuses.")
     parser_burnup = subparsers.add_parser('burnup', parents=[opt_project_id, opt_tag], help="Print burn(up|down) statistics. Typically used for entering in an Excel sheet or such that plots a burnup.",)
     parser_store_daily = subparsers.add_parser('store_daily', parents=[opt_project_id, opt_tag, opt_output_path], help="Store the current state of a project on file so that the CFD command can generate a diagram with this data.")
-    parser_cfd = subparsers.add_parser('cfd', parents=[opt_project_id, opt_tag, opt_output_path, opt_target_date, opt_status_ids], help="Generate a Cumulative Flow Diagram from stored data.")
+    parser_cfd = subparsers.add_parser('cfd', parents=[opt_project_id, opt_tag, opt_output_path, opt_target_date, opt_status_ids, opt_annotations_off], help="Generate a Cumulative Flow Diagram from stored data.")
     parser_deps = subparsers.add_parser('deps_dot_nodes', parents=[opt_project_id, opt_tag], help="Print User Story nodes in .dot file format.")
     parser_deps_dot = subparsers.add_parser('deps_dot', parents=[opt_project_id, opt_tag, opt_output_path], help="Print US in .dot file format with dependencies too! Create a custom attribute for User Stories named '{:s}' by going to Settings>Attributes>Custom Fields. Then go to a User Story and put in a comma separated list of stories that this story depends on e.g. '#123,#456'.".format(CUST_ATTRIB_DEPENDSON_NAME))
 
@@ -604,16 +613,17 @@ def parse_args():
 
 def main():
     args = parse_args()
-    cnf_url, cnf_auth_token, cnf_project_id, cnf_tag, cnf_output_path, cnf_target_date, cnf_target_layer, cnf_status_ids = read_config()
+    cnf_url, cnf_auth_token, cnf_project_id, cnf_tag, cnf_output_path, cnf_target_date, cnf_target_layer, cnf_status_ids, cnf_annotations_off= read_config()
 
     args['url'] = args['url'] if 'url' in args and args['url'] else cnf_url
-    args['auth_token'] = args['auth_token'] if 'auth_token' in args and args['auth_token'] else cnf_auth_token
-    args['project_id'] = args['project_id'] if 'project_id' in args and args['project_id'] else cnf_project_id
+    args['auth_token'] = args['auth_token'] if 'auth_token' in args and args['auth_token'] else cnf_auth_token if cnf_auth_token else None
+    args['project_id'] = args['project_id'] if 'project_id' in args and args['project_id'] else cnf_project_id if cnf_project_id else None
     args['tag'] = args['tag'] if 'tag' in args and args['tag'] else cnf_tag if cnf_tag else TAG_MATCH_ALL
     args['output_path'] = args['output_path'] if 'output_path' in args and args['output_path'] else cnf_output_path if cnf_output_path else "."
     args['target_date'] = args['target_date_and_layer'][0] if 'target_date_and_layer' in args and args['target_date_and_layer'] else cnf_target_date if cnf_target_date else None
     args['target_layer'] = args['target_date_and_layer'][1] if 'target_date_and_layer' in args and args['target_date_and_layer'] else cnf_target_layer if cnf_target_layer else None
     args['status_ids'] = args['status_ids'] if 'status_ids' in args and args['status_ids'] else cnf_status_ids if cnf_status_ids else None
+    args['annotations_off'] = args['annotations_off'] if 'annotations_off' in args and args['annotations_off'] is not None else cnf_annotations_off if cnf_annotations_off is not None else False
 
     if args['command'] not in COMMAND2FUNC:
         print("Misconfiguration for argparse: subcommand not mapped to a function")

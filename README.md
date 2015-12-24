@@ -13,7 +13,8 @@ usage: taiga-stats [-h] [--url URL] [--auth-token AUTH_TOKEN]
                    ...
 
 Taiga statistic tool. Default values for many options can be set config file;
-see the command 'config_template'.
+see the command 'config_template'. For more information about a command, run
+$(taiga-stats <cmd> -h)
 
 positional arguments:
   {config_template,list_projects,list_us_statuses,burnup,store_daily,cfd,deps_dot_nodes,deps_dot}
@@ -24,11 +25,12 @@ positional arguments:
                         that you have access to read.
     list_us_statuses    List all the ID and names of User Story statuses.
     burnup              Print burn(up|down) statistics. Typically used for
-                        entering in an Excel sheet or such that plots a bunup.
+                        entering in an Excel sheet or such that plots a
+                        burnup.
     store_daily         Store the current state of a project on file so that
-                        the cfd command can generate a diagram with this data.
+                        the CFD command can generate a diagram with this data.
     cfd                 Generate a Cumulative Flow Diagram from stored data.
-    deps_dot_nodes      Print user stories nodees in .dot file format.
+    deps_dot_nodes      Print User Story nodes in .dot file format.
     deps_dot            Print US in .dot file format with dependencies too!
                         Create a custom attribute for User Stories named
                         'Depends On' by going to Settings>Attributes>Custom
