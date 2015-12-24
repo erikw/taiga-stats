@@ -425,7 +425,7 @@ def cmd_gen_cfd(args):
                 y_coord = 0 # Calculate the Y coordnate by stacking up y values below.
                 for j in range(annotation_layer[i] + 1):
                     y_coord += y[j][i]
-                ax.text(x[i], y_coord, annotation, ha="center", va="center", rotation=30, size=10, bbox=bbox_props)
+                ax.text(x[i], (y_coord+5), annotation, ha="center", va="center", rotation=30, size=10, bbox=bbox_props)
 
 
 
