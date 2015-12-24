@@ -356,8 +356,7 @@ def cmd_gen_cfd(args):
     output_path = args['output_path']
     target_date = None
     target_layer = None
-
-    _, status_names = get_status_and_names_sorted(project)
+    status_ids = None
 
     # Data
     data = read_daily_cfd(output_path, tag)
@@ -366,7 +365,32 @@ def cmd_gen_cfd(args):
     annotation_layer = data[2]
     data = data[3:]
 
-    y = numpy.row_stack(tuple(data))
+
+    status_ids, status_names = get_status_and_names_sorted(project)
+
+    if 'status_ids' in args and args['status_ids']:
+        # Ids are plotted in the reversed order
+        selected_sids = reversed([int(sid) for sid in args['status_ids'].split(',')])
+    else:
+        selected_sids = status_ids
+
+
+    selected_snames = []
+    selected_data = []
+    pprint(selected_sids)
+    pprint(status_ids)
+    for sid in selected_sids:
+        try:
+            idx = status_ids.index(sid)
+        except ValueError:
+            print("Selected US status ID {:d} not found for project {:s}!".format(sid, project.name))
+            return 1
+        selected_snames.append(status_names[idx])
+        selected_data.append(data[idx])
+
+
+
+    y = numpy.row_stack(tuple(selected_data))
     x = dates
 
     # Plotting
@@ -445,9 +469,9 @@ def cmd_gen_cfd(args):
     ## Ideal line legend
     if print_ideal:
         legendProxies.append(plt.Line2D((0,1),(0,0), color=ideal_line[0].get_color(), linestyle=ideal_line[0].get_linestyle(), linewidth=ideal_line[0].get_linewidth()))
-        status_names.append(ideal_line[0].get_label())
+        selected_snames.append(ideal_line[0].get_label())
 
-    ax.legend(reversed(legendProxies), reversed(status_names), title="Color chart", loc='center left', bbox_to_anchor=(1, 0.5))
+    ax.legend(reversed(legendProxies), reversed(selected_snames), title="Color chart", loc='center left', bbox_to_anchor=(1, 0.5))
 
 
     out_file = CFD_OUT_PNG_FMT.format(get_tag_str(tag))
@@ -473,6 +497,7 @@ def cmd_gen_config_template(args):
                         'output_path': '',
                         'target_date': '',
                         'target_layer': '',
+                        'status_ids': '',
                       }
 
     fpath = "{:s}/{:s}".format(output_path, CONF_FILE_NAME_FMT)
@@ -497,6 +522,7 @@ def read_config():
     output_path = None
     target_date = None
     target_layer = None
+    status_ids = None
 
     config = configparser.ConfigParser()
     config.read(os.path.expanduser(CONF_FILE_PATH))
@@ -522,8 +548,10 @@ def read_config():
             target_date = def_values['target_date']
         if 'target_layer' in def_values:
             target_layer = def_values['target_layer']
+        if 'status_ids' in def_values:
+            status_ids = def_values['status_ids']
 
-    return url, auth_token, project_id, tag, output_path, target_date, target_layer
+    return url, auth_token, project_id, tag, output_path, target_date, target_layer, status_ids
 
 
 COMMAND2FUNC = {
@@ -538,7 +566,7 @@ COMMAND2FUNC = {
 }
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Taiga statistic tool. Default values for many options can be set config file; see the command 'config_template'.")
+    parser = argparse.ArgumentParser(description="Taiga statistic tool. Default values for many options can be set config file; see the command 'config_template'. For more information about a command, run $(taiga-stats <cmd> -h)")
 
     # General options
     parser.add_argument('--url', help="URL to Taiga server.")
@@ -546,7 +574,7 @@ def parse_args():
 
     # Common options to commands
     opt_tag = argparse.ArgumentParser(add_help=False)
-    opt_tag.add_argument('--tag', help="Taiga tag to use. Defaults is to not filter which can also be achived by giving the value '*' to this option.")
+    opt_tag.add_argument('--tag', help="Taiga tag to use. Defaults is to not filter which can also be achieved by giving the value '*' to this option.")
 
     opt_project_id = argparse.ArgumentParser(add_help=False)
     opt_project_id.add_argument('--project-id', help="Project ID in Taiga to get data from.")
@@ -555,7 +583,10 @@ def parse_args():
     opt_output_path.add_argument('--output-path', help="Store daily statistics for later usage with the 'cfd' command.")
 
     opt_target_date = argparse.ArgumentParser(add_help=False)
-    opt_output_path.add_argument('--target-date-and-layer', nargs=2, help="Specify the targetd finish date for the project and a line for the ideal work pace will be drawn. Also specify which layer to draw the line to. e;g; \"2015-10-21 3\"")
+    opt_target_date.add_argument('--target-date-and-layer', nargs=2, help="Specify the targeted finish date for the project and a line for the ideal work pace will be drawn. Also specify which layer to draw the line to. e;g; \"2015-10-21 3\"")
+
+    opt_status_ids = argparse.ArgumentParser(add_help=False)
+    opt_status_ids.add_argument('--status-ids', help="A comma separated and sorted list of User Story status IDs to use.")
 
     # Commands
     subparsers = parser.add_subparsers(help='Commands. Run $(taiga-stats <command> -h) for more info about a command.', dest='command')
@@ -564,10 +595,10 @@ def parse_args():
     parser_config_template = subparsers.add_parser('config_template', parents=[opt_output_path], help="Generate a template configuration file.")
     parser_list_projects = subparsers.add_parser('list_projects', help="List all found project IDs and names on the server that you have access to read.")
     parser_list_us_statuses = subparsers.add_parser('list_us_statuses', parents=[opt_project_id], help="List all the ID and names of User Story statuses.")
-    parser_burnup = subparsers.add_parser('burnup', parents=[opt_project_id, opt_tag], help="Print burn(up|down) statistics. Typically used for entering in an Excel sheet or such that plots a bunup.",)
-    parser_store_daily = subparsers.add_parser('store_daily', parents=[opt_project_id, opt_tag, opt_output_path], help="Store the current state of a project on file so that the cfd command can generate a diagram with this data.")
-    parser_cfd = subparsers.add_parser('cfd', parents=[opt_project_id, opt_tag, opt_output_path, opt_target_date], help="Generate a Cumulative Flow Diagram from stored data.")
-    parser_deps = subparsers.add_parser('deps_dot_nodes', parents=[opt_project_id, opt_tag], help="Print user stories nodees in .dot file format.")
+    parser_burnup = subparsers.add_parser('burnup', parents=[opt_project_id, opt_tag], help="Print burn(up|down) statistics. Typically used for entering in an Excel sheet or such that plots a burnup.",)
+    parser_store_daily = subparsers.add_parser('store_daily', parents=[opt_project_id, opt_tag, opt_output_path], help="Store the current state of a project on file so that the CFD command can generate a diagram with this data.")
+    parser_cfd = subparsers.add_parser('cfd', parents=[opt_project_id, opt_tag, opt_output_path, opt_target_date, opt_status_ids], help="Generate a Cumulative Flow Diagram from stored data.")
+    parser_deps = subparsers.add_parser('deps_dot_nodes', parents=[opt_project_id, opt_tag], help="Print User Story nodes in .dot file format.")
     parser_deps_dot = subparsers.add_parser('deps_dot', parents=[opt_project_id, opt_tag, opt_output_path], help="Print US in .dot file format with dependencies too! Create a custom attribute for User Stories named '{:s}' by going to Settings>Attributes>Custom Fields. Then go to a User Story and put in a comma separated list of stories that this story depends on e.g. '#123,#456'.".format(CUST_ATTRIB_DEPENDSON_NAME))
 
     return vars(parser.parse_args())
@@ -575,7 +606,7 @@ def parse_args():
 
 def main():
     args = parse_args()
-    cnf_url, cnf_auth_token, cnf_project_id, cnf_tag, cnf_output_path, cnf_target_date, cnf_target_layer = read_config()
+    cnf_url, cnf_auth_token, cnf_project_id, cnf_tag, cnf_output_path, cnf_target_date, cnf_target_layer, cnf_status_ids = read_config()
 
     args['url'] = args['url'] if 'url' in args and args['url'] else cnf_url
     args['auth_token'] = args['auth_token'] if 'auth_token' in args and args['auth_token'] else cnf_auth_token
@@ -584,6 +615,7 @@ def main():
     args['output_path'] = args['output_path'] if 'output_path' in args and args['output_path'] else cnf_output_path if cnf_output_path else "."
     args['target_date'] = args['target_date_and_layer'][0] if 'target_date_and_layer' in args and args['target_date_and_layer'] else cnf_target_date if cnf_target_date else None
     args['target_layer'] = args['target_date_and_layer'][1] if 'target_date_and_layer' in args and args['target_date_and_layer'] else cnf_target_layer if cnf_target_layer else None
+    args['status_ids'] = args['status_ids'] if 'status_ids' in args and args['status_ids'] else cnf_status_ids if cnf_status_ids else None
 
     if args['command'] not in COMMAND2FUNC:
         print("Misconfiguration for argparse: subcommand not mapped to a function")
