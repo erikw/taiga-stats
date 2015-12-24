@@ -377,8 +377,6 @@ def cmd_gen_cfd(args):
 
     selected_snames = []
     selected_data = []
-    pprint(selected_sids)
-    pprint(status_ids)
     for sid in selected_sids:
         try:
             idx = status_ids.index(sid)
