@@ -19,18 +19,18 @@ from matplotlib.dates import MonthLocator, WeekdayLocator, DateFormatter
 ################# Constants #####################
 
 
-CFD_DATA_FILE_TEMPLATE='cfd_{:s}.dat'
-CFD_OUT_PNG_TEMPLATE='cfd_{:s}.png'
+CFD_DATA_FILE_FMT='cfd_{:s}.dat'
+CFD_OUT_PNG_FMT='cfd_{:s}.png'
 NO_ANNOTATION='NONE'
 TAG_MATCH_ALL='*'
 CUST_ATTRIB_DEPENDSON_NAME='Depends On'
 
 CONF_FILE_PATH='~/.taiga-stats.conf'
-CONF_FILE_NAME_TEMPLATE='taiga.conf.template'
+CONF_FILE_NAME_FMT='taiga.conf.template'
 
-DEPS_DOT_FILE_TEMPLATE='dependencies_{:s}'
+DEPS_DOT_FILE_FMT='dependencies_{:s}'
 
-DOT_HEADER_TEMPLATE = """digraph {:s} {{
+DOT_HEADER_FMT = """digraph {:s} {{
   labelloc="t";
   //labelfontsize="40"
   label="{:s}";
@@ -110,14 +110,14 @@ def get_status_and_names_sorted(project):
 
 
 def get_dot_header(name, title):
-    return DOT_HEADER_TEMPLATE.format(name, title)
+    return DOT_HEADER_FMT.format(name, title)
 
 
 def get_dot_footer():
     return "}"
 
 def read_daily_cfd(path, tag):
-    data_file = CFD_DATA_FILE_TEMPLATE.format(get_tag_str(tag))
+    data_file = CFD_DATA_FILE_FMT.format(get_tag_str(tag))
     data_path = "{:s}/{:s}".format(path, data_file)
     data = []
     try:
@@ -259,7 +259,7 @@ def cmd_us_in_dep_format_dot(args):
     titles.sort()
     edges.sort()
 
-    file_name_base = DEPS_DOT_FILE_TEMPLATE.format(get_tag_str(tag))
+    file_name_base = DEPS_DOT_FILE_FMT.format(get_tag_str(tag))
     file_name = file_name_base + ".dot"
     file_path = "{:s}/{:s}".format(output_path, file_name)
     try:
@@ -321,7 +321,7 @@ def cmd_store_daily_stats(args):
     for us in uss:
         us_by_status[us.status].append(us)
 
-    data_file = CFD_DATA_FILE_TEMPLATE.format(get_tag_str(tag))
+    data_file = CFD_DATA_FILE_FMT.format(get_tag_str(tag))
     data_path = "{:s}/{:s}".format(output_path, data_file)
     if not os.path.isfile(data_path):
         with open(data_path, 'w') as fdata:
@@ -450,7 +450,7 @@ def cmd_gen_cfd(args):
     ax.legend(reversed(legendProxies), reversed(status_names), title="Color chart", loc='center left', bbox_to_anchor=(1, 0.5))
 
 
-    out_file = CFD_OUT_PNG_TEMPLATE.format(get_tag_str(tag))
+    out_file = CFD_OUT_PNG_FMT.format(get_tag_str(tag))
     out_path = "{:s}/{:s}".format(output_path, out_file)
     plt.savefig(out_path)
 
@@ -475,7 +475,7 @@ def cmd_gen_config_template(args):
                         'target_layer': '',
                       }
 
-    fpath = "{:s}/{:s}".format(output_path, CONF_FILE_NAME_TEMPLATE)
+    fpath = "{:s}/{:s}".format(output_path, CONF_FILE_NAME_FMT)
     try:
         with open(fpath, 'w') as configfile:
             config.write(configfile)
