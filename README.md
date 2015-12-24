@@ -13,8 +13,7 @@ usage: taiga-stats [-h] [--url URL] [--auth-token AUTH_TOKEN]
                    ...
 
 Taiga statistic tool. Default values for many options can be set config file;
-see the command 'config_template'. For more information about a command, run
-$(taiga-stats <cmd> -h)
+see the command 'config_template'.
 
 positional arguments:
   {config_template,list_projects,list_us_statuses,burnup,store_daily,cfd,deps_dot_nodes,deps_dot}
