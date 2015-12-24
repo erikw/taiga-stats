@@ -125,27 +125,29 @@ $ virtualenv -p /usr/bin/python3 py3env
 $ source py3env/bin/activate
 ```
 
-## Dependencies
+## Taiga-stats & Dependencies
+
+
+```console
+$ git clone https://github.com/erikw/taiga-stats.git
+$ cd taiga-stats
+```
 
 Use either
 
 pip (recommended)
-
 ```console
 $ pip install -r requirements.txt
 ```
 
 or setuptools
-
 ```console
 $ python setup.py install
 ```
 
-## Taiga-stats
+Now taiga-stats should work!
 
 ```console
-$ git clone https://github.com/erikw/taiga-stats.git
-$ cd taiga-stats
 $ ./taiga-stats -h
 ```
 
