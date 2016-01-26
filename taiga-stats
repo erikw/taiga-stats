@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 
-import sys
+from pprint import pprint
+import argparse
+import configparser
+import datetime as dt
 import os
 import re
-import argparse
-import datetime as dt
-from pprint import pprint
-import configparser
+import sys
+import time
 
 import taiga
 import numpy
@@ -428,6 +429,10 @@ def cmd_gen_cfd(args):
                 ax.text(x[i], (y_coord+5), annotation, ha="center", va="center", rotation=30, size=10, bbox=bbox_props)
 
 
+    # Generation date string
+    date_now = time.strftime("%Y-%m-%d %H:%M:%S")
+    date_str = "Generated at {:s}".format(date_now)
+    fig.text(0.125, 0.1, date_str)
 
 
     # Ideal pace line
