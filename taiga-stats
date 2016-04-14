@@ -292,8 +292,8 @@ def cmd_us_in_dep_format_dot(args):
         tags = ""
         if print_tags and us.tags:
             tags += '\n['
-            for tag in us.tags:
-                tags += "{:s}, ".format(tag)
+            for ustag in us.tags:
+                tags += "{:s}, ".format(ustag)
             tags = tags[:-2] # Remove last ", "
             tags += ']'
             tags = tags.replace("\n", "\\n") # Don't interpret \n.
