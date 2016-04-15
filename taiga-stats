@@ -373,21 +373,39 @@ def cmd_print_burnup_data(args):
             selected_uss.append(us)
 
 
+
+
     nbr_done = 0
     nbr_todo = 0
+    nbr_pts_done = 0
+    nbr_pts_todo = 0
+    total_pts = 0
     for us in selected_uss:
+        pts = 0
+        if us.total_points:
+            pts = float(us.total_points)
+            total_pts += pts
+
         if us.is_closed:
             nbr_done += 1
+            nbr_pts_done += pts
         else:
             nbr_todo += 1
+            nbr_pts_todo += pts
+
 
     snames_str = ", ".join(reversed(selected_snames))
     tag_str = tag if tag != TAG_MATCH_ALL else "*"
     print("Statuses: {:s}".format(snames_str))
     print("Tag: {:s}".format(tag_str))
+    print("##### User Stories #####")
     print("Total: {:d}".format(len(selected_uss)))
     print("Done: {:d}".format(nbr_done))
     print("TODO: {:d}".format(nbr_todo))
+    print("##### Points #####")
+    print("Total: {:.1f}".format(total_pts))
+    print("Done: {:.1f}".format(nbr_pts_done))
+    print("TODO: {:.1f}".format(nbr_pts_todo))
 
     return 0
 
