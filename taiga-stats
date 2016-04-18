@@ -308,8 +308,9 @@ def cmd_us_in_dep_format_dot(args):
         if str(depson_attr_id) in attrs['attributes_values']:
             deps = attrs['attributes_values'][str(depson_attr_id)].split(',')
             for dep in deps:
-                dep = dep.lstrip('#')
-                edges.append('  "{:s}" -> "{:d}"'.format(dep, us.ref))
+                dep = dep.strip(' \t\n\r').lstrip('#')
+                if dep:
+                    edges.append('  "{:s}" -> "{:d}"'.format(dep, us.ref))
 
         titles.append("  \"{:d}\" [label=\"#{:d} {:s}{:s}{:s}\", color=\"{:s}\"];".format(us.ref, us.ref, subject, tags, points, color))
 
