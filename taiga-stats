@@ -342,6 +342,48 @@ def cmd_us_in_dep_format_dot(args):
     return 0
 
 @assert_args('url', 'auth_token', 'project_id', 'tag')
+def cmd_points_sum(args):
+    api = taiga.TaigaAPI(host=args['url'], token=args['auth_token'])
+    project = api.projects.get(args['project_id'])
+    tag = args['tag']
+    status_ids = None
+
+    status_ids, _ = get_status_and_names_sorted(project)
+    selected_sids = None
+    if 'status_ids' in args and args['status_ids']:
+        selected_sids = [int(sid) for sid in args['status_ids'].split(',')]
+        selected_sids.reverse()
+    else:
+        selected_sids = status_ids
+
+    for sid in selected_sids:
+        try:
+            idx = status_ids.index(sid)
+        except ValueError:
+            print("Selected US status ID {:d} not found for project {:s}!".format(sid, project.name))
+            return 1
+
+    uss = get_stories_with_tag(project, tag)
+
+    selected_uss = []
+    for us in uss:
+        if us.status in selected_sids:
+            selected_uss.append(us)
+
+
+    points = {} # statusID -> pointsum
+    for us in selected_uss:
+        if us.status not in points:
+            points[us.status] = 0
+        if us.total_points:
+            points[us.status] += float(us.total_points)
+
+    for status_id, points_sum in points.items():
+        status_name = get_us_status_name_from_id(project, status_id)
+        print("{:20s}\t{:.1f}".format(status_name, points_sum))
+
+
+@assert_args('url', 'auth_token', 'project_id', 'tag')
 def cmd_print_burnup_data(args):
     api = taiga.TaigaAPI(host=args['url'], token=args['auth_token'])
     project = api.projects.get(args['project_id'])
@@ -681,6 +723,7 @@ COMMAND2FUNC = {
     'list_projects' : cmd_list_projects,
     'list_us_statuses' : cmd_list_us_statuses,
     'store_daily' : cmd_store_daily_stats,
+    'points_sum' : cmd_points_sum,
 }
 
 def parse_args():
@@ -724,6 +767,7 @@ def parse_args():
     parser_list_us_statuses = subparsers.add_parser('list_us_statuses', parents=[opt_project_id], help="List all the ID and names of User Story statuses.")
     parser_burnup = subparsers.add_parser('burnup', parents=[opt_project_id, opt_tag, opt_status_ids], help="Print burn(up|down) statistics. Typically used for entering in an Excel sheet or such that plots a burnup.",)
     parser_store_daily = subparsers.add_parser('store_daily', parents=[opt_project_id, opt_tag, opt_output_path], help="Store the current state of a project on file so that the CFD command can generate a diagram with this data.")
+    parser_points_sum = subparsers.add_parser('points_sum', parents=[opt_project_id, opt_tag, opt_status_ids], help="Print out the sum of points in User Story statuses.")
     parser_cfd = subparsers.add_parser('cfd', parents=[opt_project_id, opt_tag, opt_output_path, opt_target_date, opt_status_ids, opt_annotations_off], help="Generate a Cumulative Flow Diagram from stored data.")
     parser_deps = subparsers.add_parser('deps_dot_nodes', parents=[opt_project_id, opt_tag, opt_status_ids], help="Print User Story nodes in .dot file format.")
     parser_deps_dot = subparsers.add_parser('deps_dot', parents=[opt_project_id, opt_tag, opt_output_path, opt_status_ids, opt_print_tags, opt_print_points], help="Print US in .dot file format with dependencies too! Create a custom attribute for User Stories named '{:s}' by going to Settings>Attributes>Custom Fields. Then go to a User Story and put in a comma separated list of stories that this story depends on e.g. '#123,#456'.".format(CUST_ATTRIB_DEPENDSON_NAME))
