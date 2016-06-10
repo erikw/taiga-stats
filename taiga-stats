@@ -123,7 +123,7 @@ def read_daily_cfd(path, tag):
                 line = line.rstrip()
                 parts = line.split('\t')
                 if row == 0:
-                    data  = [[] for _ in range(len(parts))]
+                    data  = [[] for _ in range(len(parts) + 1)]
                 else:
                     for col in range(len(parts)):
                         value = parts[col]

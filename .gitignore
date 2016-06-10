@@ -1,6 +1,7 @@
 *.dat
 *.dot
 *.png
+*.sw[op]
 taiga.conf
 taiga.conf.template
 build/
