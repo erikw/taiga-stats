@@ -121,8 +121,8 @@ It is recommended to use virtual environment to not pollute your system.
 ```console
 $ sudo apt-get install python3-dev
 $ cd some/dev/dir
-$ virtualenv -p /usr/bin/python3 py3env
-$ source py3env/bin/activate
+$ virtualenv -p python3 taiga-stats_env
+$ source taiga-stats_env/bin/activate
 ```
 
 ## Taiga-stats & Dependencies
