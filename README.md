@@ -137,12 +137,12 @@ Use either
 
 pip (recommended)
 ```console
-$ pip install -r requirements.txt
+$ pip3 install -r requirements.txt
 ```
 
 or setuptools
 ```console
-$ python setup.py install
+$ python3 setup.py install
 ```
 
 Now taiga-stats should work!
