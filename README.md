@@ -72,7 +72,7 @@ $ crontab -l | grep taiga
 
 and the script `taiga-stats_cron.sh`:
 
-```bash
+```console
 #!/usr/bin/env sh
 
 source $HOME/dev/virtualenvs/py3env/bin/activate
