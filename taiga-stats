@@ -26,6 +26,7 @@ NO_ANNOTATION='NONE'
 TAG_MATCH_ALL='*'
 CUST_ATTRIB_DEPENDSON_NAME='Depends On'
 
+CONF_FILE_PATH_XDG='$XDG_CONFIG_HOME/taiga-stats/taiga-stats.conf'
 CONF_FILE_PATH='~/.taiga-stats.conf'
 CONF_FILE_NAME_FMT='taiga.conf.template'
 
@@ -659,7 +660,7 @@ def cmd_gen_config_template(args):
         print("Could not create {:s}".format(fpath), file=sys.stderr)
         return 1
 
-    print("Template created. Rename and edit it:\n$ mv {:s} {:s}".format(fpath, CONF_FILE_PATH))
+    print("Template created. Rename and edit it:\n$ mv {:s} {:s}".format(fpath, CONF_FILE_PATH_XDG))
     return 0
 
 
@@ -679,7 +680,12 @@ def read_config():
     print_points = None
 
     config = configparser.ConfigParser()
-    config.read(os.path.expanduser(CONF_FILE_PATH))
+    conf_xdg = os.path.expanduser(CONF_FILE_PATH_XDG)
+    conf_home = os.path.expanduser(CONF_FILE_PATH)
+    if os.path.isfile(conf_xdg):
+        config.read(conf_xdg)
+    else:
+        config.read(conf_home)
 
     if 'taiga' in config:
         taiga = config['taiga']
