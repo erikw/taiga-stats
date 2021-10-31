@@ -1,6 +1,5 @@
 import os
 
-# TODO only keep constants that are used across multiple modules here.
 TAG_MATCH_ALL='*'
 CUST_ATTRIB_DEPENDSON_NAME='Depends On'
 
