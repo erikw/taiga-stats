@@ -122,3 +122,4 @@ $ vi ~/.taiga-stats.conf
 
 # Development
 * Make sure to `$ poetry shell` before using tools like pyright LSP, so that it can find the installed dependency modules
+* Reference for how to structure a python projec: https://realpython.com/pypi-publish-python-package/
