@@ -1,57 +1,41 @@
 #!/usr/bin/env python3
 
 from pprint import pprint
-import argparse
-import configparser
 import datetime as dt
 import os
 import re
 import sys
 import time
+import configparser
 
 import taiga
 import numpy
-import matplotlib.lines as mplotlines
+
+import matplotlib
+matplotlib.use('TkAgg')  # Reference: https://stackoverflow.com/a/48374671/265508
 import matplotlib.pyplot as plt
+import matplotlib.lines as mplotlines
 import matplotlib.dates as mplotdates
 from matplotlib.dates import MONDAY
 from matplotlib.dates import MonthLocator, WeekdayLocator, DateFormatter
 
-################# Constants #####################
 
+import taiga_stats
 
-CFD_DATA_FILE_FMT='cfd_{:s}.dat'
-CFD_OUT_PNG_FMT='cfd_{:s}.png'
-NO_ANNOTATION='NONE'
-TAG_MATCH_ALL='*'
-CUST_ATTRIB_DEPENDSON_NAME='Depends On'
-
-CONF_FILE_PATH_XDG='$XDG_CONFIG_HOME/taiga-stats/taiga-stats.conf'
-CONF_FILE_PATH='~/.taiga-stats.conf'
-CONF_FILE_NAME_FMT='taiga.conf.template'
-
-DEPS_DOT_FILE_FMT='dependencies_{:s}'
-
-DOT_HEADER_FMT = """digraph {:s} {{
-  labelloc="t";
-  //labelfontsize="40"
-  label="{:s}";
-  //size="7.5,10"
-  ratio="compress"
-  //orientation=landscape
-"""
-
+# TODO split this file up to
+# - helpers.py
+# - commands.py??
 
 ################# Helper functions #####################
 
 def get_tag_str(tag):
-    return "" if tag == TAG_MATCH_ALL else tag
+    return "" if tag == taiga_stats.TAG_MATCH_ALL else tag
 
 
 def get_stories_with_tag(project, tag):
     uss = project.list_user_stories()
     ret_uss = None
-    if tag == TAG_MATCH_ALL:
+    if tag == taiga_stats.TAG_MATCH_ALL:
         ret_uss = uss
     else:
         ret_uss = []
@@ -107,14 +91,14 @@ def get_status_and_names_sorted(project):
 
 
 def get_dot_header(name, title):
-    return DOT_HEADER_FMT.format(name, title)
+    return taiga_stats.DOT_HEADER_FMT.format(name, title)
 
 
 def get_dot_footer():
     return "}"
 
 def read_daily_cfd(path, tag):
-    data_file = CFD_DATA_FILE_FMT.format(get_tag_str(tag))
+    data_file = taiga_stats.CFD_DATA_FILE_FMT.format(get_tag_str(tag))
     data_path = "{:s}/{:s}".format(path, data_file)
     data = []
     try:
@@ -278,10 +262,10 @@ def cmd_us_in_dep_format_dot(args):
     depson_attr_id = None
     proj_attrs = project.list_user_story_attributes()
     for attr in proj_attrs:
-        if attr.name == CUST_ATTRIB_DEPENDSON_NAME:
+        if attr.name == taiga_stats.CUST_ATTRIB_DEPENDSON_NAME:
             depson_attr_id = attr.id
     if not depson_attr_id:
-            print("No custom User Story attribute named '{:s}' found!. Go to Settings>Attributes>Custom Fields and create one.".format(CUST_ATTRIB_DEPENDSON_NAME), file=sys.stderr)
+            print("No custom User Story attribute named '{:s}' found!. Go to Settings>Attributes>Custom Fields and create one.".format(taiga_stats.CUST_ATTRIB_DEPENDSON_NAME), file=sys.stderr)
             return 1
 
     for us in selected_uss:
@@ -319,7 +303,7 @@ def cmd_us_in_dep_format_dot(args):
     titles.sort()
     edges.sort()
 
-    file_name_base = DEPS_DOT_FILE_FMT.format(get_tag_str(tag))
+    file_name_base = taiga_stats.DEPS_DOT_FILE_FMT.format(get_tag_str(tag))
     file_name = file_name_base + ".dot"
     file_path = "{:s}/{:s}".format(output_path, file_name)
     try:
@@ -439,7 +423,7 @@ def cmd_print_burnup_data(args):
 
 
     snames_str = ", ".join(reversed(selected_snames))
-    tag_str = tag if tag != TAG_MATCH_ALL else "*"
+    tag_str = tag if tag != taiga_stats.TAG_MATCH_ALL else "*"
     print("Statuses: {:s}".format(snames_str))
     print("Tag: {:s}".format(tag_str))
     print("##### User Stories #####")
@@ -467,7 +451,7 @@ def cmd_store_daily_stats(args):
     for us in uss:
         us_by_status[us.status].append(us)
 
-    data_file = CFD_DATA_FILE_FMT.format(get_tag_str(tag))
+    data_file = taiga_stats.CFD_DATA_FILE_FMT.format(get_tag_str(tag))
     data_path = "{:s}/{:s}".format(output_path, data_file)
     if not os.path.isfile(data_path):
         with open(data_path, 'w') as fdata:
@@ -481,14 +465,14 @@ def cmd_store_daily_stats(args):
 
     with open(data_path, 'a') as fdata:
         fdata.write("{:s}".format(dt.datetime.utcnow().strftime("%Y-%m-%d")))
-        fdata.write("\t{:s}".format(NO_ANNOTATION))
+        fdata.write("\t{:s}".format(taiga_stats.NO_ANNOTATION))
         fdata.write("\t{:d}".format(0))
         for status_id in status_ids:
             no_uss = len(us_by_status[status_id])
             fdata.write("\t{:d}".format(no_uss))
         fdata.write("\n")
 
-    tag_str = " for {:s}".format(tag) if tag != TAG_MATCH_ALL else ""
+    tag_str = " for {:s}".format(tag) if tag != taiga_stats.TAG_MATCH_ALL else ""
     print("Daily stats{:s} stored at: {:s}".format(tag_str, output_path))
 
     return 0
@@ -542,7 +526,7 @@ def cmd_gen_cfd(args):
     # Plotting
     fig, ax = plt.subplots()
     fig.set_size_inches(w=20.0, h=10)
-    tag_str = " for {:s}".format(tag) if tag != TAG_MATCH_ALL else ""
+    tag_str = " for {:s}".format(tag) if tag != taiga_stats.TAG_MATCH_ALL else ""
     fig.suptitle("Cumulative Flow Diagram{:s}".format(tag_str))
     plt.xlabel('Week', fontsize=18)
     plt.ylabel('Number of USs', fontsize=16)
@@ -568,7 +552,7 @@ def cmd_gen_cfd(args):
         # Draw annotations of the data.
         bbox_props = dict(boxstyle="round4,pad=0.3", fc="white", ec="black", lw=2)
         for i, annotation in enumerate(annotations):
-            if annotation != NO_ANNOTATION:
+            if annotation != taiga_stats.NO_ANNOTATION:
                 y_coord = 0 # Calculate the Y coordnate by stacking up y values below.
                 for j in range(annotation_layer[i] + 1):
                     y_coord += y[j][i]
@@ -626,7 +610,7 @@ def cmd_gen_cfd(args):
     ax.legend(reversed(legendProxies), reversed(selected_snames), title="Color chart", loc='center left', bbox_to_anchor=(1, 0.5))
 
 
-    out_file = CFD_OUT_PNG_FMT.format(get_tag_str(tag))
+    out_file = taiga_stats.CFD_OUT_PNG_FMT.format(get_tag_str(tag))
     out_path = "{:s}/{:s}".format(output_path, out_file)
     plt.savefig(out_path)
 
@@ -652,7 +636,7 @@ def cmd_gen_config_template(args):
                         'status_ids': '',
                       }
 
-    fpath = "{:s}/{:s}".format(output_path, CONF_FILE_NAME_FMT)
+    fpath = "{:s}/{:s}".format(output_path, taiga_stats.CONF_FILE_NAME_FMT)
     try:
         with open(fpath, 'w') as configfile:
             config.write(configfile)
@@ -660,151 +644,5 @@ def cmd_gen_config_template(args):
         print("Could not create {:s}".format(fpath), file=sys.stderr)
         return 1
 
-    print("Template created. Rename and edit it:\n$ mv {:s} {:s}".format(fpath, CONF_FILE_PATH_XDG))
+    print("Template created. Rename and edit it:\n$ mv {:s} {:s}".format(fpath, taiga_stats.CONF_FILE_PATH_XDG))
     return 0
-
-
-################# Main configuration #####################
-
-def read_config():
-    url = None
-    auth_token = None
-    project_id = None
-    tag = None
-    output_path = None
-    target_date = None
-    target_layer = None
-    status_ids = None
-    annotations_off = None
-    print_tags = None
-    print_points = None
-
-    config = configparser.ConfigParser()
-    conf_xdg = os.path.expanduser(CONF_FILE_PATH_XDG)
-    conf_home = os.path.expanduser(CONF_FILE_PATH)
-    if os.path.isfile(conf_xdg):
-        config.read(conf_xdg)
-    else:
-        config.read(conf_home)
-
-    if 'taiga' in config:
-        taiga = config['taiga']
-        if 'url' in taiga:
-            url = taiga['url']
-        if 'auth_token' in taiga:
-            auth_token = taiga['auth_token']
-
-    if 'default_values' in config:
-        def_values = config['default_values']
-        if 'project_id' in def_values:
-            project_id = def_values['project_id']
-            if project_id:
-                project_id = int(project_id)
-        if 'tag' in def_values:
-            tag = def_values['tag']
-        if 'output_path' in def_values:
-            output_path = def_values['output_path']
-        if 'target_date' in def_values:
-            target_date = def_values['target_date']
-        if 'target_layer' in def_values:
-            target_layer = def_values['target_layer']
-        if 'status_ids' in def_values:
-            status_ids = def_values['status_ids']
-        if 'annotations_off' in def_values:
-            annotations_off = def_values['annotations_off']
-        if 'print_tags' in def_values:
-            print_tags = def_values['print_tags']
-        if 'print_points' in def_values:
-            print_points = def_values['print_points']
-
-    return url, auth_token, project_id, tag, output_path, target_date, target_layer, status_ids, annotations_off, print_tags, print_points
-
-
-COMMAND2FUNC = {
-    'burnup' : cmd_print_burnup_data,
-    'cfd' : cmd_gen_cfd,
-    'config_template' : cmd_gen_config_template,
-    'deps_dot_nodes' : cmd_print_us_in_dep_format,
-    'deps_dot' : cmd_us_in_dep_format_dot,
-    'list_projects' : cmd_list_projects,
-    'list_us_statuses' : cmd_list_us_statuses,
-    'store_daily' : cmd_store_daily_stats,
-    'points_sum' : cmd_points_sum,
-}
-
-def parse_args():
-    parser = argparse.ArgumentParser(description="Taiga statistic tool. Default values for many options can be set config file; see the command 'config_template'.")
-
-    # General options
-    parser.add_argument('--url', help="URL to Taiga server.")
-    parser.add_argument('--auth-token', help="Authentication token. Instructions on how to get one is found at {:s}".format('https://taigaio.github.io/taiga-doc/dist/api.html#_authentication'))
-
-    # Common options to commands
-    opt_tag = argparse.ArgumentParser(add_help=False)
-    opt_tag.add_argument('--tag', help="Taiga tag to use. Defaults is to not filter which can also be achieved by giving the value '*' to this option.")
-
-    opt_project_id = argparse.ArgumentParser(add_help=False)
-    opt_project_id.add_argument('--project-id', help="Project ID in Taiga to get data from.")
-
-    opt_output_path = argparse.ArgumentParser(add_help=False)
-    opt_output_path.add_argument('--output-path', help="Store daily statistics for later usage with the 'cfd' command.")
-
-    opt_target_date = argparse.ArgumentParser(add_help=False)
-    opt_target_date.add_argument('--target-date-and-layer', nargs=2, help="Specify the targeted finish date for the project and a line for the ideal work pace will be drawn. Also specify which layer to draw the line to. e;g; \"2015-10-21 3\"")
-
-    opt_status_ids = argparse.ArgumentParser(add_help=False)
-    opt_status_ids.add_argument('--status-ids', help="A comma separated and sorted list of User Story status IDs to use.")
-
-    opt_annotations_off = argparse.ArgumentParser(add_help=False)
-    opt_annotations_off.add_argument('--annotations-off', dest='annotations_off', action='store_true', help="Turn off user user defined annotations. Default is on.")
-
-    opt_print_tags = argparse.ArgumentParser(add_help=False)
-    opt_print_tags.add_argument('--print-tags', dest='print_tags', action='store_true', help="Print a US's tags in the nodes.")
-
-    opt_print_points = argparse.ArgumentParser(add_help=False)
-    opt_print_points.add_argument('--print-points', dest='print_points', action='store_true', help="Print a US's total points in the nodes.")
-
-    # Commands
-    subparsers = parser.add_subparsers(help='Commands. Run $(taiga-stats <command> -h) for more info about a command.', dest='command')
-    subparsers.required = True
-
-    parser_config_template = subparsers.add_parser('config_template', parents=[opt_output_path], help="Generate a template configuration file.")
-    parser_list_projects = subparsers.add_parser('list_projects', help="List all found project IDs and names on the server that you have access to read.")
-    parser_list_us_statuses = subparsers.add_parser('list_us_statuses', parents=[opt_project_id], help="List all the ID and names of User Story statuses.")
-    parser_burnup = subparsers.add_parser('burnup', parents=[opt_project_id, opt_tag, opt_status_ids], help="Print burn(up|down) statistics. Typically used for entering in an Excel sheet or such that plots a burnup.",)
-    parser_store_daily = subparsers.add_parser('store_daily', parents=[opt_project_id, opt_tag, opt_output_path], help="Store the current state of a project on file so that the CFD command can generate a diagram with this data.")
-    parser_points_sum = subparsers.add_parser('points_sum', parents=[opt_project_id, opt_tag, opt_status_ids], help="Print out the sum of points in User Story statuses.")
-    parser_cfd = subparsers.add_parser('cfd', parents=[opt_project_id, opt_tag, opt_output_path, opt_target_date, opt_status_ids, opt_annotations_off], help="Generate a Cumulative Flow Diagram from stored data.")
-    parser_deps = subparsers.add_parser('deps_dot_nodes', parents=[opt_project_id, opt_tag, opt_status_ids], help="Print User Story nodes in .dot file format.")
-    parser_deps_dot = subparsers.add_parser('deps_dot', parents=[opt_project_id, opt_tag, opt_output_path, opt_status_ids, opt_print_tags, opt_print_points], help="Print US in .dot file format with dependencies too! Create a custom attribute for User Stories named '{:s}' by going to Settings>Attributes>Custom Fields. Then go to a User Story and put in a comma separated list of stories that this story depends on e.g. '#123,#456'.".format(CUST_ATTRIB_DEPENDSON_NAME))
-
-    return vars(parser.parse_args())
-
-
-def main():
-    args = parse_args()
-    cnf_url, cnf_auth_token, cnf_project_id, cnf_tag, cnf_output_path, cnf_target_date, cnf_target_layer, cnf_status_ids, cnf_annotations_off, cnf_print_tags, cnf_print_points = read_config()
-
-    args['url'] = args['url'] if 'url' in args and args['url'] else cnf_url
-    args['auth_token'] = args['auth_token'] if 'auth_token' in args and args['auth_token'] else cnf_auth_token if cnf_auth_token else None
-    args['project_id'] = args['project_id'] if 'project_id' in args and args['project_id'] else cnf_project_id if cnf_project_id else None
-    args['tag'] = args['tag'] if 'tag' in args and args['tag'] else cnf_tag if cnf_tag else TAG_MATCH_ALL
-    args['output_path'] = args['output_path'] if 'output_path' in args and args['output_path'] else cnf_output_path if cnf_output_path else "."
-    args['target_date'] = args['target_date_and_layer'][0] if 'target_date_and_layer' in args and args['target_date_and_layer'] else cnf_target_date if cnf_target_date else None
-    args['target_layer'] = args['target_date_and_layer'][1] if 'target_date_and_layer' in args and args['target_date_and_layer'] else cnf_target_layer if cnf_target_layer else None
-    args['status_ids'] = args['status_ids'] if 'status_ids' in args and args['status_ids'] else cnf_status_ids if cnf_status_ids else None
-    args['annotations_off'] = args['annotations_off'] if 'annotations_off' in args and args['annotations_off'] is not None else cnf_annotations_off if cnf_annotations_off is not None else False
-    args['print_tags'] = args['print_tags'] if 'print_tags' in args and args['print_tags'] is not None and args['print_tags'] else cnf_print_tags if cnf_print_tags is not None else False
-    args['print_points'] = args['print_points'] if 'print_points' in args and args['print_points'] is not None and args['print_points'] else cnf_print_points if cnf_print_points is not None else False
-
-    if args['command'] not in COMMAND2FUNC:
-        print("Misconfiguration for argparse: subcommand not mapped to a function")
-        return 1
-    command_func = COMMAND2FUNC[args['command']]
-    args.pop('command')
-
-    return command_func(args)
-
-
-if __name__ == '__main__':
-    sys.exit(main())
