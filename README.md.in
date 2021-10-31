@@ -79,47 +79,31 @@ $ dot -T png -o ./dependencies.png ./dependencies.dot
 
 # Setup
 
-## Virtual environment (optional)
+## Installation
+### From package
+TODO 
 
-It is recommended to use virtual environment to not pollute your system.
-
-```console
-$ sudo apt-get install python3-dev
-$ cd some/dev/dir
-$ virtualenv -p python3 taiga-stats_env
-$ source taiga-stats_env/bin/activate
-```
-
-## Taiga-stats & Dependencies
-
-
-```console
-$ git clone https://github.com/erikw/taiga-stats.git
-$ cd taiga-stats
-```
-
-Use either
-
-pip (recommended)
-```console
-$ pip3 install -r requirements.txt
-```
-
-or setuptools
-```console
-$ python3 setup.py install
-```
-
-Now taiga-stats should work!
-
-```console
-$ ./taiga-stats -h
-```
+### From Git
+* Clone this git
+	```console
+	$ git clone https://github.com/erikw/taiga-stats.git
+	$ cd taiga-stats
+	```
+* Install Poetry
+* Install dependencies
+	```console
+	$ poetry install
+	```
+* Now taiga-stats should work!
+	```console
+	$ poetry run python taiga-stats -h
+	$ # -or-
+	$ poetry shell
+	(virtualenv) $ ./taiga-stats -h
+	```
 
 ## Config file
-
 It is tedious to have to specify the server URL and the authentication token everytime. Also you typically work with some project at a time and would like to have default values for the project to use and maybe which tag to filter on. You can genearte a configuration file to set these default values.
-
 
 ```console
 $ taiga-stats config_template
