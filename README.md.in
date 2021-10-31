@@ -118,3 +118,7 @@ $ taiga-stats config_template
 $ mv ./taiga.conf.template ~/.taiga-stats.conf
 $ vi ~/.taiga-stats.conf
 ```
+
+
+# Development
+* Make sure to `$ poetry shell` before using tools like pyright LSP, so that it can find the installed dependency modules
