@@ -27,7 +27,6 @@ flake8 = "^4.0"
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
-# TODO
 [tool.poetry.scripts]
 # By defining this, we can run
 # $ poetry run taiga-stats
