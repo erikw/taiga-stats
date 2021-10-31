@@ -22,7 +22,7 @@ COMMAND2FUNC = {
 
 
 def main():
-    args = parse_args.parse_args() # TODO rename to "prase()"?
+    args = parse_args.parse_args()
     cnf_url, cnf_auth_token, cnf_project_id, cnf_tag, cnf_output_path, cnf_target_date, cnf_target_layer, cnf_status_ids, cnf_annotations_off, cnf_print_tags, cnf_print_points = config.read_config()
 
     args['url'] = args['url'] if 'url' in args and args['url'] else cnf_url
