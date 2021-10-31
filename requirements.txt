@@ -1,3 +1,0 @@
-python-taiga >= 0.9.0
-numpy >= 1.13.3
-matplotlib >= 2.1.0
