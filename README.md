@@ -1,4 +1,4 @@
-# Taiga Statistics Tool
+# Taiga Stats - Your Taiga Statistics Tool
 
 This is a script for all you "Kanban masters" who use Taiga and are interested in visualizing progress and generate some automated statistics and graphs.
 
