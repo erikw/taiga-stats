@@ -28,4 +28,8 @@ build-backend = "poetry.core.masonry.api"
 
 # TODO
 [tool.poetry.scripts]
-poetry = 'taiga-stats:main'
+# By defining this, we can run
+# $ poetry run taiga-stats
+# instead of the longer
+# $ poetry run python -m taiga_stats
+taiga_stats = 'taiga_stats.__main__:main'

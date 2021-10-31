@@ -42,8 +42,8 @@ and the script `taiga-stats_cron.sh`:
 
 cd $HOME/dev/taiga-stats
 
-poetry run python taiga-stats store_daily --tag some_feature_tag
-poetry run python cfd --tag some_feature_tag
+poetry run taiga_stats store_daily --tag some_feature_tag
+poetry run taiga_stats cfd --tag some_feature_tag
 ```
 
 ## User Story Dependency Graph
@@ -105,10 +105,7 @@ TODO
 	```
 * Now taiga-stats should work!
 	```console
-	$ poetry run python taiga-stats -h
-	$ # -or-
-	$ poetry shell
-	(virtualenv) $ ./taiga-stats -h
+	$ poetry run taiga_stats -h
 	```
 
 ## Config file
