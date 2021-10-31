@@ -4,5 +4,4 @@
 *.sw[op]
 /taiga.conf
 /taiga.conf.template
-build/
-dist/
+/taiga_stats/__pycache__/
