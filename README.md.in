@@ -106,6 +106,8 @@ TODO
 * Now taiga-stats should work!
 	```console
 	$ poetry run taiga_stats -h
+	$ # or
+	$ bin/taiga_stats.sh
 	```
 
 ## Config file

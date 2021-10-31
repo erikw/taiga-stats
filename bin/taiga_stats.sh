@@ -3,5 +3,5 @@
 
 
 DIR=$(dirname "$0")
-cd $DIR
+cd $DIR/..
 poetry run taiga_stats $*

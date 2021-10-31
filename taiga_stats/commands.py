@@ -22,9 +22,27 @@ from matplotlib.dates import MonthLocator, WeekdayLocator, DateFormatter
 
 import taiga_stats
 
+
 # TODO split this file up to
 # - helpers.py
 # - commands.py??
+
+
+################# Constants #####################
+CFD_DATA_FILE_FMT='cfd_{:s}.dat'
+CFD_OUT_PNG_FMT='cfd_{:s}.png'
+NO_ANNOTATION='NONE'
+DEPS_DOT_FILE_FMT='dependencies_{:s}'
+DOT_HEADER_FMT = """digraph {:s} {{
+  labelloc="t";
+  //labelfontsize="40"
+  label="{:s}";
+  //size="7.5,10"
+  ratio="compress"
+  //orientation=landscape
+"""
+
+
 
 ################# Helper functions #####################
 
@@ -98,7 +116,7 @@ def get_dot_footer():
     return "}"
 
 def read_daily_cfd(path, tag):
-    data_file = taiga_stats.CFD_DATA_FILE_FMT.format(get_tag_str(tag))
+    data_file = CFD_DATA_FILE_FMT.format(get_tag_str(tag))
     data_path = "{:s}/{:s}".format(path, data_file)
     data = []
     try:
@@ -303,7 +321,7 @@ def cmd_us_in_dep_format_dot(args):
     titles.sort()
     edges.sort()
 
-    file_name_base = taiga_stats.DEPS_DOT_FILE_FMT.format(get_tag_str(tag))
+    file_name_base = DEPS_DOT_FILE_FMT.format(get_tag_str(tag))
     file_name = file_name_base + ".dot"
     file_path = "{:s}/{:s}".format(output_path, file_name)
     try:
@@ -451,7 +469,7 @@ def cmd_store_daily_stats(args):
     for us in uss:
         us_by_status[us.status].append(us)
 
-    data_file = taiga_stats.CFD_DATA_FILE_FMT.format(get_tag_str(tag))
+    data_file = CFD_DATA_FILE_FMT.format(get_tag_str(tag))
     data_path = "{:s}/{:s}".format(output_path, data_file)
     if not os.path.isfile(data_path):
         with open(data_path, 'w') as fdata:
@@ -465,7 +483,7 @@ def cmd_store_daily_stats(args):
 
     with open(data_path, 'a') as fdata:
         fdata.write("{:s}".format(dt.datetime.utcnow().strftime("%Y-%m-%d")))
-        fdata.write("\t{:s}".format(taiga_stats.NO_ANNOTATION))
+        fdata.write("\t{:s}".format(NO_ANNOTATION))
         fdata.write("\t{:d}".format(0))
         for status_id in status_ids:
             no_uss = len(us_by_status[status_id])
@@ -552,7 +570,7 @@ def cmd_gen_cfd(args):
         # Draw annotations of the data.
         bbox_props = dict(boxstyle="round4,pad=0.3", fc="white", ec="black", lw=2)
         for i, annotation in enumerate(annotations):
-            if annotation != taiga_stats.NO_ANNOTATION:
+            if annotation != NO_ANNOTATION:
                 y_coord = 0 # Calculate the Y coordnate by stacking up y values below.
                 for j in range(annotation_layer[i] + 1):
                     y_coord += y[j][i]
@@ -610,7 +628,7 @@ def cmd_gen_cfd(args):
     ax.legend(reversed(legendProxies), reversed(selected_snames), title="Color chart", loc='center left', bbox_to_anchor=(1, 0.5))
 
 
-    out_file = taiga_stats.CFD_OUT_PNG_FMT.format(get_tag_str(tag))
+    out_file = CFD_OUT_PNG_FMT.format(get_tag_str(tag))
     out_path = "{:s}/{:s}".format(output_path, out_file)
     plt.savefig(out_path)
 
