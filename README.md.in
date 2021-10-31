@@ -40,11 +40,10 @@ and the script `taiga-stats_cron.sh`:
 ```bash
 #!/usr/bin/env sh
 
-source $HOME/dev/virtualenvs/py3env/bin/activate
 cd $HOME/dev/taiga-stats
 
-./taiga-stats store_daily --tag some_feature_tag
-./taiga-stats cfd --tag some_feature_tag
+poetry run python taiga-stats store_daily --tag some_feature_tag
+poetry run python cfd --tag some_feature_tag
 ```
 
 ## User Story Dependency Graph
@@ -90,6 +89,16 @@ TODO
 	$ cd taiga-stats
 	```
 * Install Poetry
+* Numpy install issues as of 2021-10-31
+  * `$ poetry install` did not work with numpy on macOS. Solution from https://github.com/python-poetry/poetry/issues/3196#issuecomment-769753478
+	```console
+	$ pyenv local 3.9.7
+	$ poetry env use 3.9.7
+	$ poetry env use 3.9.7
+	$ poetry config experimental.new-installer false
+	$ poetry install
+	```
+
 * Install dependencies
 	```console
 	$ poetry install
