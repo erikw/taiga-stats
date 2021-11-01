@@ -40,11 +40,10 @@ and the script `taiga-stats_cron.sh`:
 ```bash
 #!/usr/bin/env sh
 
-source $HOME/dev/virtualenvs/py3env/bin/activate
 cd $HOME/dev/taiga-stats
 
-./taiga-stats store_daily --tag some_feature_tag
-./taiga-stats cfd --tag some_feature_tag
+poetry run taiga_stats store_daily --tag some_feature_tag
+poetry run taiga_stats cfd --tag some_feature_tag
 ```
 
 ## User Story Dependency Graph
@@ -79,50 +78,48 @@ $ dot -T png -o ./dependencies.png ./dependencies.dot
 
 # Setup
 
-## Virtual environment (optional)
+## Installation
+### From package
+TODO 
 
-It is recommended to use virtual environment to not pollute your system.
+### From Git
+* Clone this git
+	```console
+	$ git clone https://github.com/erikw/taiga-stats.git
+	$ cd taiga-stats
+	```
+* Install Poetry
+* Numpy install issues as of 2021-10-31
+  * `$ poetry install` did not work with numpy on macOS. Solution from https://github.com/python-poetry/poetry/issues/3196#issuecomment-769753478
+	```console
+	$ pyenv local 3.9.7
+	$ poetry env use 3.9.7
+	$ poetry env use 3.9.7
+	$ poetry config experimental.new-installer false
+	$ poetry install
+	```
 
-```console
-$ sudo apt-get install python3-dev
-$ cd some/dev/dir
-$ virtualenv -p python3 taiga-stats_env
-$ source taiga-stats_env/bin/activate
-```
-
-## Taiga-stats & Dependencies
-
-
-```console
-$ git clone https://github.com/erikw/taiga-stats.git
-$ cd taiga-stats
-```
-
-Use either
-
-pip (recommended)
-```console
-$ pip3 install -r requirements.txt
-```
-
-or setuptools
-```console
-$ python3 setup.py install
-```
-
-Now taiga-stats should work!
-
-```console
-$ ./taiga-stats -h
-```
+* Install dependencies
+	```console
+	$ poetry install
+	```
+* Now taiga-stats should work!
+	```console
+	$ poetry run taiga_stats -h
+	$ # or
+	$ bin/taiga_stats.sh
+	```
 
 ## Config file
-
 It is tedious to have to specify the server URL and the authentication token everytime. Also you typically work with some project at a time and would like to have default values for the project to use and maybe which tag to filter on. You can genearte a configuration file to set these default values.
-
 
 ```console
 $ taiga-stats config_template
 $ mv ./taiga.conf.template ~/.taiga-stats.conf
 $ vi ~/.taiga-stats.conf
 ```
+
+
+# Development
+* Make sure to `$ poetry shell` before using tools like pyright LSP, so that it can find the installed dependency modules
+* Reference for how to structure a python projec: https://realpython.com/pypi-publish-python-package/

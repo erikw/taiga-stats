@@ -1,4 +1,4 @@
-# Taiga Statistics Tool
+# Taiga Stats - Your Taiga Statistics Tool
 
 This is a script for all you "Kanban masters" who use Taiga and are interested in visualizing progress and generate some automated statistics and graphs.
 
@@ -8,15 +8,15 @@ This is a script for all you "Kanban masters" who use Taiga and are interested i
 
 ```console
 $ taiga-stats --help
-usage: taiga-stats [-h] [--url URL] [--auth-token AUTH_TOKEN]
-                   {config_template,list_projects,list_us_statuses,burnup,store_daily,cfd,deps_dot_nodes,deps_dot}
+usage: taiga_stats [-h] [--url URL] [--auth-token AUTH_TOKEN]
+                   {config_template,list_projects,list_us_statuses,burnup,store_daily,points_sum,cfd,deps_dot_nodes,deps_dot}
                    ...
 
 Taiga statistic tool. Default values for many options can be set config file;
 see the command 'config_template'.
 
 positional arguments:
-  {config_template,list_projects,list_us_statuses,burnup,store_daily,cfd,deps_dot_nodes,deps_dot}
+  {config_template,list_projects,list_us_statuses,burnup,store_daily,points_sum,cfd,deps_dot_nodes,deps_dot}
                         Commands. Run $(taiga-stats <command> -h) for more
                         info about a command.
     config_template     Generate a template configuration file.
@@ -28,6 +28,7 @@ positional arguments:
                         burnup.
     store_daily         Store the current state of a project on file so that
                         the CFD command can generate a diagram with this data.
+    points_sum          Print out the sum of points in User Story statuses.
     cfd                 Generate a Cumulative Flow Diagram from stored data.
     deps_dot_nodes      Print User Story nodes in .dot file format.
     deps_dot            Print US in .dot file format with dependencies too!
@@ -72,14 +73,13 @@ $ crontab -l | grep taiga
 
 and the script `taiga-stats_cron.sh`:
 
-```console
+```bash
 #!/usr/bin/env sh
 
-source $HOME/dev/virtualenvs/py3env/bin/activate
 cd $HOME/dev/taiga-stats
 
-./taiga-stats store_daily --tag some_feature_tag
-./taiga-stats cfd --tag some_feature_tag
+poetry run taiga_stats store_daily --tag some_feature_tag
+poetry run taiga_stats cfd --tag some_feature_tag
 ```
 
 ## User Story Dependency Graph
@@ -114,47 +114,40 @@ $ dot -T png -o ./dependencies.png ./dependencies.dot
 
 # Setup
 
-## Virtual environment (optional)
+## Installation
+### From package
+TODO
 
-It is recommended to use virtual environment to not pollute your system.
-
-```console
-$ sudo apt-get install python3-dev
-$ cd some/dev/dir
-$ virtualenv -p python3 taiga-stats_env
-$ source taiga-stats_env/bin/activate
-```
-
-## Taiga-stats & Dependencies
-
-
+### From Git
+* Clone this git
 ```console
 $ git clone https://github.com/erikw/taiga-stats.git
 $ cd taiga-stats
 ```
-
-Use either
-
-pip (recommended)
+* Install Poetry
+* Numpy install issues as of 2021-10-31
+* `$ poetry install` did not work with numpy on macOS. Solution from https://github.com/python-poetry/poetry/issues/3196#issuecomment-769753478
 ```console
-$ pip3 install -r requirements.txt
+$ pyenv local 3.9.7
+$ poetry env use 3.9.7
+$ poetry env use 3.9.7
+$ poetry config experimental.new-installer false
+$ poetry install
 ```
 
-or setuptools
+* Install dependencies
 ```console
-$ python3 setup.py install
+$ poetry install
 ```
-
-Now taiga-stats should work!
-
+* Now taiga-stats should work!
 ```console
-$ ./taiga-stats -h
+$ poetry run taiga_stats -h
+$ # or
+$ bin/taiga_stats.sh
 ```
 
 ## Config file
-
 It is tedious to have to specify the server URL and the authentication token everytime. Also you typically work with some project at a time and would like to have default values for the project to use and maybe which tag to filter on. You can genearte a configuration file to set these default values.
-
 
 ```console
 $ taiga-stats config_template

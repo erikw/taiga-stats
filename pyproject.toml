@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "taiga-stats"
+version = "0.1.0"
+description = "Generate statistics from Taiga and produce burnup diagrams, CFDs, dependency graphs and more."
+authors = ["Erik Westrup <erik.westrup@gmail.com>"]
+license = "BSD-3-Clause"
+homepage = "https://github.com/erikw/taiga-stats"
+keywords = ["taiga", "generator", "stats", "cfd", "dependency graph"]
+classifiers = [
+    "Topic :: Utilities",
+    "Topic :: Software Development"
+]
+
+exclude = ["README.md.in"]
+
+
+[tool.poetry.dependencies]
+matplotlib = "^2.1.0"
+numpy = "^1.13.3"
+python = "^3.6"
+python-taiga = "^0.9.0"
+
+[tool.poetry.dev-dependencies]
+flake8 = "^4.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+# By defining this, we can run
+# $ poetry run taiga-stats
+# instead of the longer
+# $ poetry run python -m taiga_stats
+taiga_stats = 'taiga_stats.__main__:main'

@@ -2,7 +2,6 @@
 *.dot
 *.png
 *.sw[op]
-taiga.conf
-taiga.conf.template
-build/
-dist/
+/taiga.conf
+/taiga.conf.template
+/taiga_stats/__pycache__/
