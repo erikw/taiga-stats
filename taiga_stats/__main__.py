@@ -3,7 +3,7 @@
 
 import sys
 
-import taiga_stats
+import taiga_stats.constants as c
 from taiga_stats import parse_args
 from taiga_stats import config
 from taiga_stats import commands
@@ -29,7 +29,7 @@ def main():
     args['url'] = args['url'] if 'url' in args and args['url'] else cnf_url
     args['auth_token'] = args['auth_token'] if 'auth_token' in args and args['auth_token'] else cnf_auth_token if cnf_auth_token else None
     args['project_id'] = args['project_id'] if 'project_id' in args and args['project_id'] else cnf_project_id if cnf_project_id else None
-    args['tag'] = args['tag'] if 'tag' in args and args['tag'] else cnf_tag if cnf_tag else taiga_stats.TAG_MATCH_ALL
+    args['tag'] = args['tag'] if 'tag' in args and args['tag'] else cnf_tag if cnf_tag else c.TAG_MATCH_ALL
     args['output_path'] = args['output_path'] if 'output_path' in args and args['output_path'] else cnf_output_path if cnf_output_path else "."
     args['target_date'] = args['target_date_and_layer'][0] \
         if 'target_date_and_layer' in args and args['target_date_and_layer'] else cnf_target_date if cnf_target_date else None

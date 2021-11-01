@@ -1,7 +1,7 @@
 import configparser
 import os
 
-import taiga_stats
+import taiga_stats.constants as c
 
 
 def read_config():
@@ -18,8 +18,8 @@ def read_config():
     print_points = None
 
     config = configparser.ConfigParser()
-    conf_xdg = os.path.expanduser(taiga_stats.CONF_FILE_PATH_XDG)
-    conf_home = os.path.expanduser(taiga_stats.CONF_FILE_PATH)
+    conf_xdg = os.path.expanduser(c.CONF_FILE_PATH_XDG)
+    conf_home = os.path.expanduser(c.CONF_FILE_PATH)
     if os.path.isfile(conf_xdg):
         config.read(conf_xdg)
     else:

@@ -1,4 +1,4 @@
-import taiga_stats
+import taiga_stats.constants as c
 
 import datetime as dt
 import sys
@@ -18,13 +18,13 @@ DOT_HEADER_FMT = """digraph {:s} {{
 
 
 def get_tag_str(tag):
-    return "" if tag == taiga_stats.TAG_MATCH_ALL else tag
+    return "" if tag == c.TAG_MATCH_ALL else tag
 
 
 def get_stories_with_tag(project, tag):
     uss = project.list_user_stories()
     ret_uss = None
-    if tag == taiga_stats.TAG_MATCH_ALL:
+    if tag == c.TAG_MATCH_ALL:
         ret_uss = uss
     else:
         ret_uss = []
@@ -94,7 +94,7 @@ def get_dot_footer():
 
 
 def read_daily_cfd(path, tag):
-    data_file = taiga_stats.CFD_DATA_FILE_FMT.format(get_tag_str(tag))
+    data_file = c.CFD_DATA_FILE_FMT.format(get_tag_str(tag))
     data_path = "{:s}/{:s}".format(path, data_file)
     data = []
     try:

@@ -1,4 +1,4 @@
-import taiga_stats
+import taiga_stats.constants as c
 from taiga_stats.helpers import assert_args, get_tag_str, get_stories_with_tag, \
     get_us_status_name_from_id, get_statuses_sorted_by_order, \
     get_status_and_names_sorted, get_dot_header, get_dot_footer, read_daily_cfd
@@ -135,11 +135,11 @@ def cmd_us_in_dep_format_dot(args):
     depson_attr_id = None
     proj_attrs = project.list_user_story_attributes()
     for attr in proj_attrs:
-        if attr.name == taiga_stats.CUST_ATTRIB_DEPENDSON_NAME:
+        if attr.name == c.CUST_ATTRIB_DEPENDSON_NAME:
             depson_attr_id = attr.id
     if not depson_attr_id:
         print("No custom User Story attribute named '{:s}' found!. Go to Settings>Attributes>Custom Fields and create one.".
-              format(taiga_stats.CUST_ATTRIB_DEPENDSON_NAME), file=sys.stderr)
+              format(c.CUST_ATTRIB_DEPENDSON_NAME), file=sys.stderr)
         return 1
 
     for us in selected_uss:
@@ -292,7 +292,7 @@ def cmd_print_burnup_data(args):
             nbr_pts_todo += pts
 
     snames_str = ", ".join(reversed(selected_snames))
-    tag_str = tag if tag != taiga_stats.TAG_MATCH_ALL else "*"
+    tag_str = tag if tag != c.TAG_MATCH_ALL else "*"
     print("Statuses: {:s}".format(snames_str))
     print("Tag: {:s}".format(tag_str))
     print("##### User Stories #####")
@@ -320,7 +320,7 @@ def cmd_store_daily_stats(args):
     for us in uss:
         us_by_status[us.status].append(us)
 
-    data_file = taiga_stats.CFD_DATA_FILE_FMT.format(get_tag_str(tag))
+    data_file = c.CFD_DATA_FILE_FMT.format(get_tag_str(tag))
     data_path = "{:s}/{:s}".format(output_path, data_file)
     if not os.path.isfile(data_path):
         with open(data_path, 'w') as fdata:
@@ -340,7 +340,7 @@ def cmd_store_daily_stats(args):
             fdata.write("\t{:d}".format(no_uss))
         fdata.write("\n")
 
-    tag_str = " for {:s}".format(tag) if tag != taiga_stats.TAG_MATCH_ALL else ""
+    tag_str = " for {:s}".format(tag) if tag != c.TAG_MATCH_ALL else ""
     print("Daily stats{:s} stored at: {:s}".format(tag_str, output_path))
 
     return 0
@@ -390,7 +390,7 @@ def cmd_gen_cfd(args):
     # Plotting
     fig, ax = plt.subplots()
     fig.set_size_inches(w=20.0, h=10)
-    tag_str = " for {:s}".format(tag) if tag != taiga_stats.TAG_MATCH_ALL else ""
+    tag_str = " for {:s}".format(tag) if tag != c.TAG_MATCH_ALL else ""
     fig.suptitle("Cumulative Flow Diagram{:s}".format(tag_str))
     plt.xlabel('Week', fontsize=18)
     plt.ylabel('Number of USs', fontsize=16)
@@ -498,7 +498,7 @@ def cmd_gen_config_template(args):
                         'status_ids': '',
                       }
 
-    fpath = "{:s}/{:s}".format(output_path, taiga_stats.CONF_FILE_NAME_FMT)
+    fpath = "{:s}/{:s}".format(output_path, c.CONF_FILE_NAME_FMT)
     try:
         with open(fpath, 'w') as configfile:
             config.write(configfile)
@@ -506,5 +506,5 @@ def cmd_gen_config_template(args):
         print("Could not create {:s}".format(fpath), file=sys.stderr)
         return 1
 
-    print("Template created. Rename and edit it:\n$ mv {:s} {:s}".format(fpath, taiga_stats.CONF_FILE_PATH_XDG))
+    print("Template created. Rename and edit it:\n$ mv {:s} {:s}".format(fpath, c.CONF_FILE_PATH_XDG))
     return 0

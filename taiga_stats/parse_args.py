@@ -1,4 +1,4 @@
-import taiga_stats
+import taiga_stats.constants as c
 import argparse
 
 
@@ -59,6 +59,6 @@ def parse_args():
     subparsers.add_parser('cfd', parents=[opt_project_id, opt_tag, opt_output_path, opt_target_date, opt_status_ids, opt_annotations_off], help=cfd_help)
     subparsers.add_parser('deps_dot_nodes', parents=[opt_project_id, opt_tag, opt_status_ids], help="Print User Story nodes in .dot file format.")
     subparsers.add_parser('deps_dot', parents=[opt_project_id, opt_tag, opt_output_path, opt_status_ids, opt_print_tags, opt_print_points],
-                          help=dd_help.format(taiga_stats.CUST_ATTRIB_DEPENDSON_NAME))
+                          help=dd_help.format(c.CUST_ATTRIB_DEPENDSON_NAME))
 
     return vars(parser.parse_args())
