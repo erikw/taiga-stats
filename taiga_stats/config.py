@@ -3,6 +3,7 @@ import os
 
 import taiga_stats
 
+
 def read_config():
     url = None
     auth_token = None
