@@ -47,7 +47,7 @@ def parse_args():
     opt_print_points.add_argument('--print-points', dest='print_points', action='store_true', help="Print a US's total points in the nodes.")
 
     # Commands
-    subparsers = parser.add_subparsers(help='Commands. Run $(taiga-stats <command> -h) for more info about a command.', dest='command')
+    subparsers = parser.add_subparsers(help='Commands. Run $(taiga_stats <command> -h) for more info about a command.', dest='command')
     subparsers.required = True
 
     subparsers.add_parser('config_template', parents=[opt_output_path], help="Generate a template configuration file.")

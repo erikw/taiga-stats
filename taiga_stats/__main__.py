@@ -1,5 +1,5 @@
 # Entry point when called as a module
-# $ python -m taiga-stats
+# $ python -m taiga_stats
 
 import sys
 
