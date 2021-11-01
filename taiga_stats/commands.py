@@ -1,4 +1,14 @@
-from pprint import pprint
+import taiga_stats
+from taiga_stats.helpers import assert_args, get_tag_str, get_stories_with_tag, \
+    get_us_status_name_from_id, get_statuses_sorted_by_order, \
+    get_status_and_names_sorted, get_dot_header, get_dot_footer, read_daily_cfd
+
+import matplotlib.pyplot as plt
+import matplotlib.dates as mplotdates
+
+from matplotlib.dates import MONDAY
+from matplotlib.dates import WeekdayLocator, DateFormatter
+
 import datetime as dt
 import os
 import re
@@ -11,34 +21,12 @@ import numpy
 
 import matplotlib
 matplotlib.use('TkAgg')  # Reference: https://stackoverflow.com/a/48374671/265508
-import matplotlib.pyplot as plt
-import matplotlib.lines as mplotlines
-import matplotlib.dates as mplotdates
-from matplotlib.dates import MONDAY
-from matplotlib.dates import MonthLocator, WeekdayLocator, DateFormatter
 
 
-import taiga_stats
-from taiga_stats.helpers import *
+CFD_OUT_PNG_FMT = 'cfd_{:s}.png'
+NO_ANNOTATION = 'NONE'
+DEPS_DOT_FILE_FMT = 'dependencies_{:s}'
 
-
-################# Constants #####################
-CFD_DATA_FILE_FMT='cfd_{:s}.dat'
-CFD_OUT_PNG_FMT='cfd_{:s}.png'
-NO_ANNOTATION='NONE'
-DEPS_DOT_FILE_FMT='dependencies_{:s}'
-DOT_HEADER_FMT = """digraph {:s} {{
-  labelloc="t";
-  //labelfontsize="40"
-  label="{:s}";
-  //size="7.5,10"
-  ratio="compress"
-  //orientation=landscape
-"""
-
-
-
-################# Commands #####################
 
 @assert_args('url', 'auth_token')
 def cmd_list_projects(args):
@@ -51,6 +39,7 @@ def cmd_list_projects(args):
         print("{:-3d}\t{:s}".format(proj.id, proj.name))
 
     return 0
+
 
 @assert_args('url', 'auth_token', 'project_id')
 def cmd_list_us_statuses(args):
@@ -84,7 +73,7 @@ def cmd_print_us_in_dep_format(args):
 
     for sid in selected_sids:
         try:
-            idx = status_ids.index(sid)
+            _ = status_ids.index(sid)
         except ValueError:
             print("Selected US status ID {:d} not found for project {:s}!".format(sid, project.name))
             return 1
@@ -95,7 +84,6 @@ def cmd_print_us_in_dep_format(args):
     for us in uss:
         if us.status in selected_sids:
             selected_uss.append(us)
-
 
     for us in selected_uss:
         if us.is_closed:
@@ -128,7 +116,7 @@ def cmd_us_in_dep_format_dot(args):
 
     for sid in selected_sids:
         try:
-            idx = status_ids.index(sid)
+            _ = status_ids.index(sid)
         except ValueError:
             print("Selected US status ID {:d} not found for project {:s}!".format(sid, project.name))
             return 1
@@ -140,14 +128,9 @@ def cmd_us_in_dep_format_dot(args):
         if us.status in selected_sids:
             selected_uss.append(us)
 
-
-
-
-
     titles = []
     edges = []
     header = get_dot_header(get_tag_str(tag), "{:s} US Dependency Graph".format(get_tag_str(tag)))
-
 
     depson_attr_id = None
     proj_attrs = project.list_user_story_attributes()
@@ -155,29 +138,30 @@ def cmd_us_in_dep_format_dot(args):
         if attr.name == taiga_stats.CUST_ATTRIB_DEPENDSON_NAME:
             depson_attr_id = attr.id
     if not depson_attr_id:
-            print("No custom User Story attribute named '{:s}' found!. Go to Settings>Attributes>Custom Fields and create one.".format(taiga_stats.CUST_ATTRIB_DEPENDSON_NAME), file=sys.stderr)
-            return 1
+        print("No custom User Story attribute named '{:s}' found!. Go to Settings>Attributes>Custom Fields and create one.".
+              format(taiga_stats.CUST_ATTRIB_DEPENDSON_NAME), file=sys.stderr)
+        return 1
 
     for us in selected_uss:
         if us.is_closed:
-            color="green"
+            color = "green"
         else:
-            color="black"
+            color = "black"
         subject = re.sub("\"", '', us.subject)
 
         points = ""
         if print_points and us.total_points:
             points += '\n{:s} points'.format(str(us.total_points))
-            points = points.replace("\n", "\\n") # Don't interpret \n.
+            points = points.replace("\n", "\\n")  # Don't interpret \n.
 
         tags = ""
         if print_tags and us.tags:
             tags += '\n['
             for ustag in us.tags:
                 tags += "{:s}, ".format(ustag)
-            tags = tags[:-2] # Remove last ", "
+            tags = tags[:-2]  # Remove last ", "
             tags += ']'
-            tags = tags.replace("\n", "\\n") # Don't interpret \n.
+            tags = tags.replace("\n", "\\n")  # Don't interpret \n.
 
         attrs = us.get_attributes()
         if str(depson_attr_id) in attrs['attributes_values']:
@@ -216,6 +200,7 @@ def cmd_us_in_dep_format_dot(args):
 
     return 0
 
+
 @assert_args('url', 'auth_token', 'project_id', 'tag')
 def cmd_points_sum(args):
     api = taiga.TaigaAPI(host=args['url'], token=args['auth_token'])
@@ -233,7 +218,7 @@ def cmd_points_sum(args):
 
     for sid in selected_sids:
         try:
-            idx = status_ids.index(sid)
+            _ = status_ids.index(sid)
         except ValueError:
             print("Selected US status ID {:d} not found for project {:s}!".format(sid, project.name))
             return 1
@@ -245,8 +230,7 @@ def cmd_points_sum(args):
         if us.status in selected_sids:
             selected_uss.append(us)
 
-
-    points = {} # statusID -> pointsum
+    points = {}  # statusID -> pointsum
     for us in selected_uss:
         if us.status not in points:
             points[us.status] = 0
@@ -264,7 +248,6 @@ def cmd_print_burnup_data(args):
     project = api.projects.get(args['project_id'])
     tag = args['tag']
     status_ids = None
-
 
     status_ids, status_names = get_status_and_names_sorted(project)
     selected_sids = None
@@ -290,9 +273,6 @@ def cmd_print_burnup_data(args):
         if us.status in selected_sids:
             selected_uss.append(us)
 
-
-
-
     nbr_done = 0
     nbr_todo = 0
     nbr_pts_done = 0
@@ -310,7 +290,6 @@ def cmd_print_burnup_data(args):
         else:
             nbr_todo += 1
             nbr_pts_todo += pts
-
 
     snames_str = ", ".join(reversed(selected_snames))
     tag_str = tag if tag != taiga_stats.TAG_MATCH_ALL else "*"
@@ -337,11 +316,11 @@ def cmd_store_daily_stats(args):
 
     status_ids, _ = get_status_and_names_sorted(project)
     uss = get_stories_with_tag(project, tag)
-    us_by_status = {status_id : [] for status_id in status_ids}
+    us_by_status = {status_id: [] for status_id in status_ids}
     for us in uss:
         us_by_status[us.status].append(us)
 
-    data_file = CFD_DATA_FILE_FMT.format(get_tag_str(tag))
+    data_file = taiga_stats.CFD_DATA_FILE_FMT.format(get_tag_str(tag))
     data_path = "{:s}/{:s}".format(output_path, data_file)
     if not os.path.isfile(data_path):
         with open(data_path, 'w') as fdata:
@@ -351,7 +330,6 @@ def cmd_store_daily_stats(args):
             for status_id in status_ids:
                 fdata.write("\t{:s}".format(get_us_status_name_from_id(project, status_id)))
             fdata.write("\n")
-
 
     with open(data_path, 'a') as fdata:
         fdata.write("{:s}".format(dt.datetime.utcnow().strftime("%Y-%m-%d")))
@@ -386,7 +364,6 @@ def cmd_gen_cfd(args):
     annotation_layer = data[2]
     data = data[3:]
 
-
     status_ids, status_names = get_status_and_names_sorted(project)
     selected_sids = None
     if 'status_ids' in args and args['status_ids']:
@@ -395,7 +372,6 @@ def cmd_gen_cfd(args):
         selected_sids.reverse()
     else:
         selected_sids = status_ids
-
 
     selected_snames = []
     selected_data = []
@@ -408,8 +384,6 @@ def cmd_gen_cfd(args):
         selected_snames.append(status_names[idx])
         selected_data.append(data[idx])
 
-
-
     y = numpy.row_stack(tuple(selected_data))
     x = dates
 
@@ -421,7 +395,6 @@ def cmd_gen_cfd(args):
     plt.xlabel('Week', fontsize=18)
     plt.ylabel('Number of USs', fontsize=16)
     polys = ax.stackplot(x, y)
-
 
     # X-axis, plot per week.
     mondays = WeekdayLocator(MONDAY)
@@ -437,23 +410,20 @@ def cmd_gen_cfd(args):
     # ax.grid(True)
     fig.autofmt_xdate()
 
-
     if not annotations_off:
         # Draw annotations of the data.
         bbox_props = dict(boxstyle="round4,pad=0.3", fc="white", ec="black", lw=2)
         for i, annotation in enumerate(annotations):
             if annotation != NO_ANNOTATION:
-                y_coord = 0 # Calculate the Y coordnate by stacking up y values below.
+                y_coord = 0  # Calculate the Y coordnate by stacking up y values below.
                 for j in range(annotation_layer[i] + 1):
                     y_coord += y[j][i]
                 ax.text(x[i], (y_coord+5), annotation, ha="center", va="center", rotation=30, size=10, bbox=bbox_props)
-
 
     # Generation date string
     date_now = time.strftime("%Y-%m-%d %H:%M:%S")
     date_str = "Generated at {:s}".format(date_now)
     fig.text(0.125, 0.1, date_str)
-
 
     # Ideal pace line
     print_ideal = False
@@ -461,13 +431,13 @@ def cmd_gen_cfd(args):
         print_ideal = True
         target_date = args['target_date']
         target_date_dt = dt.datetime.strptime(target_date, "%Y-%m-%d")
-        if mplotdates.date2num(target_date_dt) <  mplotdates.date2num(x[0]):
+        if mplotdates.date2num(target_date_dt) < mplotdates.date2num(x[0]):
             print("Target date must be after the first data point stored!", file=sys.stderr)
 
         target_layer = int(args['target_layer'])
         if not (0 <= target_layer < len(y)):
-                print("Ideal target layer not in range!", file=sys.stderr)
-                return 1
+            print("Ideal target layer not in range!", file=sys.stderr)
+            return 1
 
         y_ideal_start = 0
         for i in range(target_layer - 1):
@@ -480,25 +450,26 @@ def cmd_gen_cfd(args):
 
         # Extend last known value of target layer if needed.
         if mplotdates.date2num(x[-1]) < mplotdates.date2num(target_date_dt):
-            plt.hlines(y_ideal_end, x[-1], target_date_dt, colors='k', linestyles='--',linewidth=3)
-
-
+            plt.hlines(y_ideal_end, x[-1], target_date_dt, colors='k', linestyles='--', linewidth=3)
 
     # Legend
-    ## Stack plot legend
+    # - Stack plot legend
     legendProxies = []
     for poly in polys:
         legendProxies.append(plt.Rectangle((0, 0), 1, 1, fc=poly.get_facecolor()[0]))
     box = ax.get_position()
     ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
 
-    ## Ideal line legend
+    # - Ideal line legend
     if print_ideal:
-        legendProxies.append(plt.Line2D((0,1),(0,0), color=ideal_line[0].get_color(), linestyle=ideal_line[0].get_linestyle(), linewidth=ideal_line[0].get_linewidth()))
+        legendProxies.append(plt.Line2D((0, 1),
+                                        (0, 0),
+                                        color=ideal_line[0].get_color(),
+                                        linestyle=ideal_line[0].get_linestyle(),
+                                        linewidth=ideal_line[0].get_linewidth()))
         selected_snames.append(ideal_line[0].get_label())
 
     ax.legend(reversed(legendProxies), reversed(selected_snames), title="Color chart", loc='center left', bbox_to_anchor=(1, 0.5))
-
 
     out_file = CFD_OUT_PNG_FMT.format(get_tag_str(tag))
     out_path = "{:s}/{:s}".format(output_path, out_file)

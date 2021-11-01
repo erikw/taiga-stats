@@ -22,10 +22,6 @@ import taiga_stats
 
 
 ################# Constants #####################
-CFD_DATA_FILE_FMT='cfd_{:s}.dat'
-CFD_OUT_PNG_FMT='cfd_{:s}.png'
-NO_ANNOTATION='NONE'
-DEPS_DOT_FILE_FMT='dependencies_{:s}'
 DOT_HEADER_FMT = """digraph {:s} {{
   labelloc="t";
   //labelfontsize="40"
@@ -109,7 +105,7 @@ def get_dot_footer():
     return "}"
 
 def read_daily_cfd(path, tag):
-    data_file = CFD_DATA_FILE_FMT.format(get_tag_str(tag))
+    data_file = taiga_stats.CFD_DATA_FILE_FMT.format(get_tag_str(tag))
     data_path = "{:s}/{:s}".format(path, data_file)
     data = []
     try:
