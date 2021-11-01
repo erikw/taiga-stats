@@ -15,11 +15,11 @@ exclude = ["README.md.in"]
 
 
 [tool.poetry.dependencies]
+isort = "^5.9.3"
 matplotlib = "^2.1.0"
 numpy = "^1.13.3"
 python = "^3.6.1"
 python-taiga = "^0.9.0"
-isort = "^5.9.3"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^4.0"
