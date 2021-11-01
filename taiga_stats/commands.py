@@ -427,6 +427,7 @@ def cmd_gen_cfd(args):
 
     # Ideal pace line
     print_ideal = False
+    ideal_line = None
     if ('target_date' in args and args['target_date']) and ('target_layer' in args and args['target_layer']):
         print_ideal = True
         target_date = args['target_date']
@@ -461,7 +462,7 @@ def cmd_gen_cfd(args):
     ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
 
     # - Ideal line legend
-    if print_ideal:
+    if print_ideal and ideal_line:
         legendProxies.append(plt.Line2D((0, 1),
                                         (0, 0),
                                         color=ideal_line[0].get_color(),
