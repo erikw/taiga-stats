@@ -1,5 +1,6 @@
-import taiga_stats.constants as c
 import argparse
+
+import taiga_stats.constants as c
 
 
 def parse_args():

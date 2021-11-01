@@ -1,25 +1,24 @@
-import taiga_stats.constants as c
-from taiga_stats.helpers import assert_args, get_tag_str, get_stories_with_tag, \
-    get_us_status_name_from_id, get_statuses_sorted_by_order, \
-    get_status_and_names_sorted, get_dot_header, get_dot_footer, read_daily_cfd
-
-import matplotlib.pyplot as plt
-import matplotlib.dates as mplotdates
-
-from matplotlib.dates import MONDAY
-from matplotlib.dates import WeekdayLocator, DateFormatter
-
+import configparser
 import datetime as dt
 import os
 import re
 import sys
 import time
-import configparser
-
-import taiga
-import numpy
 
 import matplotlib
+import matplotlib.dates as mplotdates
+import matplotlib.pyplot as plt
+import numpy
+import taiga
+from matplotlib.dates import MONDAY, DateFormatter, WeekdayLocator
+
+import taiga_stats.constants as c
+from taiga_stats.helpers import (assert_args, get_dot_footer, get_dot_header,
+                                 get_status_and_names_sorted,
+                                 get_statuses_sorted_by_order,
+                                 get_stories_with_tag, get_tag_str,
+                                 get_us_status_name_from_id, read_daily_cfd)
+
 matplotlib.use('TkAgg')  # Reference: https://stackoverflow.com/a/48374671/265508
 
 

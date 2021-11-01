@@ -4,9 +4,7 @@
 import sys
 
 import taiga_stats.constants as c
-from taiga_stats import parse_args
-from taiga_stats import config
-from taiga_stats import commands
+from taiga_stats import commands, config, parse_args
 
 COMMAND2FUNC = {
     'burnup': commands.cmd_print_burnup_data,

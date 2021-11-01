@@ -1,9 +1,10 @@
-import taiga_stats.constants as c
-
 import datetime as dt
 import sys
 
 import matplotlib
+
+import taiga_stats.constants as c
+
 matplotlib.use('TkAgg')  # Reference: https://stackoverflow.com/a/48374671/265508
 
 
