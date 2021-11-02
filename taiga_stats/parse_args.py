@@ -20,15 +20,13 @@ def parse_args():
         "this story depends on e.g. '#123,#456'."
     )
 
-    parser = argparse.ArgumentParser(prog="taiga_stats", description=tool_desc)
+    parser = argparse.ArgumentParser(prog="taiga-stats", description=tool_desc)
 
     # General options
     parser.add_argument("--url", help="URL to Taiga server.")
     parser.add_argument(
         "--auth-token",
-        help=at_help.format(
-            "https://taigaio.github.io/taiga-doc/dist/api.html#_authentication"
-        ),
+        help=at_help.format("https://taigaio.github.io/taiga-doc/dist/api.html#_authentication"),
     )
 
     # Common options to commands
@@ -39,9 +37,7 @@ def parse_args():
     )
 
     opt_project_id = argparse.ArgumentParser(add_help=False)
-    opt_project_id.add_argument(
-        "--project-id", help="Project ID in Taiga to get data from."
-    )
+    opt_project_id.add_argument("--project-id", help="Project ID in Taiga to get data from.")
 
     opt_output_path = argparse.ArgumentParser(add_help=False)
     opt_output_path.add_argument(
@@ -59,9 +55,7 @@ def parse_args():
     )
 
     opt_annotations_off = argparse.ArgumentParser(add_help=False)
-    opt_annotations_off.add_argument(
-        "--annotations-off", dest="annotations_off", action="store_true", help=ao_help
-    )
+    opt_annotations_off.add_argument("--annotations-off", dest="annotations_off", action="store_true", help=ao_help)
 
     opt_print_tags = argparse.ArgumentParser(add_help=False)
     opt_print_tags.add_argument(
@@ -81,7 +75,7 @@ def parse_args():
 
     # Commands
     subparsers = parser.add_subparsers(
-        help="Commands. Run $(taiga_stats <command> -h) for more info about a command.",
+        help="Commands. Run $(taiga-stats <command> -h) for more info about a command.",
         dest="command",
     )
     subparsers.required = True
@@ -100,12 +94,8 @@ def parse_args():
         parents=[opt_project_id],
         help="List all the ID and names of User Story statuses.",
     )
-    subparsers.add_parser(
-        "burnup", parents=[opt_project_id, opt_tag, opt_status_ids], help=b_help
-    )
-    subparsers.add_parser(
-        "store_daily", parents=[opt_project_id, opt_tag, opt_output_path], help=sd_help
-    )
+    subparsers.add_parser("burnup", parents=[opt_project_id, opt_tag, opt_status_ids], help=b_help)
+    subparsers.add_parser("store_daily", parents=[opt_project_id, opt_tag, opt_output_path], help=sd_help)
     subparsers.add_parser(
         "points_sum",
         parents=[opt_project_id, opt_tag, opt_status_ids],

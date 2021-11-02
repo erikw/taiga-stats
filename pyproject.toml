@@ -1,16 +1,22 @@
 [tool.poetry]
-name = "taiga_stats"
+name = "taiga-stats"
 version = "0.1.0"
 description = "Generate statistics from Taiga and produce burnup diagrams, CFDs, dependency graphs and more."
 authors = ["Erik Westrup <erik.westrup@gmail.com>"]
 license = "BSD-3-Clause"
-homepage = "https://github.com/erikw/taiga_stats"
+readme = "README.md"
+homepage = "https://github.com/erikw/taiga-stats"
 keywords = ["taiga", "generator", "stats", "cfd", "dependency graph"]
 classifiers = [
     "Topic :: Utilities",
     "Topic :: Software Development"
 ]
-
+include = [
+	"CHANGELOG.md",
+	"README.md",
+	"img/",
+	"sample_data/",
+	]
 exclude = ["README.md.in"]
 
 
@@ -35,10 +41,11 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 # By defining this, we can run
-# $ poetry run taiga_stats
+# $ poetry run taiga-stats
 # instead of the longer
 # $ poetry run python -m taiga_stats
-taiga_stats = 'taiga_stats.__main__:main'
+# NOTE python modules should use underscores, python packages not (PEP8)...
+taiga-stats = 'taiga_stats.__main__:main'
 
 [tool.isort]
 line_length = 160

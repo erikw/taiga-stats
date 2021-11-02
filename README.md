@@ -7,8 +7,8 @@ This is a script for all you "Kanban masters" who use Taiga and are interested i
 # Features
 
 ```console
-$ taiga_stats --help
-usage: taiga_stats [-h] [--url URL] [--auth-token AUTH_TOKEN]
+$ taiga-stats --help
+usage: taiga-stats [-h] [--url URL] [--auth-token AUTH_TOKEN]
                    {config_template,list_projects,list_us_statuses,burnup,store_daily,points_sum,cfd,deps_dot_nodes,deps_dot}
                    ...
 
@@ -17,7 +17,7 @@ see the command 'config_template'.
 
 positional arguments:
   {config_template,list_projects,list_us_statuses,burnup,store_daily,points_sum,cfd,deps_dot_nodes,deps_dot}
-                        Commands. Run $(taiga_stats <command> -h) for more
+                        Commands. Run $(taiga-stats <command> -h) for more
                         info about a command.
     config_template     Generate a template configuration file.
     list_projects       List all found project IDs and names on the server
@@ -68,18 +68,16 @@ To save the data and generate the diagram each working day I have this cronjob:
 
 ```console
 $ crontab -l | grep taiga
-0 18 * * 1-5            $HOME/bin/taiga_stats_cron.sh
+0 18 * * 1-5            $HOME/bin/taiga-stats-cron.sh
 ```
 
-and the script `taiga_stats_cron.sh`:
+and the script `taiga-stats-cron.sh`:
 
 ```bash
 #!/usr/bin/env sh
 
-cd $HOME/path/to/taiga_stats/
-
-poetry run taiga_stats store_daily --tag some_feature_tag
-poetry run taiga_stats cfd --tag some_feature_tag
+taiga-stats store_daily --tag some_feature_tag
+taiga-stats cfd --tag some_feature_tag
 ```
 
 ## User Story Dependency Graph
@@ -107,7 +105,7 @@ Then run the script and generate a png file.
 
 
 ```console
-$ taiga_stats deps_dot
+$ taiga-stats deps_dot
 $ dot -T png -o ./dependencies.png ./dependencies.dot
 ```
 
@@ -115,14 +113,32 @@ $ dot -T png -o ./dependencies.png ./dependencies.dot
 # Setup
 
 ## Installation
-### From package
-TODO
+```console
+$ pip install taiga-stats
+$ # or maybe even nicer
+$ pipx install taiga-stats
+```
 
-### From Git
+
+## Config file
+It is tedious to have to specify the server URL and the authentication token everytime. Also you typically work with some project at a time and would like to have default values for the project to use and maybe which tag to filter on. You can genearte a configuration file to set these default values.
+
+```console
+$ taiga-stats config_template
+$ mv ./taiga.conf.template ~/.taiga-stats.conf
+$ vi ~/.taiga-stats.conf
+```
+
+
+# Development
+* Make sure to `$ poetry shell` before using tools like pyright LSP, so that it can find the installed dependency modules
+* Reference for how to structure a python projec: https://realpython.com/pypi-publish-python-package/
+
+## Setup from Git
 * Clone this git
 ```console
-$ git clone https://github.com/erikw/taiga_stats.git
-$ cd taiga_stats
+$ git clone https://github.com/erikw/taiga-stats.git
+$ cd taiga-stats
 ```
 * Install Poetry
 * Numpy install issues as of 2021-10-31
@@ -139,23 +155,22 @@ $ poetry install
 ```console
 $ poetry install
 ```
-* Now taiga_stats should work!
+* Now taiga-stats should work!
 ```console
-$ poetry run taiga_stats -h
+$ poetry run taiga-stats -h
 $ # or
-$ bin/taiga_stats.sh
+$ bin/taiga-stats.sh
 ```
-
-## Config file
-It is tedious to have to specify the server URL and the authentication token everytime. Also you typically work with some project at a time and would like to have default values for the project to use and maybe which tag to filter on. You can genearte a configuration file to set these default values.
-
+* To install locally:
 ```console
-$ taiga_stats config_template
-$ mv ./taiga.conf.template ~/.taiga_stats.conf
-$ vi ~/.taiga_stats.conf
+$ poetry build
+$ pip install dist/taiga-stats-*.whl
 ```
 
 
-# Development
-* Make sure to `$ poetry shell` before using tools like pyright LSP, so that it can find the installed dependency modules
-* Reference for how to structure a python projec: https://realpython.com/pypi-publish-python-package/
+## Releasing
+```console
+$ vi pyproject.toml  # Update version.
+$ poetry build
+$ poetry publish
+```
