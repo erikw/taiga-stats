@@ -44,6 +44,7 @@ build-backend = "poetry.core.masonry.api"
 # $ poetry run taiga-stats
 # instead of the longer
 # $ poetry run python -m taiga_stats
+# This short name will also be the name of the script being installed to the system when installing the wheel from pip.
 # NOTE python modules should use underscores, python packages not (PEP8)...
 taiga-stats = 'taiga_stats.__main__:main'
 
