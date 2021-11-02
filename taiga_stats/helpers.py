@@ -5,7 +5,7 @@ import matplotlib
 
 import taiga_stats.constants as c
 
-matplotlib.use('TkAgg')  # Reference: https://stackoverflow.com/a/48374671/265508
+matplotlib.use("TkAgg")  # Reference: https://stackoverflow.com/a/48374671/265508
 
 
 DOT_HEADER_FMT = """digraph {:s} {{
@@ -34,7 +34,10 @@ def get_stories_with_tag(project, tag):
                 ret_uss.append(us)
 
     if ret_uss is None or len(ret_uss) == 0:
-        print("Warning: no userstories matching '{:s}' was found.".format(tag), file=sys.stderr)
+        print(
+            "Warning: no userstories matching '{:s}' was found.".format(tag),
+            file=sys.stderr,
+        )
         sys.exit(1)
     return ret_uss
 
@@ -99,11 +102,11 @@ def read_daily_cfd(path, tag):
     data_path = "{:s}/{:s}".format(path, data_file)
     data = []
     try:
-        with open(data_path, 'r') as fdata:
+        with open(data_path, "r") as fdata:
             row = 0
             for line in fdata:
                 line = line.rstrip()
-                parts = line.split('\t')
+                parts = line.split("\t")
                 if row == 0:
                     data = [[] for _ in range(len(parts) + 1)]
                 else:
@@ -119,7 +122,10 @@ def read_daily_cfd(path, tag):
 
                 row += 1
     except IOError as e:
-        print("Could not read {:s}, error: {:s}".format(data_path, str(e)), file=sys.stderr)
+        print(
+            "Could not read {:s}, error: {:s}".format(data_path, str(e)),
+            file=sys.stderr,
+        )
         sys.exit(2)
 
     return data
@@ -139,7 +145,12 @@ class assert_args(object):
         def wrapper(args):
             for arg in dec.needed_args:
                 if arg not in args or args[arg] is None:
-                    print("Required argument ''{:s}' was not supplied on commandline or set in config file.".format(arg))
+                    print(
+                        "Required argument ''{:s}' was not supplied on commandline or set in config file.".format(
+                            arg
+                        )
+                    )
                     return 1
             func(args)
+
         return wrapper
