@@ -39,3 +39,6 @@ build-backend = "poetry.core.masonry.api"
 # instead of the longer
 # $ poetry run python -m taiga_stats
 taiga_stats = 'taiga_stats.__main__:main'
+
+[tool.black]
+line_length = 160
