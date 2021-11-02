@@ -1,3 +1,7 @@
+## [1.0.0] - 2021-11-02
+- Published on pypy.org
+- Prevent python 3.10.0 as it does not currently work with numpy for this version.
+
 ## [0.1.1] - 2021-11-02
 - Make README.md images work on pypi.org
 
