@@ -26,7 +26,7 @@ def parse_args():
     parser.add_argument("--url", help="URL to Taiga server.")
     parser.add_argument(
         "--auth-token",
-        help=at_help.format("https://taigaio.github.io/taiga-doc/dist/api.html#_authentication"),
+        help=at_help.format("https://docs.taiga.io/api.html#_authentication"),
     )
 
     # Common options to commands

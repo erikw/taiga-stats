@@ -44,8 +44,8 @@ optional arguments:
   --url URL             URL to Taiga server.
   --auth-token AUTH_TOKEN
                         Authentication token. Instructions on how to get one
-                        is found at https://taigaio.github.io/taiga-
-                        doc/dist/api.html#_authentication
+                        is found at
+                        https://docs.taiga.io/api.html#_authentication
 ```
 
 ## Cumulative Flow Diagram
