@@ -1,3 +1,6 @@
+## [1.0.1] - 2021-11-02
+- Add README.md badges for easier overview of current status and support.
+
 ## [1.0.0] - 2021-11-02
 - Published on pypy.org
 - Prevent python 3.10.0 as it does not currently work with numpy for this version.
