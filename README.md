@@ -116,8 +116,7 @@ $ dot -T png -o ./dependencies.png ./dependencies.dot
 ## Installation
 ```console
 $ pip install taiga-stats
-$ # or maybe even nicer
-$ pipx install taiga-stats
+$ taiga-stats -h
 ```
 
 
