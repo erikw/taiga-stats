@@ -5,22 +5,23 @@ import re
 import sys
 import time
 
-import matplotlib
-import matplotlib.dates as mplotdates
-import matplotlib.pyplot as plt
-import numpy
-import taiga
-from matplotlib.dates import MONDAY, DateFormatter, WeekdayLocator
+import matplotlib  # noqa
 
-import taiga_stats.constants as c
-from taiga_stats.helpers import (assert_args, get_dot_footer, get_dot_header,
-                                 get_status_and_names_sorted,
-                                 get_statuses_sorted_by_order,
-                                 get_stories_with_tag, get_tag_str,
+matplotlib.use("TkAgg")  # noqa
+import matplotlib.dates as mplotdates  # noqa
+import matplotlib.pyplot as plt  # noqa
+import numpy  # noqa
+import taiga  # noqa
+from matplotlib.dates import MONDAY, DateFormatter, WeekdayLocator  # noqa
+
+import taiga_stats.constants as c  # noqa
+from taiga_stats.helpers import get_dot_footer  # noqa
+from taiga_stats.helpers import get_dot_header  # noqa
+from taiga_stats.helpers import get_status_and_names_sorted  # noqa
+from taiga_stats.helpers import get_statuses_sorted_by_order  # noqa
+from taiga_stats.helpers import get_tag_str  # noqa
+from taiga_stats.helpers import (assert_args, get_stories_with_tag,  # noqa
                                  get_us_status_name_from_id, read_daily_cfd)
-
-matplotlib.use("TkAgg")  # Reference: https://stackoverflow.com/a/48374671/265508
-
 
 CFD_OUT_PNG_FMT = "cfd_{:s}.png"
 NO_ANNOTATION = "NONE"
