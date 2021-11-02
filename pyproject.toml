@@ -25,8 +25,9 @@ autoflake = "^1.4"
 autoimport = "^0.7.5"
 black = "^21.10b0"
 flake8 = "^4.0"
-isort = "^5.9.3"
 ipdb = "^0.13.9"
+isort = "^5.9.3"
+pudb = "^2021.2.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
