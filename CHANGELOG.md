@@ -1,3 +1,6 @@
+## [0.1.1] - 2021-11-02
+- Make README.md images work on pypi.org
+
 ## [0.1.0] - 2021-11-02
 - No feature changes from previous version.
 - Project being properly built with poetry. Restructuring of the source modules.
