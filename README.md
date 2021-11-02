@@ -164,13 +164,13 @@ $ bin/taiga-stats.sh
 * To install locally:
 ```console
 $ poetry build
-$ pip install dist/taiga-stats-*.whl
+$ pip install dist/taiga_stats-*.whl
 ```
 
 
 ## Releasing
 ```console
-$ vi pyproject.toml  # Update version.
+$ vi -p pyproject.toml CHANGELOG.md  # Update version.
 $ poetry build
 $ poetry publish
 ```

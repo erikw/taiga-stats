@@ -128,7 +128,7 @@ $ vi ~/.taiga-stats.conf
 * To install locally:
 	```console
 	$ poetry build
-	$ pip install dist/taiga-stats-*.whl
+	$ pip install dist/taiga_stats-*.whl
 	```
 
 
