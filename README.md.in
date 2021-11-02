@@ -18,14 +18,14 @@ From a [CFD](http://brodzinski.com/2013/07/cumulative-flow-diagram.html) a lot o
 
 This is an example diagram generated from [mock data](sample_data/cfd_example.dat):
 
-![Example CFD](img/cfd_example.png)
+![Example CFD](https://raw.githubusercontent.com/erikw/taiga-stats/master/img/cfd_example.png)
 
 Textual annotations can be put in the plot by manually editing the `.dat file`.
 
 
 Also a target date for the project deadline can be specified. Then a line will be drawn showing the ideal work pace towards this date, as seen below where the target finish date is in week 46.
 
-![Example CFD with ideal pace](img/cfd_example_ideal_pace.png)
+![Example CFD with ideal pace](https://raw.githubusercontent.com/erikw/taiga-stats/master/img/cfd_example_ideal_pace.png)
 
 
 To save the data and generate the diagram each working day I have this cronjob:
@@ -48,7 +48,7 @@ taiga-stats cfd --tag some_feature_tag
 
 Some stories requires other to be completed before they can be started. I thought it would be handy if you could keep track of these dependencies in Taiga but simply writing for each US a list of other stories that this story depends on. Then from this information a [.dot file](sample_data/dependencies_example.dot) can be generated that should how you user stories depends on each other. This graph is very useful for work planning i.e. what to start with and how much parallelization is possible and at what stages.
 
-![US Dependency Graph](img/dependencies_example.png)
+![US Dependency Graph](https://raw.githubusercontent.com/erikw/taiga-stats/master/img/dependencies_example.png)
 
 The stories that are marked as Done in Taiga have a green color in the graph.
 
@@ -57,12 +57,12 @@ The stories that are marked as Done in Taiga have a green color in the graph.
 
 First create a new custom filed in taiga named `Depends On` under Settings > Attributes > Custom Fields:
 
-![Custom Field](img/taiga_custom_field.png)
+![Custom Field](https://raw.githubusercontent.com/erikw/taiga-stats/master/img/taiga_custom_field.png)
 
 
 Then go to your User Stories and enter some dependencies as demonstrated below.
 
-![US dependency](img/us_depends_on.png)
+![US dependency](https://raw.githubusercontent.com/erikw/taiga-stats/master/img/us_depends_on.png)
 
 
 Then run the script and generate a png file.
