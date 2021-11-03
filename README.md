@@ -182,3 +182,10 @@ $ poetry build
 $ ls -l dist/
 $ poetry publish
 ```
+
+or
+
+```console
+$ vi -p pyproject.toml CHANGELOG.md  # Update version.
+$ poetry publish --build
+```
