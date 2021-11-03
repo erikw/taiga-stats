@@ -85,6 +85,11 @@ $ pip install taiga-stats
 $ taiga-stats -h
 ```
 
+To use this tool, you need to supply
+* `--url` to your taiga server e.g. `https://api.taiga.io/`
+* `--auth-token` that you need to obtain according to the [official instructions](https://docs.taiga.io/api.html#_authentication).
+
+It's recommended to put these 2 values in the below described `taiga-stats.conf` file for easier usage of this tool!
 
 ## Config file
 It is tedious to have to specify the server URL and the authentication token everytime. Also you typically work with some project at a time and would like to have default values for the project to use and maybe which tag to filter on. You can genearte a configuration file to set these default values.
