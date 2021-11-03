@@ -153,9 +153,7 @@ $ cd taiga-stats
 ```console
 $ pyenv local 3.9.7
 $ poetry env use 3.9.7
-$ poetry env use 3.9.7
 $ poetry config experimental.new-installer false
-$ poetry install
 ```
 
 * Install dependencies
