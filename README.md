@@ -104,7 +104,7 @@ Then go to your User Stories and enter some dependencies as demonstrated below.
 ![US dependency](https://raw.githubusercontent.com/erikw/taiga-stats/master/img/us_depends_on.png)
 
 
-Then run the script and generate a png file.
+Then run the script and generate a PNG file.
 
 
 ```console
@@ -116,9 +116,17 @@ $ dot -T png -o ./dependencies.png ./dependencies.dot
 # Setup
 
 ## Installation
+Make sure to use a supported python version. See the key `python` in the section `tool.poetry.dependencies` at [pyproject.toml](https://github.com/erikw/taiga-stats/blob/master/pyproject.toml).
+
 ```console
 $ pip install taiga-stats
 $ taiga-stats -h
+```
+
+If you use [pipx](https://pypi.org/project/pipx/) to install, you must specify a supported and locally available python version like:
+
+```console
+$ pipx install --python python3.9  taiga-stats
 ```
 
 To use this tool, you need to supply
@@ -128,7 +136,7 @@ To use this tool, you need to supply
 It's recommended to put these 2 values in the below described `taiga-stats.conf` file for easier usage of this tool!
 
 ## Config file
-It is tedious to have to specify the server URL and the authentication token everytime. Also you typically work with some project at a time and would like to have default values for the project to use and maybe which tag to filter on. You can genearte a configuration file to set these default values.
+It is tedious to have to specify the server URL and the authentication token every time. Also you typically work with some project at a time and would like to have default values for the project to use and maybe which tag to filter on. You can generate a configuration file to set these default values.
 
 ```console
 $ taiga-stats config_template
@@ -139,7 +147,7 @@ $ vi ~/.taiga-stats.conf
 
 # Development
 * Make sure to `$ poetry shell` before using tools like pyright LSP, so that it can find the installed dependency modules
-* Reference for how to structure a python projec: https://realpython.com/pypi-publish-python-package/
+* Reference for how to structure a python project: https://realpython.com/pypi-publish-python-package/
 
 ## Setup from Git
 * Clone this git
@@ -149,7 +157,7 @@ $ cd taiga-stats
 ```
 * Install Poetry
 * Numpy install issues as of 2021-10-31
-* `$ poetry install` did not work with numpy on macOS. Solution from https://github.com/python-poetry/poetry/issues/3196#issuecomment-769753478
+* `$ poetry install` did not work with Numpy on macOS. Solution from https://github.com/python-poetry/poetry/issues/3196#issuecomment-769753478
 ```console
 $ pyenv local 3.9.7
 $ poetry env use 3.9.7
