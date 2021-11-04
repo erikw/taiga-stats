@@ -55,10 +55,7 @@ platformdirs = ">=2"
 regex = ">=2020.1.8"
 tomli = ">=0.2.6,<2.0.0"
 typed-ast = {version = ">=1.4.2", markers = "python_version < \"3.8\""}
-typing-extensions = [
-    {version = ">=3.10.0.0", markers = "python_version < \"3.10\""},
-    {version = "!=3.10.0.1", markers = "python_version >= \"3.10\""},
-]
+typing-extensions = ">=3.10.0.0"
 
 [package.extras]
 colorama = ["colorama (>=0.4.3)"]
@@ -461,7 +458,7 @@ six = ">=1.5"
 
 [[package]]
 name = "python-taiga"
-version = "0.9.0"
+version = "1.0.0"
 description = "Taiga python API"
 category = "main"
 optional = false
@@ -623,8 +620,8 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 
 [metadata]
 lock-version = "1.1"
-python-versions = "^3.7"
-content-hash = "f85119d2d3f0e11695b05e79f63be1f189f5ae19bd6037e3599d1371ef3cff4a"
+python-versions = "^3.7, < 3.10.0"
+content-hash = "86bf54c77a79422372a5d78c3b72a649a415e90e7ebf9e4350e04653a0f5912e"
 
 [metadata.files]
 appnope = [
@@ -892,8 +889,8 @@ python-dateutil = [
     {file = "python_dateutil-2.8.2-py2.py3-none-any.whl", hash = "sha256:961d03dc3453ebbc59dbdea9e4e11c5651520a876d0f4db161e8674aae935da9"},
 ]
 python-taiga = [
-    {file = "python-taiga-0.9.0.tar.gz", hash = "sha256:ee615f82aecaea2f2612f2098f02b375f119994f9a933c0dfc1a50204b30192c"},
-    {file = "python_taiga-0.9.0-py2.py3-none-any.whl", hash = "sha256:fd98c474ab1d78d7ea75f26a473f802cd03416468e0c931da24d4e423ae68ab9"},
+    {file = "python-taiga-1.0.0.tar.gz", hash = "sha256:4ab4ae81324c8b4c8a7dae3a3300096326181e5074b238516a134825df0c25a3"},
+    {file = "python_taiga-1.0.0-py2.py3-none-any.whl", hash = "sha256:d18fe441428ba2084f0442516d42f9b5787ec113e80c80ea761a47579d3a7412"},
 ]
 pytz = [
     {file = "pytz-2021.3-py2.py3-none-any.whl", hash = "sha256:3672058bc3453457b622aab7a1c3bfd5ab0bdae451512f6cf25f64ed37f5b87c"},
