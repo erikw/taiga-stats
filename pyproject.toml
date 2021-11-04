@@ -11,13 +11,7 @@ classifiers = [
     "Topic :: Utilities",
     "Topic :: Software Development"
 ]
-include = [
-	"CHANGELOG.md",
-	"README.md",
-	"img/",
-	"sample_data/",
-	]
-exclude = ["README.md.in"]
+include = ["CHANGELOG.md", "LICENSE", "README.md"]
 
 
 [tool.poetry.dependencies]
