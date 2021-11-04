@@ -1,5 +1,8 @@
+## [1.1.0] - 2021-11-04
+- Add `--version|-v` flags.
+
 ## [1.0.4] - 2021-11-04
-- Add installation instructiosn with `pipx`.
+- Add installation instructions with `pipx`.
 
 ## [1.0.3] - 2021-11-04
 - Trim wheel size by removing img/ and sample_data/.
