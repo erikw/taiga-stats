@@ -1,5 +1,6 @@
 import argparse
 
+import taiga_stats
 import taiga_stats.constants as c
 
 
@@ -20,9 +21,10 @@ def parse_args():
         "this story depends on e.g. '#123,#456'."
     )
 
-    parser = argparse.ArgumentParser(prog="taiga-stats", description=tool_desc)
+    parser = argparse.ArgumentParser(prog="taiga-stats", description=tool_desc, epilog="Support: please go to https://github.com/erikw/taiga-stats/issues")
 
     # General options
+    parser.add_argument("-v", "--version", action="version", version=taiga_stats.__version__)
     parser.add_argument("--url", help="URL to Taiga server.")
     parser.add_argument(
         "--auth-token",

@@ -10,7 +10,7 @@ This is a script for all you "Kanban masters" who use Taiga and are interested i
 # Features
 ```console
 $ taiga-stats --help
-usage: taiga-stats [-h] [--url URL] [--auth-token AUTH_TOKEN]
+usage: taiga-stats [-h] [-v] [--url URL] [--auth-token AUTH_TOKEN]
                    {config_template,list_projects,list_us_statuses,burnup,store_daily,points_sum,cfd,deps_dot_nodes,deps_dot}
                    ...
 
@@ -42,11 +42,14 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
+  -v, --version         show program's version number and exit
   --url URL             URL to Taiga server.
   --auth-token AUTH_TOKEN
                         Authentication token. Instructions on how to get one
                         is found at
                         https://docs.taiga.io/api.html#_authentication
+
+Support: please go to https://github.com/erikw/taiga-stats/issues
 ```
 
 # Terminology
