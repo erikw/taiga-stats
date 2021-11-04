@@ -18,7 +18,7 @@ include = ["CHANGELOG.md", "LICENSE", "README.md"]
 matplotlib = "^2.1.0"
 numpy = "^1.13.3"
 python = "^3.7, < 3.10.0"  # TODO remove restriction "<3.10.0" when numpy works. See README.md
-python-taiga = "^0.9.0"
+python-taiga = "^1.0.0"
 
 [tool.poetry.dev-dependencies]
 autoflake = "^1.4"
