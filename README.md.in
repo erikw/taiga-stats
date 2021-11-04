@@ -80,9 +80,17 @@ $ dot -T png -o ./dependencies.png ./dependencies.dot
 # Setup
 
 ## Installation
+Make sure to use a supported python version. See the key `python` in the section `tool.poetry.dependencies` at [pyproject.toml](https://github.com/erikw/taiga-stats/blob/master/pyproject.toml).
+
 ```console
 $ pip install taiga-stats
 $ taiga-stats -h
+```
+
+If you use [pipx](https://pypi.org/project/pipx/) to install, you must specify a supported and locally available python version like:
+
+```console
+$ pipx install --python python3.9  taiga-stats
 ```
 
 To use this tool, you need to supply
