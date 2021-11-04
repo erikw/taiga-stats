@@ -8,7 +8,6 @@ This is a script for all you "Kanban masters" who use Taiga and are interested i
 [Taiga](https://taiga.io/) is an Open Source virtual Scrum and Kanban board that is popular for managing projects and work. We use a physical whiteboard at work but I mirror the status of stories in Taiga so that I can collect some statistics and generate diagrams and graphs using this tool I wrote.
 
 # Features
-
 ```console
 $ taiga-stats --help
 usage: taiga-stats [-h] [--url URL] [--auth-token AUTH_TOKEN]
@@ -51,11 +50,10 @@ optional arguments:
 ```
 
 ## Cumulative Flow Diagram
-
 From a [CFD](http://brodzinski.com/2013/07/cumulative-flow-diagram.html) a lot of interesting insights about your team's progress [can be found](http://paulklipp.com/images/Interpreting_a_Cumulative_Flow_Diagram.jpg). However I'm not found of repetitive work like counting and entering numbers in an Excel sheet. This had to be automated! Therefore I deiced to write this script to save data on a daily basis with a cron job and a function for generating this diagram. This diagram can the be put on a TV visible in the hallways.
 
 
-This is an example diagram generated from [mock data](sample_data/cfd_example.dat):
+This is an example diagram generated from [mock data](https://github.com/erikw/taiga-stats/tree/master/sample_data/cfd_example.dat):
 
 ![Example CFD](https://raw.githubusercontent.com/erikw/taiga-stats/master/img/cfd_example.png)
 
@@ -84,8 +82,7 @@ taiga-stats cfd --tag some_feature_tag
 ```
 
 ## User Story Dependency Graph
-
-Some stories requires other to be completed before they can be started. I thought it would be handy if you could keep track of these dependencies in Taiga but simply writing for each US a list of other stories that this story depends on. Then from this information a [.dot file](sample_data/dependencies_example.dot) can be generated that should how you user stories depends on each other. This graph is very useful for work planning i.e. what to start with and how much parallelization is possible and at what stages.
+Some stories requires other to be completed before they can be started. I thought it would be handy if you could keep track of these dependencies in Taiga but simply writing for each US a list of other stories that this story depends on. Then from this information a [.dot file](https://github.com/erikw/taiga-stats/tree/master/sample_data/dependencies_example.dot) can be generated that should how you user stories depends on each other. This graph is very useful for work planning i.e. what to start with and how much parallelization is possible and at what stages.
 
 ![US Dependency Graph](https://raw.githubusercontent.com/erikw/taiga-stats/master/img/dependencies_example.png)
 
@@ -93,7 +90,6 @@ The stories that are marked as Done in Taiga have a green color in the graph.
 
 
 ### How to set up the dependency feature
-
 First create a new custom filed in taiga named `Depends On` under Settings > Attributes > Custom Fields:
 
 ![Custom Field](https://raw.githubusercontent.com/erikw/taiga-stats/master/img/taiga_custom_field.png)
@@ -153,7 +149,9 @@ $ cd taiga-stats
 ```console
 $ pyenv local 3.9.7
 $ poetry env use 3.9.7
+$ poetry env use 3.9.7
 $ poetry config experimental.new-installer false
+$ poetry install
 ```
 
 * Install dependencies

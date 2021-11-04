@@ -1,3 +1,6 @@
+## [1.0.3] - 2021-11-04
+- Trim wheel size by removing img/ and sample_data/.
+
 ## [1.0.2] - 2021-11-03
 - Update README.md with setup instructions (--url, --auth-token).
 
