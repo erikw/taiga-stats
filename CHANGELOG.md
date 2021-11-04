@@ -1,3 +1,6 @@
+## [1.0.4] - 2021-11-04
+- Add installation instructiosn with `pipx`.
+
 ## [1.0.3] - 2021-11-04
 - Trim wheel size by removing img/ and sample_data/.
 
