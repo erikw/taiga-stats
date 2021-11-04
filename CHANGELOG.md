@@ -1,3 +1,6 @@
+## [1.2.0] - 2021-11-04
+- Upgrade dependencies, most notably python-taiga to `1.0.0`
+
 ## [1.1.0] - 2021-11-04
 - Add `--version|-v` flags.
 
