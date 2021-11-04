@@ -1,0 +1,14 @@
+# Modified version of https://github.com/ruby/ruby/blob/master/.editorconfig
+
+root = true
+
+[*]
+end_of_line = lf
+indent_size = 4
+insert_final_newline = true
+tab_width = 4
+indent_size = 4
+trim_trailing_whitespace = true
+
+[*.py]
+indent_style = space
