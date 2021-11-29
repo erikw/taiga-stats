@@ -1,9 +1,10 @@
 # Taiga Stats - Your Taiga Statistics Tool [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Scrum%20and%20Kanban%20masters;%20generate%20statistics%20from%20your%20Taiga.io%20projects%20with%20this%20python%20tool&url=https://github.com/erikw/jekyll-glossary_tooltip&via=erik_westrup&hashtags=taiga,scrum,kanban,statistics)
 [![PyPI version](https://badge.fury.io/py/taiga-stats.svg)](https://badge.fury.io/py/taiga-stats)
+[![Downloads](https://pepy.tech/badge/taiga-stats)](https://pepy.tech/project/taiga-stats)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/taiga-stats)](#)
 [![License](https://img.shields.io/pypi/l/taiga-stats)](https://github.com/erikw/taiga-stats/blob/master/LICENSE)
 
-This is a script for all you Scrum||Kanban Masters out there who use Taiga and are interested in visualizing progress and generate some automated statistics and graphs.
+This is a script for all you Scrum||Kanban masters out there who use Taiga and are interested in visualizing progress and generate some automated statistics and graphs.
 
 [Taiga](https://taiga.io/) is an Open Source virtual Scrum and Kanban board that is popular for managing projects and work. We use a physical whiteboard at work but I mirror the status of stories in Taiga so that I can collect some statistics and generate diagrams and graphs using this tool I wrote.
 

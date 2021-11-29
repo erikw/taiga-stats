@@ -4,7 +4,7 @@
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/taiga-stats)](#)
 [![License](https://img.shields.io/pypi/l/taiga-stats)](https://github.com/erikw/taiga-stats/blob/master/LICENSE)
 
-This is a script for all you Scrum & Kanban masters who use Taiga and are interested in visualizing progress and generate some automated statistics and graphs.
+This is a script for all you Scrum||Kanban masters out there who use Taiga and are interested in visualizing progress and generate some automated statistics and graphs.
 
 [Taiga](https://taiga.io/) is an Open Source virtual Scrum and Kanban board that is popular for managing projects and work. We use a physical whiteboard at work but I mirror the status of stories in Taiga so that I can collect some statistics and generate diagrams and graphs using this tool I wrote.
 
