@@ -10,7 +10,7 @@ language: python
 # Buid matrix (rvm x gemfile = 2x2) with one version from each supported major version in range defined in .gemspec for
 # TODO add all supported versions
 python:
-  - "3.7"
+  - "3.8"
 before_install: pip install poetry
 install: poetry install
 script:
