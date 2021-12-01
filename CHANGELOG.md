@@ -1,5 +1,6 @@
 ## [1.2.1] - 2021-12-01
 - Bug fix: should not crash if $XDG_CONFIG_HOME is not set in the envionment.
+- Bug fix: The submodule importlib.metadata was added in 3.8. Added the backport importlib-metadata package to python <3.8.
 - Set up Travis builds: https://app.travis-ci.com/github/erikw/taiga-stats
 
 ## [1.2.0] - 2021-11-04
