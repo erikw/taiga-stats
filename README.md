@@ -192,9 +192,9 @@ $ pip install dist/taiga_stats-*.whl
 $ vi -p pyproject.toml CHANGELOG.md  # Update version.
 $ poetry build
 $ ls -l dist/
-$ git commit "Prepare vX.Y.Z"
+$ git commit -m "Prepare vX.Y.Z"
 $ git tag V.X.Y.Z
-$ git push --all --tags
+$ git push --all && git push --tags
 $ poetry publish
 ```
 
