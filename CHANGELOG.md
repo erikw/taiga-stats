@@ -1,3 +1,6 @@
+## [1.2.2] - 2021-12-01
+- Fix travis build badge
+
 ## [1.2.1] - 2021-12-01
 - Bug fix: should not crash if $XDG_CONFIG_HOME is not set in the envionment.
 - Bug fix: The submodule importlib.metadata was added in 3.8. Added the backport importlib-metadata package to python <3.8.
