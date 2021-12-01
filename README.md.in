@@ -2,7 +2,7 @@
 [![PyPI version](https://badge.fury.io/py/taiga-stats.svg)](https://badge.fury.io/py/taiga-stats)
 [![Downloads](https://pepy.tech/badge/taiga-stats)](https://pepy.tech/project/taiga-stats)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/taiga-stats)](#)
-[![Travis Build Status](https://app.travis-ci.com/erikw/taiga-stats.svg?branch=master)](https://app.travis-ci.com/github/erikw/taiga-stats)
+[![Travis Build Status](https://img.shields.io/travis/erikw/taiga-stats/main?logo=travis)](https://app.travis-ci.com/github/erikw/taiga-stats)
 [![License](https://img.shields.io/pypi/l/taiga-stats)](https://github.com/erikw/taiga-stats/blob/master/LICENSE)
 
 This is a script for all you Scrum||Kanban masters out there who use Taiga and are interested in visualizing progress and generate some automated statistics and graphs.
