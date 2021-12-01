@@ -20,8 +20,7 @@ from taiga_stats.helpers import get_dot_header  # noqa
 from taiga_stats.helpers import get_status_and_names_sorted  # noqa
 from taiga_stats.helpers import get_statuses_sorted_by_order  # noqa
 from taiga_stats.helpers import get_tag_str  # noqa
-from taiga_stats.helpers import (assert_args, get_stories_with_tag,  # noqa
-                                 get_us_status_name_from_id, read_daily_cfd)
+from taiga_stats.helpers import assert_args, get_stories_with_tag, get_us_status_name_from_id, read_daily_cfd  # noqa
 
 CFD_OUT_PNG_FMT = "cfd_{:s}.png"
 NO_ANNOTATION = "NONE"
@@ -32,9 +31,7 @@ DEPS_DOT_FILE_FMT = "dependencies_{:s}"
 def cmd_list_projects(args):
     api = taiga.TaigaAPI(host=args["url"], token=args["auth_token"])
 
-    print(
-        "All projects which you have access to\n(note that this can take very very long if you use https://api.taiga.io/, as there are many projects):\n"
-    )
+    print("All projects which you have access to\n(note that this can take very very long if you use https://api.taiga.io/, as there are many projects):\n")
     print("id\tname")
     print("--\t----")
     for proj in api.projects.list():
@@ -77,11 +74,7 @@ def cmd_print_us_in_dep_format(args):
         try:
             _ = status_ids.index(sid)
         except ValueError:
-            print(
-                "Selected US status ID {:d} not found for project {:s}!".format(
-                    sid, project.name
-                )
-            )
+            print("Selected US status ID {:d} not found for project {:s}!".format(sid, project.name))
             return 1
 
     uss = get_stories_with_tag(project, tag)
@@ -97,11 +90,7 @@ def cmd_print_us_in_dep_format(args):
         else:
             color = "black"
         subject = re.sub('"', "", us.subject)
-        print(
-            '  "{:d}" [label="#{:d} {:s}", color="{:s}"];'.format(
-                us.ref, us.ref, subject, color
-            )
-        )
+        print('  "{:d}" [label="#{:d} {:s}", color="{:s}"];'.format(us.ref, us.ref, subject, color))
 
     return 0
 
@@ -136,11 +125,7 @@ def cmd_us_in_dep_format_dot(args):
         try:
             _ = status_ids.index(sid)
         except ValueError:
-            print(
-                "Selected US status ID {:d} not found for project {:s}!".format(
-                    sid, project.name
-                )
-            )
+            print("Selected US status ID {:d} not found for project {:s}!".format(sid, project.name))
             return 1
 
     uss = get_stories_with_tag(project, tag)
@@ -152,9 +137,7 @@ def cmd_us_in_dep_format_dot(args):
 
     titles = []
     edges = []
-    header = get_dot_header(
-        get_tag_str(tag), "{:s} US Dependency Graph".format(get_tag_str(tag))
-    )
+    header = get_dot_header(get_tag_str(tag), "{:s} US Dependency Graph".format(get_tag_str(tag)))
 
     depson_attr_id = None
     proj_attrs = project.list_user_story_attributes()
@@ -163,9 +146,7 @@ def cmd_us_in_dep_format_dot(args):
             depson_attr_id = attr.id
     if not depson_attr_id:
         print(
-            "No custom User Story attribute named '{:s}' found!. Go to Settings>Attributes>Custom Fields and create one.".format(
-                c.CUST_ATTRIB_DEPENDSON_NAME
-            ),
+            "No custom User Story attribute named '{:s}' found!. Go to Settings>Attributes>Custom Fields and create one.".format(c.CUST_ATTRIB_DEPENDSON_NAME),
             file=sys.stderr,
         )
         return 1
@@ -199,11 +180,7 @@ def cmd_us_in_dep_format_dot(args):
                 if dep:
                     edges.append('  "{:s}" -> "{:d}"'.format(dep, us.ref))
 
-        titles.append(
-            '  "{:d}" [label="#{:d} {:s}{:s}{:s}", color="{:s}"];'.format(
-                us.ref, us.ref, subject, tags, points, color
-            )
-        )
+        titles.append('  "{:d}" [label="#{:d} {:s}{:s}{:s}", color="{:s}"];'.format(us.ref, us.ref, subject, tags, points, color))
 
     footer = get_dot_footer()
     titles.sort()
@@ -224,16 +201,8 @@ def cmd_us_in_dep_format_dot(args):
             fh.write(footer)
             print("Dependency graph written to: {:s}\n".format(file_path))
             print("Generate a png with e.g.")
-            print(
-                "$ dot -T png -o {:s}/{:s}.png {:s}".format(
-                    output_path, file_name_base, file_path
-                )
-            )
-            print(
-                "$ unflatten -l1 -c5 {:s}/{:s} | dot -T png -o {:s}/{:s}.png".format(
-                    output_path, file_name, output_path, file_name_base
-                )
-            )
+            print("$ dot -T png -o {:s}/{:s}.png {:s}".format(output_path, file_name_base, file_path))
+            print("$ unflatten -l1 -c5 {:s}/{:s} | dot -T png -o {:s}/{:s}.png".format(output_path, file_name, output_path, file_name_base))
     except IOError as err:
         print(
             "Could not write file {:s}: {:s}".format(file_path, str(err)),
@@ -263,11 +232,7 @@ def cmd_points_sum(args):
         try:
             _ = status_ids.index(sid)
         except ValueError:
-            print(
-                "Selected US status ID {:d} not found for project {:s}!".format(
-                    sid, project.name
-                )
-            )
+            print("Selected US status ID {:d} not found for project {:s}!".format(sid, project.name))
             return 1
 
     uss = get_stories_with_tag(project, tag)
@@ -309,11 +274,7 @@ def cmd_print_burnup_data(args):
         try:
             idx = status_ids.index(sid)
         except ValueError:
-            print(
-                "Selected US status ID {:d} not found for project {:s}!".format(
-                    sid, project.name
-                )
-            )
+            print("Selected US status ID {:d} not found for project {:s}!".format(sid, project.name))
             return 1
         selected_snames.append(status_names[idx])
 
@@ -379,9 +340,7 @@ def cmd_store_daily_stats(args):
             fdata.write("\tannotation")
             fdata.write("\tannotation_layer")
             for status_id in status_ids:
-                fdata.write(
-                    "\t{:s}".format(get_us_status_name_from_id(project, status_id))
-                )
+                fdata.write("\t{:s}".format(get_us_status_name_from_id(project, status_id)))
             fdata.write("\n")
 
     with open(data_path, "a") as fdata:
@@ -432,11 +391,7 @@ def cmd_gen_cfd(args):
         try:
             idx = status_ids.index(sid)
         except ValueError:
-            print(
-                "Selected US status ID {:d} not found for project {:s}!".format(
-                    sid, project.name
-                )
-            )
+            print("Selected US status ID {:d} not found for project {:s}!".format(sid, project.name))
             return 1
         selected_snames.append(status_names[idx])
         selected_data.append(data[idx])
@@ -494,9 +449,7 @@ def cmd_gen_cfd(args):
     # Ideal pace line
     print_ideal = False
     ideal_line = None
-    if ("target_date" in args and args["target_date"]) and (
-        "target_layer" in args and args["target_layer"]
-    ):
+    if ("target_date" in args and args["target_date"]) and ("target_layer" in args and args["target_layer"]):
         print_ideal = True
         target_date = args["target_date"]
         target_date_dt = dt.datetime.strptime(target_date, "%Y-%m-%d")
@@ -601,9 +554,5 @@ def cmd_gen_config_template(args):
         print("Could not create {:s}".format(fpath), file=sys.stderr)
         return 1
 
-    print(
-        "Template created. Rename and edit it:\n$ mv {:s} {:s}".format(
-            fpath, c.CONF_FILE_PATH_XDG
-        )
-    )
+    print("Template created. Rename and edit it:\n$ mv {:s} {:s}".format(fpath, c.CONF_FILE_PATH_XDG))
     return 0

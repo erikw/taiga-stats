@@ -145,11 +145,7 @@ class assert_args(object):
         def wrapper(args):
             for arg in dec.needed_args:
                 if arg not in args or args[arg] is None:
-                    print(
-                        "Required argument ''{:s}' was not supplied on commandline or set in config file.".format(
-                            arg
-                        )
-                    )
+                    print("Required argument ''{:s}' was not supplied on commandline or set in config file.".format(arg))
                     return 1
             func(args)
 
