@@ -176,7 +176,7 @@ $ poetry config experimental.new-installer false
 $ poetry install
 ```
 
-* Install dependencies
+* Install project dependencies
 ```console
 $ poetry install
 ```

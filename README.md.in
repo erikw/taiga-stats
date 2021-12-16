@@ -137,7 +137,7 @@ $ vi ~/.taiga-stats.conf
 	$ poetry install
 	```
 
-* Install dependencies
+* Install project dependencies
 	```console
 	$ poetry install
 	```
