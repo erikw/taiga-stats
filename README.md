@@ -203,10 +203,3 @@ $ git tag V.X.Y.Z
 $ git push --all && git push --tags
 $ poetry publish
 ```
-
-or
-
-```console
-$ vi -p pyproject.toml CHANGELOG.md  # Update version.
-$ poetry publish --build
-```
