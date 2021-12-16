@@ -133,7 +133,7 @@ $ taiga-stats -h
 If you use [pipx](https://pypi.org/project/pipx/) to install, you must specify a supported and locally available python version like:
 
 ```console
-$ pipx install --python python3.9  taiga-stats
+$ pipx install --python python3.9 taiga-stats
 ```
 
 To use this tool, you need to supply
