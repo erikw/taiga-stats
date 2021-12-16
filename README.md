@@ -163,6 +163,10 @@ $ git clone https://github.com/erikw/taiga-stats.git
 $ cd taiga-stats
 ```
 * Install Poetry
+```console
+$ pip install poetry
+```
+
 * Numpy install issues as of 2021-10-31
 * `$ poetry install` did not work with Numpy on macOS. Solution from https://github.com/python-poetry/poetry/issues/3196#issuecomment-769753478
 ```console
