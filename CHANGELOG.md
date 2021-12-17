@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2021-12-17
+- More roboust version check.
+
 ## [1.2.2] - 2021-12-01
 - Fix travis build badge
 
