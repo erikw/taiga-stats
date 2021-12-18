@@ -159,8 +159,7 @@ $ vi ~/.taiga-stats.conf
 ## Setup from Git
 * Clone this git
 ```console
-$ git clone https://github.com/erikw/taiga-stats.git
-$ cd taiga-stats
+$ git clone https://github.com/erikw/taiga-stats.git && cd $(basename "$_" .git)
 ```
 * Install Poetry
 ```console
