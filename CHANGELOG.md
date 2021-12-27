@@ -7,36 +7,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [1.3.0] - 2021-12-17
+### Changed
 - More roboust version check.
 
 ## [1.2.2] - 2021-12-01
-- Fix travis build badge
+### Fixed
+- Travis build badge
 
 ## [1.2.1] - 2021-12-01
+## Added
+- Set up Travis builds: https://app.travis-ci.com/github/erikw/taiga-stats
+### Fixed
 - Bug fix: should not crash if $XDG_CONFIG_HOME is not set in the envionment.
 - Bug fix: The submodule importlib.metadata was added in 3.8. Added the backport importlib-metadata package to python <3.8.
-- Set up Travis builds: https://app.travis-ci.com/github/erikw/taiga-stats
 
 ## [1.2.0] - 2021-11-04
+### Changed
 - Upgrade dependencies, most notably python-taiga to `1.0.0`
 
 ## [1.1.0] - 2021-11-04
-- Add `--version|-v` flags.
+## Added
+- `--version|-v` flags.
 
 ## [1.0.4] - 2021-11-04
-- Add installation instructions with `pipx`.
+## Added
+- Installation instructions with `pipx`.
 
 ## [1.0.3] - 2021-11-04
+## Changed
 - Trim wheel size by removing img/ and sample_data/.
 
 ## [1.0.2] - 2021-11-03
+## Changed
 - Update README.md with setup instructions (--url, --auth-token).
 
 ## [1.0.1] - 2021-11-02
-- Add README.md badges for easier overview of current status and support.
+## Added
+- README.md badges for easier overview of current status and support.
 
 ## [1.0.0] - 2021-11-02
 - Published on pypy.org
+
+## Fixed
 - Prevent python 3.10.0 as it does not currently work with numpy for this version.
 
 ## [0.1.1] - 2021-11-02
