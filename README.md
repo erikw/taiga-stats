@@ -3,8 +3,7 @@
 [![Downloads](https://pepy.tech/badge/taiga-stats)](https://pepy.tech/project/taiga-stats)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/taiga-stats)](#)
 [![Travis Build Status](https://img.shields.io/travis/com/erikw/taiga-stats/master?logo=travis)](https://app.travis-ci.com/github/erikw/taiga-stats)
-[![CodeQL](https://github.com/erikw/taiga-stats/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/erikw/taiga-stats/actions/workflows/codeql-analysis.yml)
-[![SLOC](https://img.shields.io/tokei/lines/github/erikw/taiga-stats?logo=codefactor&logoColor=lightgrey)](#)
+[![SLOC](https://img.shields.io/tokei/lines/github/erikw/taiga-stats)](#)
 [![License](https://img.shields.io/pypi/l/taiga-stats)](https://github.com/erikw/taiga-stats/blob/master/LICENSE)
 [![OSS Lifecycle](https://img.shields.io/osslifecycle/erikw/taiga-stats)](https://github.com/Netflix/osstracker)
 
@@ -195,11 +194,8 @@ $ pip install dist/taiga_stats-*.whl
 
 ## Releasing
 ```console
-$ vi -p pyproject.toml CHANGELOG.md  # Update version.
-$ poetry build
-$ ls -l dist/
-$ git commit -m "Prepare vX.Y.Z"
-$ git tag vX.Y.Z
-$ git push --all && git push --tags
-$ poetry publish
+$ vi CHANGELOG.md
+$ poetry version minor && ver="v$(poetry version -s)"
+$ git commit -am "Bump version to $ver" &&  git tag $ver && git push --atomic origin master $ver
+$ poetry publish --build
 ```
