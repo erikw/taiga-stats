@@ -196,6 +196,6 @@ $ pip install dist/taiga_stats-*.whl
 ```console
 $ vi CHANGELOG.md
 $ poetry version minor && ver="v$(poetry version -s)"
-$ git commit -am "Bump version to $ver" &&  git tag $ver && git push --atomic origin master $ver
+$ git commit -am "Bump version to $ver" && git tag $ver && git push --atomic origin master $ver
 $ poetry publish --build
 ```
