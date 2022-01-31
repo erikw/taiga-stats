@@ -153,7 +153,7 @@ $ vi ~/.taiga-stats.conf
 	```
 
 
-## Releasing
+# Releasing
 ```console
 $ vi CHANGELOG.md
 $ poetry version minor && ver="v$(poetry version -s)"

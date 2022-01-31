@@ -192,7 +192,7 @@ $ pip install dist/taiga_stats-*.whl
 ```
 
 
-## Releasing
+# Releasing
 ```console
 $ vi CHANGELOG.md
 $ poetry version minor && ver="v$(poetry version -s)"
