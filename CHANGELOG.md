@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.0] - 2022-01-31
+### Changed
+- Improve release commands with poetry version bump feature.
+
 ## [1.3.0] - 2021-12-17
 ### Changed
 - More roboust version check.
