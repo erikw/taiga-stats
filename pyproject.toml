@@ -23,7 +23,7 @@ single-source = "^0.2.0"
 
 [tool.poetry.dev-dependencies]
 autoflake = "^1.4"
-autoimport = "^0.11"
+autoimport = "^1.0"
 black = "^22.1"
 flake8 = "^4.0"	# TODO replace with flakehell to be able to move .flake8 to this config file. Blocked by https://github.com/flakehell/flakehell/issues/18
 ipdb = "^0.13"
