@@ -28,7 +28,7 @@ black = "^22.1"
 flake8 = "^4.0"	# TODO replace with flakehell to be able to move .flake8 to this config file. Blocked by https://github.com/flakehell/flakehell/issues/18
 ipdb = "^0.13"
 isort = "^5.9"
-pudb = "^2021.2.2"
+pudb = "^2022.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
