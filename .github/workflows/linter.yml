@@ -28,5 +28,6 @@ jobs:
           VALIDATE_ALL_CODEBASE: true
           VALIDATE_PYTHON_FLAKE8: true
           VALIDATE_PYTHON_PYLINT: true
+          LINTER_RULES_PATH: /
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
