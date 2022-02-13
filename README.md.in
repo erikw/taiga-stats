@@ -3,6 +3,7 @@
 [![Downloads](https://pepy.tech/badge/taiga-stats)](https://pepy.tech/project/taiga-stats)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/taiga-stats)](#)
 [![Travis Build Status](https://img.shields.io/travis/com/erikw/taiga-stats/master?logo=travis)](https://app.travis-ci.com/github/erikw/taiga-stats)
+[![Lint Code Base](https://github.com/erikw/taiga-stats/actions/workflows/linter.yml/badge.svg)](https://github.com/erikw/taiga-stats/actions/workflows/linter.yml)
 [![SLOC](https://img.shields.io/tokei/lines/github/erikw/taiga-stats)](#)
 [![License](https://img.shields.io/pypi/l/taiga-stats)](https://github.com/erikw/taiga-stats/blob/master/LICENSE)
 [![OSS Lifecycle](https://img.shields.io/osslifecycle/erikw/taiga-stats)](https://github.com/Netflix/osstracker)
