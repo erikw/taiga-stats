@@ -6,3 +6,6 @@
 /taiga.conf
 /taiga.conf.template
 /taiga_stats/__pycache__/
+
+# mkdocs
+/site/
