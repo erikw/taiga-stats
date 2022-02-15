@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+log_gen() {
+	echo "⚙️  Generating $@..."
+}
+
 README_IN=README.md.in
 README_OUT=README.md
 COMMANDS_MD=docs/commands.md
@@ -8,8 +12,7 @@ SEARCH="<insert-helptext-here>"
 DIR=$(dirname "$0")
 cd $DIR/..
 
-
-echo "⚙️  Generating $README_OUT..."
+log_gen $README_OUT
 rm -f $README_OUT
 help=$(bin/taiga-stats.sh --help)
 while read line; do
@@ -21,7 +24,7 @@ while read line; do
 done < $README_IN
 
 
-echo "⚙️  Generating $COMMANDS_MD..."
+log_gen $COMMANDS_MD
 cat << EOF > $COMMANDS_MD
 # Commands
 \`\`\`console
@@ -31,5 +34,5 @@ $help
 Full documentation at [github.com/erikw/taiga-stats](https://github.com/erikw/taiga-stats).
 EOF
 
-echo "⚙️  Generating mkdocs/docs..."
+log_gen mkdocs
 poetry run mkdocs build
