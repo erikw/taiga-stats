@@ -1,7 +1,7 @@
 # Taiga Stats - Your Taiga Statistics Tool [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Scrum%20and%20Kanban%20masters;%20generate%20statistics%20from%20your%20Taiga.io%20projects%20with%20this%20python%20tool&url=https://github.com/erikw/jekyll-glossary_tooltip&via=erik_westrup&hashtags=taiga,scrum,kanban,statistics)
 [![PyPI version](https://badge.fury.io/py/taiga-stats.svg)](https://badge.fury.io/py/taiga-stats)
 [![Downloads](https://pepy.tech/badge/taiga-stats)](https://pepy.tech/project/taiga-stats)
-[![Documentation Status](https://readthedocs.org/projects/taiga-stats/badge/?version=latest)](https://taiga-stats.readthedocs.io/en/latest/?badge=latest)
+[![Documentation Status](https://readthedocs.org/projects/taiga-stats/badge/?version=latest)](https://taiga-stats.readthedocs.io/)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/taiga-stats)](#)
 [![Travis Build Status](https://img.shields.io/travis/com/erikw/taiga-stats/master?logo=travis)](https://app.travis-ci.com/github/erikw/taiga-stats)
 [![Lint Code Base](https://github.com/erikw/taiga-stats/actions/workflows/linter.yml/badge.svg)](https://github.com/erikw/taiga-stats/actions/workflows/linter.yml)
