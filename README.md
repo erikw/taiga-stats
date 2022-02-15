@@ -199,8 +199,11 @@ $ poetry run mkdocs serve
 $ poetry run mkdocs build
 ```
 
+but `bin/gen_docs.sh` will take care of all that plus more!
+
 # Releasing
 ```console
+$ bin/gen_docs.sh
 $ vi CHANGELOG.md
 $ poetry version minor && ver="v$(poetry version -s)"
 $ git commit -am "Bump version to $ver" && git tag $ver && git push --atomic origin master $ver
