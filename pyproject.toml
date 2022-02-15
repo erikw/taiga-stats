@@ -20,7 +20,6 @@ numpy = "^1.13.3"
 python = "^3.7, < 3.10.0"  # TODO remove restriction "<3.10.0" when numpy works. See README.md
 python-taiga = "^1.0.0"
 single-source = "^0.2.0"
-mkdocs = "^1.2.3"
 
 [tool.poetry.dev-dependencies]
 autoflake = "^1.4"
@@ -29,6 +28,7 @@ black = "^22.1"
 flake8 = "^4.0"	# TODO replace with flakehell to be able to move .flake8 to this config file. Blocked by https://github.com/flakehell/flakehell/issues/18
 ipdb = "^0.13"
 isort = "^5.9"
+mkdocs = "^1.2.3"
 pudb = "^2021.2.2"
 
 [build-system]
