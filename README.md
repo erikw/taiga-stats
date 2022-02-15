@@ -192,6 +192,12 @@ $ poetry build
 $ pip install dist/taiga_stats-*.whl
 ```
 
+# Development
+## Documentation generation
+```console
+$ poetry run mkdocs serve
+$ poetry run mkdocs build
+```
 
 # Releasing
 ```console

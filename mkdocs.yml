@@ -1,0 +1,6 @@
+site_name: taiga-stats Documentation
+#site_url: https://example.com/
+theme: readthedocs
+nav:
+    - Home: index.md
+    - Commands: commands.md
