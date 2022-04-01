@@ -29,7 +29,7 @@ black = "^22.1"
 pylint = "^2.0.0"
 ipdb = "^0.13"
 isort = "^5.9"
-mkdocs = "^1.3.0"
+mkdocs = "1.3.0"
 pudb = "^2021.2.2"
 
 [build-system]
