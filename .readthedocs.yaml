@@ -15,7 +15,7 @@ mkdocs:
   configuration: mkdocs.yml
   fail_on_warning: true
 
-# Optionally declare the Python requirements required to build your docs
+# Python requirements required to build docs.
 python:
    install:
    - requirements: docs/requirements.txt
