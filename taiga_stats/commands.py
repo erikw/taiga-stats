@@ -190,7 +190,7 @@ def cmd_us_in_dep_format_dot(args):
     file_name = file_name_base + ".dot"
     file_path = "{:s}/{:s}".format(output_path, file_name)
     try:
-        with open(file_path, "w") as fh:
+        with open(file_path, "w", encoding="utf-8") as fh:
             fh.write(header)
             fh.write("\n  // Edges\n")
             for edge in edges:
@@ -335,7 +335,7 @@ def cmd_store_daily_stats(args):
     data_file = c.CFD_DATA_FILE_FMT.format(get_tag_str(tag))
     data_path = "{:s}/{:s}".format(output_path, data_file)
     if not os.path.isfile(data_path):
-        with open(data_path, "w") as fdata:
+        with open(data_path, "w", encoding="utf-8") as fdata:
             fdata.write("#date")
             fdata.write("\tannotation")
             fdata.write("\tannotation_layer")
@@ -343,7 +343,7 @@ def cmd_store_daily_stats(args):
                 fdata.write("\t{:s}".format(get_us_status_name_from_id(project, status_id)))
             fdata.write("\n")
 
-    with open(data_path, "a") as fdata:
+    with open(data_path, "a", encoding="utf-8") as fdata:
         fdata.write("{:s}".format(dt.datetime.utcnow().strftime("%Y-%m-%d")))
         fdata.write("\t{:s}".format(NO_ANNOTATION))
         fdata.write("\t{:d}".format(0))
@@ -460,7 +460,7 @@ def cmd_gen_cfd(args):
             )
 
         target_layer = int(args["target_layer"])
-        if not (0 <= target_layer < len(y)):
+        if not 0 <= target_layer < len(y):
             print("Ideal target layer not in range!", file=sys.stderr)
             return 1
 
@@ -548,7 +548,7 @@ def cmd_gen_config_template(args):
 
     fpath = "{:s}/{:s}".format(output_path, c.CONF_FILE_NAME_FMT)
     try:
-        with open(fpath, "w") as configfile:
+        with open(fpath, "w", encoding="utf-8") as configfile:
             config.write(configfile)
     except IOError:
         print("Could not create {:s}".format(fpath), file=sys.stderr)

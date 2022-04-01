@@ -58,7 +58,7 @@ def get_us_status_name_from_id(project, status_id):
     return None
 
 
-def remove_closed_stories(project, uss):
+def remove_closed_stories(_project, uss):
     ret_uss = []
     for us in uss:
         if not us.is_closed:
@@ -102,7 +102,7 @@ def read_daily_cfd(path, tag):
     data_path = "{:s}/{:s}".format(path, data_file)
     data = []
     try:
-        with open(data_path, "r") as fdata:
+        with open(data_path, "r", encoding="utf-8") as fdata:
             row = 0
             for line in fdata:
                 line = line.rstrip()
@@ -131,7 +131,7 @@ def read_daily_cfd(path, tag):
     return data
 
 
-class assert_args(object):
+class assert_args:
     """
     Assert that the given arguments exists.
     """
