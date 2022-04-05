@@ -3,10 +3,10 @@
 [![Downloads](https://pepy.tech/badge/taiga-stats)](https://pepy.tech/project/taiga-stats)
 [![Documentation Status](https://readthedocs.org/projects/taiga-stats/badge/?version=latest)](https://taiga-stats.readthedocs.io/)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/taiga-stats)](#)
-[![Travis Build Status](https://img.shields.io/travis/com/erikw/taiga-stats/master?logo=travis)](https://app.travis-ci.com/github/erikw/taiga-stats)
+[![Travis Build Status](https://img.shields.io/travis/com/erikw/taiga-stats/main?logo=travis)](https://app.travis-ci.com/github/erikw/taiga-stats)
 [![Lint Code Base](https://github.com/erikw/taiga-stats/actions/workflows/linter.yml/badge.svg)](https://github.com/erikw/taiga-stats/actions/workflows/linter.yml)
 [![SLOC](https://img.shields.io/tokei/lines/github/erikw/taiga-stats)](#)
-[![License](https://img.shields.io/pypi/l/taiga-stats)](https://github.com/erikw/taiga-stats/blob/master/LICENSE)
+[![License](https://img.shields.io/pypi/l/taiga-stats)](https://github.com/erikw/taiga-stats/blob/main/LICENSE)
 [![OSS Lifecycle](https://img.shields.io/osslifecycle/erikw/taiga-stats)](https://github.com/Netflix/osstracker)
 
 This is a script for all you Scrum||Kanban masters out there who use Taiga and are interested in visualizing progress and generate some automated statistics and graphs.
@@ -66,16 +66,16 @@ Support: please go to https://github.com/erikw/taiga-stats/issues
 From a [CFD](http://brodzinski.com/2013/07/cumulative-flow-diagram.html) a lot of interesting insights about your team's progress [can be found](http://paulklipp.com/images/Interpreting_a_Cumulative_Flow_Diagram.jpg). However I'm not found of repetitive work like counting and entering numbers in an Excel sheet. This had to be automated! Therefore I deiced to write this script to save data on a daily basis with a cron job and a function for generating this diagram. This diagram can the be put on a TV visible in the hallways.
 
 
-This is an example diagram generated from [mock data](https://github.com/erikw/taiga-stats/tree/master/sample_data/cfd_example.dat):
+This is an example diagram generated from [mock data](https://github.com/erikw/taiga-stats/tree/main/sample_data/cfd_example.dat):
 
-![Example CFD](https://raw.githubusercontent.com/erikw/taiga-stats/master/img/cfd_example.png)
+![Example CFD](https://raw.githubusercontent.com/erikw/taiga-stats/main/img/cfd_example.png)
 
 Textual annotations can be put in the plot by manually editing the `.dat file`.
 
 
 Also a target date for the project deadline can be specified. Then a line will be drawn showing the ideal work pace towards this date, as seen below where the target finish date is in week 46.
 
-![Example CFD with ideal pace](https://raw.githubusercontent.com/erikw/taiga-stats/master/img/cfd_example_ideal_pace.png)
+![Example CFD with ideal pace](https://raw.githubusercontent.com/erikw/taiga-stats/main/img/cfd_example_ideal_pace.png)
 
 
 To save the data and generate the diagram each working day I have this cronjob:
@@ -95,9 +95,9 @@ taiga-stats cfd --tag some_feature_tag
 ```
 
 ## User Story Dependency Graph
-Some stories requires other to be completed before they can be started. I thought it would be handy if you could keep track of these dependencies in Taiga but simply writing for each US a list of other stories that this story depends on. Then from this information a [.dot file](https://github.com/erikw/taiga-stats/tree/master/sample_data/dependencies_example.dot) can be generated that should how you user stories depends on each other. This graph is very useful for work planning i.e. what to start with and how much parallelization is possible and at what stages.
+Some stories requires other to be completed before they can be started. I thought it would be handy if you could keep track of these dependencies in Taiga but simply writing for each US a list of other stories that this story depends on. Then from this information a [.dot file](https://github.com/erikw/taiga-stats/tree/main/sample_data/dependencies_example.dot) can be generated that should how you user stories depends on each other. This graph is very useful for work planning i.e. what to start with and how much parallelization is possible and at what stages.
 
-![US Dependency Graph](https://raw.githubusercontent.com/erikw/taiga-stats/master/img/dependencies_example.png)
+![US Dependency Graph](https://raw.githubusercontent.com/erikw/taiga-stats/main/img/dependencies_example.png)
 
 The stories that are marked as Done in Taiga have a green color in the graph.
 
@@ -105,12 +105,12 @@ The stories that are marked as Done in Taiga have a green color in the graph.
 ### How to set up the dependency feature
 First create a new custom filed in taiga named `Depends On` under Settings > Attributes > Custom Fields:
 
-![Custom Field](https://raw.githubusercontent.com/erikw/taiga-stats/master/img/taiga_custom_field.png)
+![Custom Field](https://raw.githubusercontent.com/erikw/taiga-stats/main/img/taiga_custom_field.png)
 
 
 Then go to your User Stories and enter some dependencies as demonstrated below.
 
-![US dependency](https://raw.githubusercontent.com/erikw/taiga-stats/master/img/us_depends_on.png)
+![US dependency](https://raw.githubusercontent.com/erikw/taiga-stats/main/img/us_depends_on.png)
 
 
 Then run the script and generate a PNG file.
@@ -125,7 +125,7 @@ $ dot -T png -o ./dependencies.png ./dependencies.dot
 # Setup
 
 ## Installation
-Make sure to use a supported python version. See the key `python` in the section `tool.poetry.dependencies` at [pyproject.toml](https://github.com/erikw/taiga-stats/blob/master/pyproject.toml).
+Make sure to use a supported python version. See the key `python` in the section `tool.poetry.dependencies` at [pyproject.toml](https://github.com/erikw/taiga-stats/blob/main/pyproject.toml).
 
 ```console
 $ pip install taiga-stats
@@ -207,6 +207,6 @@ but `bin/gen_docs.sh` will take care of all that plus more!
 $ bin/gen_docs.sh
 $ vi CHANGELOG.md
 $ poetry version minor && ver="v$(poetry version -s)"
-$ git commit -am "Bump version to $ver" && git tag $ver && git push --atomic origin master $ver
+$ git commit -am "Bump version to $ver" && git tag $ver && git push --atomic origin main $ver
 $ poetry publish --build
 ```
