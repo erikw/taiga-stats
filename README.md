@@ -127,15 +127,15 @@ $ dot -T png -o ./dependencies.png ./dependencies.dot
 ## Installation
 Make sure to use a supported python version. See the key `python` in the section `tool.poetry.dependencies` at [pyproject.toml](https://github.com/erikw/taiga-stats/blob/main/pyproject.toml).
 
-```console
-$ pip install taiga-stats
-$ taiga-stats -h
+```shell
+pip install taiga-stats
+taiga-stats -h
 ```
 
 If you use [pipx](https://pypi.org/project/pipx/) to install, you must specify a supported and locally available python version like:
 
-```console
-$ pipx install --python python3.9 taiga-stats
+```shell
+pipx install --python python3.9 taiga-stats
 ```
 
 To use this tool, you need to supply
@@ -147,10 +147,10 @@ It's recommended to put these 2 values in the below described `taiga-stats.conf`
 ## Config file
 It is tedious to have to specify the server URL and the authentication token every time. Also you typically work with some project at a time and would like to have default values for the project to use and maybe which tag to filter on. You can generate a configuration file to set these default values.
 
-```console
-$ taiga-stats config_template
-$ mv ./taiga.conf.template ~/.taiga-stats.conf
-$ vi ~/.taiga-stats.conf
+```shell
+taiga-stats config_template
+mv ./taiga.conf.template ~/.taiga-stats.conf
+vi ~/.taiga-stats.conf
 ```
 
 
@@ -160,53 +160,55 @@ $ vi ~/.taiga-stats.conf
 
 ## Setup from Git
 * Clone this git
-```console
-$ git clone https://github.com/erikw/taiga-stats.git && cd $(basename "$_" .git)
+```shell
+git clone https://github.com/erikw/taiga-stats.git && cd $(basename "$_" .git)
 ```
 * Install Poetry
-```console
-$ pip install poetry
+```shell
+pip install poetry
 ```
 
 * Numpy install issues as of 2021-10-31
 * `$ poetry install` did not work with Numpy on macOS. Solution from https://github.com/python-poetry/poetry/issues/3196#issuecomment-769753478
-```console
-$ pyenv local 3.9.7
-$ poetry env use 3.9.7
-$ poetry config experimental.new-installer false
-$ poetry install
+```shell
+pyenv local 3.9.7
+poetry env use 3.9.7
+poetry config experimental.new-installer false
+poetry install
 ```
 
 * Install project dependencies
-```console
-$ poetry install
-```
+  ```shell
+  poetry install
+  ```
 * Now taiga-stats should work!
-```console
-$ poetry run taiga-stats -h
-$ # or
-$ bin/taiga-stats.sh
-```
+  ```shell
+  poetry run taiga-stats -h
+  ```
+or
+  ```shell
+  bin/taiga-stats.sh
+  ```
 * To install locally:
-```console
-$ poetry build
-$ pip install dist/taiga_stats-*.whl
-```
+  ```shell
+  poetry build
+  pip install dist/taiga_stats-*.whl
+  ```
 
 # Development
 ## Documentation generation
-```console
-$ poetry run mkdocs serve
-$ poetry run mkdocs build
+```shell
+poetry run mkdocs serve
+poetry run mkdocs build
 ```
 
 but `bin/gen_docs.sh` will take care of all that plus more!
 
 # Releasing
-```console
-$ bin/gen_docs.sh
-$ vi CHANGELOG.md
-$ poetry version minor && ver="v$(poetry version -s)"
-$ git commit -am "Bump version to $ver" && git tag $ver && git push --atomic origin main $ver
-$ poetry publish --build
+```shell
+bin/gen_docs.sh
+vi CHANGELOG.md
+poetry version minor && ver="v$(poetry version -s)"
+git commit -am "Bump version to $ver" && git tag $ver && git push --atomic origin main $ver
+poetry publish --build
 ```
