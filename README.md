@@ -6,8 +6,11 @@
 [![Travis Build Status](https://img.shields.io/travis/com/erikw/taiga-stats/main?logo=travis)](https://app.travis-ci.com/github/erikw/taiga-stats)
 [![Lint Code Base](https://github.com/erikw/taiga-stats/actions/workflows/linter.yml/badge.svg)](https://github.com/erikw/taiga-stats/actions/workflows/linter.yml)
 [![SLOC](https://img.shields.io/tokei/lines/github/erikw/taiga-stats)](#)
+[![Number of programming languages used](https://img.shields.io/github/languages/count/erikw/taiga-stats)](#)
+[![Top programming languages used](https://img.shields.io/github/languages/top/erikw/taiga-stats)](#)
 [![License](https://img.shields.io/pypi/l/taiga-stats)](https://github.com/erikw/taiga-stats/blob/main/LICENSE)
 [![OSS Lifecycle](https://img.shields.io/osslifecycle/erikw/taiga-stats)](https://github.com/Netflix/osstracker)
+[![Latest tag](https://img.shields.io/github/v/tag/erikw/taiga-stats)](https://github.com/erikw/taiga-stats/tags)
 
 This is a script for all you Scrum||Kanban masters out there who use Taiga and are interested in visualizing progress and generate some automated statistics and graphs.
 
