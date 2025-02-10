@@ -424,7 +424,7 @@ def cmd_gen_cfd(args):
 
     if not annotations_off:
         # Draw annotations of the data.
-        bbox_props = {"boxstyle": 'round4,pad=0.3', "fc": 'white', "ec": 'black', "lw": 2 }
+        bbox_props = {"boxstyle": "round4,pad=0.3", "fc": "white", "ec": "black", "lw": 2}
         for i, annotation in enumerate(annotations):
             if annotation != NO_ANNOTATION:
                 y_coord = 0  # Calculate the Y coordnate by stacking up y values below.
