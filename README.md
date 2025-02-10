@@ -49,7 +49,7 @@ positional arguments:
                         separated list of stories that this story depends on
                         e.g. '#123,#456'.
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
   -v, --version         show program's version number and exit
   --url URL             URL to Taiga server.
@@ -169,15 +169,6 @@ git clone https://github.com/erikw/taiga-stats.git && cd $(basename "$_" .git)
 * Install Poetry
 ```shell
 pip install poetry
-```
-
-* Numpy install issues as of 2021-10-31
-* `$ poetry install` did not work with Numpy on macOS. Solution from https://github.com/python-poetry/poetry/issues/3196#issuecomment-769753478
-```shell
-pyenv local 3.9.7
-poetry env use 3.9.7
-poetry config experimental.new-installer false
-poetry install
 ```
 
 * Install project dependencies

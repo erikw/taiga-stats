@@ -132,15 +132,6 @@ vi ~/.taiga-stats.conf
 	pip install poetry
 	```
 
-* Numpy install issues as of 2021-10-31
-  * `$ poetry install` did not work with Numpy on macOS. Solution from https://github.com/python-poetry/poetry/issues/3196#issuecomment-769753478
-	```shell
-	pyenv local 3.9.7
-	poetry env use 3.9.7
-	poetry config experimental.new-installer false
-	poetry install
-	```
-
 * Install project dependencies
 	```shell
 	poetry install

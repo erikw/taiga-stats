@@ -30,7 +30,7 @@ positional arguments:
                         separated list of stories that this story depends on
                         e.g. '#123,#456'.
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
   -v, --version         show program's version number and exit
   --url URL             URL to Taiga server.
