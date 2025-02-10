@@ -17,18 +17,19 @@ include = ["CHANGELOG.md", "LICENSE", "README.md"]
 [tool.poetry.dependencies]
 matplotlib = "^2.1.0"
 numpy = "^1.13.3"
-python = "^3.7, < 3.10.0"  # TODO remove restriction "<3.10.0" when numpy works. See README.md
+python = "^3.11, < 3.13" 
 python-taiga = "^1.0.0"
 single-source = ">=0.2,<0.4"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 autoflake = "^1.4"
 autoimport = "^0.11"
 black = "^22.1"
 pylint = "^2.13.9"
 ipdb = "^0.13"
 isort = "^5.9"
-mkdocs = "1.3.0"  # Keep this in sync with docs/requirements.txt used by .readthedocs.yaml
+mkdocs = "1.6.0"  # Keep this in sync with docs/requirements.txt used by .readthedocs.yaml
+pyyaml = "^6.0.2" # Pin this dependency of mkdocs as 6.0.2 fixes build issue with deprecated openssl https://github.com/urllib3/urllib3/issues/2168. Remove this line once mkdocs uses this version or higher of pyyaml.
 pudb = "^2021.2.2"
 
 [build-system]
