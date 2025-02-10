@@ -6,6 +6,7 @@
 # - python defaults: https://docs.travis-ci.com/user/languages/python/
 
 version: ~> 1.0
+dist: jammy
 language: python
 python:
   - "3.11"
