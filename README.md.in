@@ -1,13 +1,16 @@
-# Taiga Stats - Your Taiga Statistics Tool [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Scrum%20and%20Kanban%20masters;%20generate%20statistics%20from%20your%20Taiga.io%20projects%20with%20this%20python%20tool&url=https://github.com/erikw/jekyll-glossary_tooltip&via=erik_westrup&hashtags=taiga,scrum,kanban,statistics)
+# Taiga Stats - Your Taiga Statistics Tool [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Scrum%20and%20Kanban%20masters;%20generate%20statistics%20from%20your%20Taiga.io%20projects%20with%20this%20python%20tool&url=https://github.com/erikw/taiga-stats&via=erik_westrup&hashtags=taiga,scrum,kanban,statistics)
 [![PyPI version](https://badge.fury.io/py/taiga-stats.svg)](https://badge.fury.io/py/taiga-stats)
 [![Downloads](https://pepy.tech/badge/taiga-stats)](https://pepy.tech/project/taiga-stats)
 [![Documentation Status](https://readthedocs.org/projects/taiga-stats/badge/?version=latest)](https://taiga-stats.readthedocs.io/)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/taiga-stats)](#)
 [![Travis Build Status](https://img.shields.io/travis/com/erikw/taiga-stats/main?logo=travis)](https://app.travis-ci.com/github/erikw/taiga-stats)
 [![Lint Code Base](https://github.com/erikw/taiga-stats/actions/workflows/linter.yml/badge.svg)](https://github.com/erikw/taiga-stats/actions/workflows/linter.yml)
-[![SLOC](https://img.shields.io/tokei/lines/github/erikw/taiga-stats)](#)
+[![SLOC](https://sloc.xyz/github/erikw/taiga-stats)](#)
+[![Number of programming languages used](https://img.shields.io/github/languages/count/erikw/taiga-stats)](#)
+[![Top programming languages used](https://img.shields.io/github/languages/top/erikw/taiga-stats)](#)
 [![License](https://img.shields.io/pypi/l/taiga-stats)](https://github.com/erikw/taiga-stats/blob/main/LICENSE)
 [![OSS Lifecycle](https://img.shields.io/osslifecycle/erikw/taiga-stats)](https://github.com/Netflix/osstracker)
+[![Latest tag](https://img.shields.io/github/v/tag/erikw/taiga-stats)](https://github.com/erikw/taiga-stats/tags)
 
 This is a script for all you Scrum||Kanban masters out there who use Taiga and are interested in visualizing progress and generate some automated statistics and graphs.
 
@@ -77,9 +80,9 @@ Then go to your User Stories and enter some dependencies as demonstrated below.
 Then run the script and generate a PNG file.
 
 
-```console
-$ taiga-stats deps_dot
-$ dot -T png -o ./dependencies.png ./dependencies.dot
+```shell
+taiga-stats deps_dot
+dot -T png -o ./dependencies.png ./dependencies.dot
 ```
 
 
@@ -88,15 +91,15 @@ $ dot -T png -o ./dependencies.png ./dependencies.dot
 ## Installation
 Make sure to use a supported python version. See the key `python` in the section `tool.poetry.dependencies` at [pyproject.toml](https://github.com/erikw/taiga-stats/blob/main/pyproject.toml).
 
-```console
-$ pip install taiga-stats
-$ taiga-stats -h
+```shell
+pip install taiga-stats
+taiga-stats -h
 ```
 
 If you use [pipx](https://pypi.org/project/pipx/) to install, you must specify a supported and locally available python version like:
 
-```console
-$ pipx install --python python3.9 taiga-stats
+```shell
+pipx install --python python3.9 taiga-stats
 ```
 
 To use this tool, you need to supply
@@ -108,10 +111,10 @@ It's recommended to put these 2 values in the below described `taiga-stats.conf`
 ## Config file
 It is tedious to have to specify the server URL and the authentication token every time. Also you typically work with some project at a time and would like to have default values for the project to use and maybe which tag to filter on. You can generate a configuration file to set these default values.
 
-```console
-$ taiga-stats config_template
-$ mv ./taiga.conf.template ~/.taiga-stats.conf
-$ vi ~/.taiga-stats.conf
+```shell
+taiga-stats config_template
+mv ./taiga.conf.template ~/.taiga-stats.conf
+vi ~/.taiga-stats.conf
 ```
 
 
@@ -121,53 +124,53 @@ $ vi ~/.taiga-stats.conf
 
 ## Setup from Git
 * Clone this git
-	```console
-	$ git clone https://github.com/erikw/taiga-stats.git && cd $(basename "$_" .git)
+	```shell
+	git clone https://github.com/erikw/taiga-stats.git && cd $(basename "$_" .git)
 	```
 * Install Poetry
-	```console
-	$ pip install poetry
+	```shell
+	pip install poetry
 	```
 
 * Numpy install issues as of 2021-10-31
   * `$ poetry install` did not work with Numpy on macOS. Solution from https://github.com/python-poetry/poetry/issues/3196#issuecomment-769753478
-	```console
-	$ pyenv local 3.9.7
-	$ poetry env use 3.9.7
-	$ poetry config experimental.new-installer false
-	$ poetry install
+	```shell
+	pyenv local 3.9.7
+	poetry env use 3.9.7
+	poetry config experimental.new-installer false
+	poetry install
 	```
 
 * Install project dependencies
-	```console
-	$ poetry install
+	```shell
+	poetry install
 	```
 * Now taiga-stats should work!
-	```console
-	$ poetry run taiga-stats -h
-	$ # or
-	$ bin/taiga-stats.sh
+	```shell
+	poetry run taiga-stats -h
+	# or
+	bin/taiga-stats.sh
 	```
 * To install locally:
-	```console
-	$ poetry build
-	$ pip install dist/taiga_stats-*.whl
+	```shell
+	poetry build
+	pip install dist/taiga_stats-*.whl
 	```
 
 # Development
 ## Documentation generation
-```console
-$ poetry run mkdocs serve
-$ poetry run mkdocs build
+```shell
+poetry run mkdocs serve
+poetry run mkdocs build
 ```
 
 but `bin/gen_docs.sh` will take care of all that plus more!
 
 # Releasing
-```console
-$ bin/gen_docs.sh
-$ vi CHANGELOG.md
-$ poetry version minor && ver="v$(poetry version -s)"
-$ git commit -am "Bump version to $ver" && git tag $ver && git push --atomic origin main $ver
-$ poetry publish --build
+```shell
+bin/gen_docs.sh
+vi CHANGELOG.md
+poetry version minor && ver="v$(poetry version -s)"
+git commit -am "Bump version to $ver" && git tag $ver && git push --atomic origin main $ver
+poetry publish --build
 ```

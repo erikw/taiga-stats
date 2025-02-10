@@ -119,9 +119,9 @@ Then go to your User Stories and enter some dependencies as demonstrated below.
 Then run the script and generate a PNG file.
 
 
-```console
-$ taiga-stats deps_dot
-$ dot -T png -o ./dependencies.png ./dependencies.dot
+```shell
+taiga-stats deps_dot
+dot -T png -o ./dependencies.png ./dependencies.dot
 ```
 
 
@@ -181,22 +181,20 @@ poetry install
 ```
 
 * Install project dependencies
-  ```shell
-  poetry install
-  ```
+```shell
+poetry install
+```
 * Now taiga-stats should work!
-  ```shell
-  poetry run taiga-stats -h
-  ```
-or
-  ```shell
-  bin/taiga-stats.sh
-  ```
+```shell
+poetry run taiga-stats -h
+# or
+bin/taiga-stats.sh
+```
 * To install locally:
-  ```shell
-  poetry build
-  pip install dist/taiga_stats-*.whl
-  ```
+```shell
+poetry build
+pip install dist/taiga_stats-*.whl
+```
 
 # Development
 ## Documentation generation
