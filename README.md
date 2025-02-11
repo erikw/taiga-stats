@@ -8,8 +8,8 @@
 / 　 づ
 It will be overwritten by bin/gen_docs.sh.
 
-Instead edit:
-1. README.md.in
+Instead:
+1. edit README.md.in
 2. run $ bin/gen_docs.sh
 -->
 # Taiga Stats - Your Taiga Statistics Tool [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Scrum%20and%20Kanban%20masters;%20generate%20statistics%20from%20your%20Taiga.io%20projects%20with%20this%20python%20tool&url=https://github.com/erikw/taiga-stats&via=erik_westrup&hashtags=taiga,scrum,kanban,statistics)
