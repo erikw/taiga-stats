@@ -18,7 +18,7 @@ include = ["CHANGELOG.md", "LICENSE", "README.md"]
 matplotlib = "^3.10"
 python = "^3.11, < 3.13" 
 python-taiga = "^1.0.0"
-single-source = ">=0.2,<0.4"
+single-source = ">=0.2,<0.5"
 packaging = "^24.2" # Pinned for matplotlib and mkdocs. If not pinned, build on travis fails, but not locally.
 
 [tool.poetry.group.dev.dependencies]
