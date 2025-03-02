@@ -2,7 +2,7 @@
 name = "taiga-stats"
 version = "1.7.0"
 description = "Generate statistics from Taiga and produce burnup diagrams, CFDs, dependency graphs and more."
-authors = ["Erik Westrup <erik.westrup@gmail.com>"]
+authors = ["Erik Westrup <erik.westrup@icloud.com>"]
 license = "BSD-3-Clause"
 readme = "README.md"
 homepage = "https://github.com/erikw/taiga-stats"
