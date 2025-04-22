@@ -57,7 +57,7 @@ def main():
     args["print_tags"] = (
         args["print_tags"]
         if "print_tags" in args and args["print_tags"] is not None and args["print_tags"]
-        else cnf_print_tags if cnf_print_tags iscnf_print_points  not None else False
+        else cnf_print_tags if cnf_print_tags is not None else False
     )
     args["print_points"] = (
         args["print_points"]
