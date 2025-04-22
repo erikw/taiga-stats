@@ -62,4 +62,18 @@ line-length = 160
 indent-width = 4
 
 [tool.ruff.lint]
-select = ["E4", "E7", "E9", "F"]
+# All supported rules: https://docs.astral.sh/ruff/rules/
+select = [
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F",
+    # pyupgrade
+    #"UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    #"SIM",
+    # isort
+    "I",
+]
