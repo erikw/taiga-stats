@@ -44,6 +44,7 @@ jobs:
           PYTHON_RUFF_CONFIG_FILE: pyproject.toml
           VALIDATE_ALL_CODEBASE: true
           VALIDATE_PYTHON_RUFF: true
+          FIX_PYTHON: true
           FIX_PYTHON_RUFF: true
           # VALIDATE_PYTHON_BLACK: true
           # VALIDATE_PYTHON_PYLINT: true
