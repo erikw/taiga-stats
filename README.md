@@ -22,13 +22,14 @@ Instead:
 [![SLOC](https://sloc.xyz/github/erikw/taiga-stats?lower=true)](#)
 [![Number of programming languages used](https://img.shields.io/github/languages/count/erikw/taiga-stats)](#)
 [![Top programming languages used](https://img.shields.io/github/languages/top/erikw/taiga-stats)](#)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://black.readthedocs.io/en/stable/the_black_code_style/current_style.html)
 [![License](https://img.shields.io/pypi/l/taiga-stats)](https://github.com/erikw/taiga-stats/blob/main/LICENSE)
 [![OSS Lifecycle](https://img.shields.io/osslifecycle/erikw/taiga-stats)](https://github.com/Netflix/osstracker)
 [![Latest tag](https://img.shields.io/github/v/tag/erikw/taiga-stats)](https://github.com/erikw/taiga-stats/tags)
 
 <p align="center">
-    <!-- Ref: https://dev.to/azure/adding-a-github-codespace-button-to-your-readme-5f6l -->
-    <a href="https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=47283228" title="Open in GitHub Codespaces" ><img alt="Open in GitHub Codespaces" src="https://github.com/codespaces/badge.svg"></a>
+<!-- Ref: https://dev.to/azure/adding-a-github-codespace-button-to-your-readme-5f6l -->
+<a href="https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=47283228" title="Open in GitHub Codespaces" ><img alt="Open in GitHub Codespaces" src="https://github.com/codespaces/badge.svg"></a>
 </p>
 
 This is a script for all you Scrum||Kanban masters out there who use Taiga and are interested in visualizing progress and generate some automated statistics and graphs.

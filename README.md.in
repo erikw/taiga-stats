@@ -22,6 +22,7 @@ Instead:
 [![SLOC](https://sloc.xyz/github/erikw/taiga-stats?lower=true)](#)
 [![Number of programming languages used](https://img.shields.io/github/languages/count/erikw/taiga-stats)](#)
 [![Top programming languages used](https://img.shields.io/github/languages/top/erikw/taiga-stats)](#)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://black.readthedocs.io/en/stable/the_black_code_style/current_style.html)
 [![License](https://img.shields.io/pypi/l/taiga-stats)](https://github.com/erikw/taiga-stats/blob/main/LICENSE)
 [![OSS Lifecycle](https://img.shields.io/osslifecycle/erikw/taiga-stats)](https://github.com/Netflix/osstracker)
 [![Latest tag](https://img.shields.io/github/v/tag/erikw/taiga-stats)](https://github.com/erikw/taiga-stats/tags)
