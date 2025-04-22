@@ -31,8 +31,6 @@ DEPS_DOT_FILE_FMT = "dependencies_{:s}"
 def cmd_list_projects(args):
     api = taiga.TaigaAPI(host=args["url"], token=args["auth_token"])
 
-
-
     print("All projects which you have access to\n(note that this can take very very long if you use https://api.taiga.io/, as there are many projects):\n")
     print("id\tname")
     print("--\t----")
