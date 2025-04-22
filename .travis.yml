@@ -17,5 +17,7 @@ install: poetry install
 script:
   - poetry run taiga-stats -v
   - poetry run taiga-stats -h
-  - poetry run pylint taiga_stats/
-  - poetry run black --check .
+#   - poetry run pylint taiga_stats/
+#   - poetry run black --check .
+  - poetry run ruff check
+  - poetry run ruff format
