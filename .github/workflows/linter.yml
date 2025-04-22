@@ -40,7 +40,6 @@ jobs:
           # To report GitHub Actions status checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BRANCH: main
-          LINTER_RULES_PATH: /
           VALIDATE_ALL_CODEBASE: true
           VALIDATE_PYTHON_RUFF: true
           FIX_PYTHON_RUFF: true
