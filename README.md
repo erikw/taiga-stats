@@ -213,6 +213,7 @@ poetry run isort taiga-stats/
 poetry run black taiga-stats/
 poetry run pylint taiga-stats/
 poetry run flake8 taiga-stats/
+poetry run ruff check
 ```
 
 ## Documentation generation

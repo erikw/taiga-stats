@@ -44,8 +44,10 @@ jobs:
           VALIDATE_ALL_CODEBASE: true
           VALIDATE_PYTHON_BLACK: true
           VALIDATE_PYTHON_PYLINT: true
+          VALIDATE_PYTHON_RUFF: true
           VALIDATE_PYTHON_FLAKE8: true
-          PYTHON_ISORT_CONFIG_FILE: pyproject.toml
           PYTHON_BLACK_CONFIG_FILE: pyproject.toml
+          PYTHON_ISORT_CONFIG_FILE: pyproject.toml
           PYTHON_PYLINT_CONFIG_FILE: pyproject.toml
+          PYTHON_RUFF_CONFIG_FILE: pyproject.toml
           # flake8 does not support pyproject.toml, thus needs it's own .flake8

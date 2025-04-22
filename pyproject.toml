@@ -31,6 +31,7 @@ isort = "^5.9"
 mkdocs = "1.6.0"  # Keep this in sync with docs/requirements.txt used by .readthedocs.yaml
 pyyaml = "^6.0.2" # Pin this dependency of mkdocs as 6.0.2 fixes build issue with deprecated openssl https://github.com/urllib3/urllib3/issues/2168. Remove this line once mkdocs uses this version or higher of pyyaml.
 pudb = "^2021.2.2"
+ruff = "^0.11.6"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -57,3 +58,10 @@ max-line-length = 160
 disable = "C0103, C0114, C0116, C0200, C0209, C0413, R0903, R0912, R0914, R0915, R1710, W1308"
 
 init-hook = "import sys; sys.path.append('taiga_stats')"
+
+[tool.ruff]
+line-length = 160
+indent-width = 4
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]
