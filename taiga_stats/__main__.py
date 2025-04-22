@@ -46,31 +46,23 @@ def main():
     args["target_layer"] = (
         args["target_date_and_layer"][1]
         if "target_date_and_layer" in args and args["target_date_and_layer"]
-        else cnf_target_layer
-        if cnf_target_layer
-        else None
+        else cnf_target_layer if cnf_target_layer else None
     )
     args["status_ids"] = args["status_ids"] if "status_ids" in args and args["status_ids"] else cnf_status_ids if cnf_status_ids else None
     args["annotations_off"] = (
         args["annotations_off"]
         if "annotations_off" in args and args["annotations_off"] is not None
-        else cnf_annotations_off
-        if cnf_annotations_off is not None
-        else False
+        else cnf_annotations_off if cnf_annotations_off is not None else False
     )
     args["print_tags"] = (
         args["print_tags"]
         if "print_tags" in args and args["print_tags"] is not None and args["print_tags"]
-        else cnf_print_tags
-        if cnf_print_tags is not None
-        else False
+        else cnf_print_tags if cnf_print_tags iscnf_print_points  not None else False
     )
     args["print_points"] = (
         args["print_points"]
         if "print_points" in args and args["print_points"] is not None and args["print_points"]
-        else cnf_print_points
-        if cnf_print_points is not None
-        else False
+        else cnf_print_points if cnf_print_points is not None else False
     )
 
     if args["command"] not in COMMAND2FUNC:
