@@ -24,7 +24,7 @@ packaging = "^24.2" # Pinned for matplotlib and mkdocs. If not pinned, build on 
 [tool.poetry.group.dev.dependencies]
 autoflake = "^1.4"
 autoimport = "^0.11"
-black = "^22.1"
+black = "25.1.0" # Use same version as super-linter: https://github.com/super-linter/super-linter/blob/main/dependencies/python/black.txt
 pylint = "^3.3"
 ipdb = "^0.13"
 isort = "^5.9"
@@ -55,9 +55,7 @@ line_length = 160
 
 [tool.pylint]
 max-line-length = 160
-disable = "C0103, C0114, C0116, C0200, C0209, C0413, R0903, R0912, R0914, R0915, R1710, W1308"
-
-init-hook = "import sys; sys.path.append('taiga_stats')"
+disable = "E0401, C0103, C0114, C0116, C0200, C0209, C0413, R0903, R0912, R0914, R0915, R1710, W1308"
 
 [tool.ruff]
 line-length = 160
