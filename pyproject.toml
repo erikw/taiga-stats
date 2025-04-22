@@ -78,7 +78,6 @@ select = [
     "I",
 ]
 
-
 [tool.ruff.format]
 quote-style = "double"
 indent-style = "space"
