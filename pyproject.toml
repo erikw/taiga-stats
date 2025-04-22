@@ -47,6 +47,7 @@ taiga-stats = 'taiga_stats.__main__:main'
 
 [tool.isort]
 line_length = 160
+profile = "black"
 
 [tool.black]
 line_length = 160

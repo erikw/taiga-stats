@@ -207,7 +207,14 @@ poetry build
 pip install dist/taiga_stats-*.whl
 ```
 
-# Development
+## Linting and Formatting
+```shell
+poetry run isort .
+poetry run black .
+poetry run pylint .
+poetry run flake8 .
+```
+
 ## Documentation generation
 ```shell
 poetry run mkdocs serve
