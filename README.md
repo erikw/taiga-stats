@@ -208,14 +208,17 @@ pip install dist/taiga_stats-*.whl
 ```
 
 ## Linting and Formatting
-Consider isort, flake8 and pylint as replacedd by ruff.
+* Linting: Consider isort, flake8 and pylint as replaced by ruff.
+* Formatting: Consider black as replaced by ruff.
+
 ```shell
-poetry run black taiga-stats/
 poetry run ruff check
+poetry run ruff format
 
 poetry run isort taiga-stats/
 poetry run pylint taiga-stats/
 poetry run flake8 taiga-stats/
+poetry run black taiga-stats/
 ```
 
 ## Documentation generation
