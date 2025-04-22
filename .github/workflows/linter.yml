@@ -40,10 +40,11 @@ jobs:
           # To report GitHub Actions status checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BRANCH: main
+          LINTER_RULES_PATH: /
+          PYTHON_RUFF_CONFIG_FILE: pyproject.toml
           VALIDATE_ALL_CODEBASE: true
           VALIDATE_PYTHON_RUFF: true
           FIX_PYTHON_RUFF: true
-          PYTHON_RUFF_CONFIG_FILE: pyproject.toml
           # VALIDATE_PYTHON_BLACK: true
           # VALIDATE_PYTHON_PYLINT: true
           # VALIDATE_PYTHON_FLAKE8: true
