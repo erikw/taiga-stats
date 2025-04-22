@@ -209,10 +209,10 @@ pip install dist/taiga_stats-*.whl
 
 ## Linting and Formatting
 ```shell
-poetry run isort .
-poetry run black .
-poetry run pylint .
-poetry run flake8 .
+poetry run isort taiga-stats/
+poetry run black taiga-stats/
+poetry run pylint taiga-stats/
+poetry run flake8 taiga-stats/
 ```
 
 ## Documentation generation

@@ -52,6 +52,6 @@ profile = "black"
 [tool.black]
 line_length = 160
 
-[tool.pylint.'MESSAGES CONTROL']
+[tool.pylint]
 max-line-length = 160
 disable = "C0103, C0114, C0116, C0200, C0209, C0413, R0903, R0912, R0914, R0915, R1710, W1308"

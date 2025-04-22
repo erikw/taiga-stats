@@ -45,3 +45,5 @@ jobs:
           VALIDATE_PYTHON_BLACK: true
           VALIDATE_PYTHON_PYLINT: true
           VALIDATE_PYTHON_FLAKE8: true
+          PYTHON_ISORT_CONFIG_FILE: 'pyproject.toml'
+          PYTHON_BLACK_CONFIG_FILE: 'pyproject.toml'
