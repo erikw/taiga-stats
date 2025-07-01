@@ -31,7 +31,7 @@ isort = "^5.9"
 mkdocs = "1.6.0"  # Keep this in sync with docs/requirements.txt used by .readthedocs.yaml
 pyyaml = "^6.0.2" # Pin this dependency of mkdocs as 6.0.2 fixes build issue with deprecated openssl https://github.com/urllib3/urllib3/issues/2168. Remove this line once mkdocs uses this version or higher of pyyaml.
 pudb = "^2021.2.2"
-ruff = "^0.11.6"
+ruff = ">=0.11.6,<0.13.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
