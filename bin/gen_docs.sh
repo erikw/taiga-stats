@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 log_gen() {
-	echo "⚙️  Generating $@..."
+	echo "⚙️ Generating $@..."
 }
 
 README_IN=README.md.in
