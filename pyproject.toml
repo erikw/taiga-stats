@@ -13,13 +13,12 @@ classifiers = [
 ]
 include = ["CHANGELOG.md", "LICENSE", "README.md"]
 
-
 [tool.poetry.dependencies]
+python = "^3.11, < 3.13"
 matplotlib = "^3.10"
-python = "^3.11, < 3.13" 
+packaging = ">=24.2,<26.0" # Pinned for matplotlib and mkdocs. If not pinned, build on travis fails, but not locally.
 python-taiga = "^1.0.0"
 single-source = ">=0.2,<0.5"
-packaging = ">=24.2,<26.0" # Pinned for matplotlib and mkdocs. If not pinned, build on travis fails, but not locally.
 
 [tool.poetry.group.dev.dependencies]
 autoflake = "^1.4"
@@ -28,10 +27,13 @@ black = "25.1.0" # Use same version as super-linter: https://github.com/super-li
 pylint = "^3.3"
 ipdb = "^0.13"
 isort = "^5.9"
-mkdocs = "1.6.0"  # Keep this in sync with docs/requirements.txt used by .readthedocs.yaml
-pyyaml = "^6.0.2" # Pin this dependency of mkdocs as 6.0.2 fixes build issue with deprecated openssl https://github.com/urllib3/urllib3/issues/2168. Remove this line once mkdocs uses this version or higher of pyyaml.
 pudb = "^2021.2.2"
 ruff = ">=0.11.6,<0.13.0"
+
+
+[tool.poetry.group.docs.dependencies]
+mkdocs = "1.6.0"  # Keep this in sync with docs/requirements.txt used by .readthedocs.yaml
+pyyaml = "^6.0.2" # Pin this dependency of mkdocs as 6.0.2 fixes build issue with deprecated openssl https://github.com/urllib3/urllib3/issues/2168. Remove this line once mkdocs uses this version or higher of pyyaml.
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

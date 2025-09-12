@@ -193,7 +193,7 @@ pip install poetry
 
 * Install project dependencies
 ```shell
-poetry install
+poetry install --with docs
 ```
 * Now taiga-stats should work!
 ```shell

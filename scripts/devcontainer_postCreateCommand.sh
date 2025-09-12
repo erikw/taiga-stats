@@ -5,5 +5,5 @@
 set -eux
 
 # For project.
-#pip install poetry NOPE no longer needed as of adding poetry via devcontainer extra feature image.
-poetry install
+#pip install poetry # NOPE no longer needed as of adding poetry via devcontainer extra feature image.
+poetry install --with docs
