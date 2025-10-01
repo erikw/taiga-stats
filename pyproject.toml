@@ -28,7 +28,7 @@ pylint = "^3.3"
 ipdb = "^0.13"
 isort = "^5.9"
 pudb = "^2021.2.2"
-ruff = ">=0.11.6,<0.13.0"
+ruff = ">=0.11.6,<0.14.0"
 
 
 [tool.poetry.group.docs.dependencies]
