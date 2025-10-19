@@ -17,7 +17,7 @@ Instead:
 [![Downloads](https://pepy.tech/badge/taiga-stats)](https://pepy.tech/project/taiga-stats)
 [![Documentation Status](https://readthedocs.org/projects/taiga-stats/badge/?version=latest)](https://taiga-stats.readthedocs.io/)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/taiga-stats)](#)
-[![Travis Build Status](https://img.shields.io/travis/com/erikw/taiga-stats/main?logo=travis)](https://app.travis-ci.com/github/erikw/taiga-stats)
+[![CI](https://github.com/erikw/taiga-stats/actions/workflows/ci.yml/badge.svg)](https://github.com/erikw/taiga-stats/actions/workflows/ci.yml)
 [![Lint](https://github.com/erikw/taiga-stats/actions/workflows/linter.yml/badge.svg)](https://github.com/erikw/taiga-stats/actions/workflows/linter.yml)
 [![SLOC](https://sloc.xyz/github/erikw/taiga-stats?lower=true)](#)
 [![Number of programming languages used](https://img.shields.io/github/languages/count/erikw/taiga-stats)](#)
