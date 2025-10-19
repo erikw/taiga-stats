@@ -9,15 +9,15 @@ version: ~> 1.0
 dist: jammy
 language: python
 python:
-  - "3.11"
-  - "3.12"
+    - "3.11"
+    - "3.12"
 cache: pip
 before_install: pip install poetry
 install: poetry install
 script:
-  - poetry run taiga-stats -v
-  - poetry run taiga-stats -h
-#   - poetry run pylint taiga_stats/
-#   - poetry run black --check .
-  - poetry run ruff check
-  - poetry run ruff format
+    - poetry run taiga-stats -v
+    - poetry run taiga-stats -h
+    #   - poetry run pylint taiga_stats/
+    #   - poetry run black --check .
+    - poetry run ruff check
+    - poetry run ruff format
