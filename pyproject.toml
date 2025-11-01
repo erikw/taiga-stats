@@ -24,7 +24,7 @@ single-source = ">=0.2,<0.5"
 autoflake = "^1.4"
 autoimport = "^0.11"
 black = "25.1.0" # Use same version as super-linter: https://github.com/super-linter/super-linter/blob/main/dependencies/python/black.txt
-pylint = "^3.3"
+pylint = ">=3.3,<5.0"
 ipdb = "^0.13"
 isort = "^5.9"
 pudb = "^2021.2.2"
