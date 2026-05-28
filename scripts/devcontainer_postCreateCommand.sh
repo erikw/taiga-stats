@@ -4,6 +4,9 @@
 
 set -eux
 
-# For project.
-#pip install poetry # NOPE no longer needed as of adding poetry via devcontainer extra feature image.
-poetry install --with docs
+if ! command -v uv >/dev/null 2>&1; then
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+fi
+
+export PATH="$HOME/.local/bin:$PATH"
+uv sync --all-groups

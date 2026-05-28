@@ -3,7 +3,7 @@
 | Don't edit 　　    |
 | README.md directly!|
 |＿＿＿＿＿＿＿＿＿＿＿|
-(__/) ||
+(\__/) ||
 (•ㅅ•) ||
 / 　 づ
 It will be overwritten by bin/gen_docs.sh.
@@ -11,8 +11,9 @@ It will be overwritten by bin/gen_docs.sh.
 Instead:
 1. edit README.md.in
 2. run $ bin/gen_docs.sh
--->
+ -->
 # Taiga Stats - Your Taiga Statistics Tool [![Post on X](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://x.com/intent/tweet?text=Scrum%20and%20Kanban%20masters;%20generate%20statistics%20from%20your%20Taiga.io%20projects%20with%20this%20python%20tool&url=https://github.com/erikw/taiga-stats&via=erik_westrup&hashtags=taiga,scrum,kanban,statistics)
+
 [![PyPI version](https://badge.fury.io/py/taiga-stats.svg)](https://badge.fury.io/py/taiga-stats)
 [![Downloads](https://pepy.tech/badge/taiga-stats)](https://pepy.tech/project/taiga-stats)
 [![Documentation Status](https://readthedocs.org/projects/taiga-stats/badge/?version=latest)](https://taiga-stats.readthedocs.io/)
@@ -28,8 +29,8 @@ Instead:
 [![Latest tag](https://img.shields.io/github/v/tag/erikw/taiga-stats)](https://github.com/erikw/taiga-stats/tags)
 
 <p align="center">
-<!-- Ref: https://dev.to/azure/adding-a-github-codespace-button-to-your-readme-5f6l -->
-<a href="https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=47283228" title="Open in GitHub Codespaces" ><img alt="Open in GitHub Codespaces" src="https://github.com/codespaces/badge.svg"></a>
+    <!-- Ref: https://dev.to/azure/adding-a-github-codespace-button-to-your-readme-5f6l -->
+    <a href="https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=47283228" title="Open in GitHub Codespaces" ><img alt="Open in GitHub Codespaces" src="https://github.com/codespaces/badge.svg"></a>
 </p>
 
 This is a script for all you Scrum||Kanban masters out there who use Taiga and are interested in visualizing progress and generating some automated statistics and graphs.
@@ -37,6 +38,7 @@ This is a script for all you Scrum||Kanban masters out there who use Taiga and a
 [Taiga](https://taiga.io/) is an open-source virtual Scrum and Kanban board that is popular for managing projects and work. We use a physical whiteboard at work, but I mirror the status of stories in Taiga so that I can collect some statistics and generate diagrams and graphs using this tool I wrote.
 
 # Features
+
 ```console
 $ taiga-stats --help
 usage: taiga-stats [-h] [-v] [--url URL] [--auth-token AUTH_TOKEN]
@@ -82,12 +84,13 @@ Support: please go to https://github.com/erikw/taiga-stats/issues
 ```
 
 # Terminology
+
 * *US* - User Story
 * *CFD* - Cumulative Flow Diagram
 
 ## Cumulative Flow Diagram
-From a [CFD](http://brodzinski.com/2013/07/cumulative-flow-diagram.html) a lot of interesting insights about your team's progress [can be found](http://paulklipp.com/images/Interpreting_a_Cumulative_Flow_Diagram.jpg). However, I'm not a fan of repetitive work like counting and entering numbers in an Excel sheet. This had to be automated! Therefore I deiced to write this script to save data on a daily basis with a cron job and a function for generating this diagram. This diagram can the be put on a TV visible in the hallways.
 
+From a [CFD](http://brodzinski.com/2013/07/cumulative-flow-diagram.html) a lot of interesting insights about your team's progress [can be found](http://paulklipp.com/images/Interpreting_a_Cumulative_Flow_Diagram.jpg). However, I'm not a fan of repetitive work like counting and entering numbers in an Excel sheet. This had to be automated! Therefore I deiced to write this script to save data on a daily basis with a cron job and a function for generating this diagram. This diagram can the be put on a TV visible in the hallways.
 
 This is an example diagram generated from [mock data](https://github.com/erikw/taiga-stats/tree/main/sample_data/cfd_example.dat):
 
@@ -95,11 +98,9 @@ This is an example diagram generated from [mock data](https://github.com/erikw/t
 
 Textual annotations can be put in the plot by manually editing the `.dat file`.
 
-
 Also, a target date for the project deadline can be specified. Then a line will be drawn showing the ideal work pace towards this date, as seen below, where the target finish date is in week 46.
 
 ![Example CFD with ideal pace](https://raw.githubusercontent.com/erikw/taiga-stats/main/img/cfd_example_ideal_pace.png)
-
 
 To save the data and generate the diagram each working day, I have this cron job:
 
@@ -118,37 +119,35 @@ taiga-stats cfd --tag some_feature_tag
 ```
 
 ## User Story Dependency Graph
+
 Some stories require others to be completed before they can be started. I thought it would be handy if you could keep track of these dependencies in Taiga, but simply write for each US a list of other stories that this story depends on. Then from this information a [.dot file](https://github.com/erikw/taiga-stats/tree/main/sample_data/dependencies_example.dot) can be generated that should how you user stories depends on each other. This graph is very useful for work planning i.e. what to start with and how much parallelization is possible and at what stages.
 
 ![US Dependency Graph](https://raw.githubusercontent.com/erikw/taiga-stats/main/img/dependencies_example.png)
 
 The stories that are marked as Done in Taiga have a green color in the graph.
 
-
 ### How to set up the dependency feature
+
 First, create a new custom field in Taiga named `Depends On` under Settings > Attributes > Custom Fields:
 
 ![Custom Field](https://raw.githubusercontent.com/erikw/taiga-stats/main/img/taiga_custom_field.png)
-
 
 Then go to your User Stories and enter some dependencies as demonstrated below.
 
 ![US dependency](https://raw.githubusercontent.com/erikw/taiga-stats/main/img/us_depends_on.png)
 
-
 Then run the script and generate a PNG file.
-
 
 ```shell
 taiga-stats deps_dot
 dot -T png -o ./dependencies.png ./dependencies.dot
 ```
 
-
 # Setup
 
 ## Installation
-Make sure to use a supported Python version. See the key `python` in the section `tool.poetry.dependencies` at [pyproject.toml](https://github.com/erikw/taiga-stats/blob/main/pyproject.toml).
+
+Make sure to use a supported Python version. See `project.requires-python` in [pyproject.toml](https://github.com/erikw/taiga-stats/blob/main/pyproject.toml).
 
 ```shell
 pip install taiga-stats
@@ -158,16 +157,18 @@ taiga-stats -h
 If you use [pipx](https://pypi.org/project/pipx/) to install, you must specify a supported and locally available Python version, like:
 
 ```shell
-pipx install --python python3.9 taiga-stats
+pipx install --python python3.11 taiga-stats
 ```
 
 To use this tool, you need to supply
+
 * `--url` to your taiga server e.g., `https://api.taiga.io/`
 * `--auth-token` that you need to obtain according to the [official instructions](https://docs.taiga.io/api.html#_authentication).
 
 It's recommended to put these 2 values in the below-described `taiga-stats.conf` file for easier usage of this tool!
 
 ## Config file
+
 It is tedious to have to specify the server URL and the authentication token every time. Also, you typically work with one project at a time and would like to have default values for the project to use, and maybe which tag to filter on. You can generate a configuration file to set these default values.
 
 ```shell
@@ -176,64 +177,75 @@ mv ./taiga.conf.template ~/.taiga-stats.conf
 vi ~/.taiga-stats.conf
 ```
 
-
 # Development
-* Make sure to `$ poetry shell` before using tools like pyright LSP, so that it can find the installed dependency modules
-* Reference for how to structure a Python project: https://realpython.com/pypi-publish-python-package/
+
+* `uv` manages the project virtual environment in `.venv`, so you generally do not need to activate it manually. Use `uv run ...` for project commands.
+* Reference for how to structure a Python project: <https://realpython.com/pypi-publish-python-package/>
 
 ## Setup from Git
+
 * Clone this git
-```shell
-git clone https://github.com/erikw/taiga-stats.git && cd $(basename "$_" .git)
-```
-* Install Poetry
-```shell
-pip install poetry
-```
+ ```shell
+ git clone https://github.com/erikw/taiga-stats.git && cd $(basename "$_" .git)
+ ```
+
+* Install uv
+ ```shell
+ curl -LsSf https://astral.sh/uv/install.sh | sh
+ ```
 
 * Install project dependencies
-```shell
-poetry install
-```
+ ```shell
+ uv sync --all-groups
+ ```
+
+* Dependency management
+ ```shell
+ uv add <package>
+ uv add --group dev <package>
+ uv remove <package>
+ uv lock --upgrade
+ ```
+
 * Now taiga-stats should work!
-```shell
-poetry run taiga-stats -h
-# or
-bin/taiga-stats.sh
-```
+ ```shell
+ uv run taiga-stats -h
+ # or
+ bin/taiga-stats.sh
+ ```
+
 * To install locally:
-```shell
-poetry build
-pip install dist/taiga_stats-*.whl
-```
+ ```shell
+ uv build
+ uv pip install dist/taiga_stats-*.whl
+ ```
 
 ## Linting and Formatting
+
 * Linting: Consider isort, flake8, and pylint as replaced by ruff.
 * Formatting: Consider black as replaced by ruff.
 
 ```shell
-poetry run ruff check
-poetry run ruff format
-
-poetry run isort taiga-stats/
-poetry run pylint taiga-stats/
-poetry run flake8 taiga-stats/
-poetry run black taiga-stats/
+uv run ruff check
+uv run ruff format
 ```
 
 ## Documentation generation
+
 ```shell
-poetry run mkdocs serve
-poetry run mkdocs build
+uv run --group docs mkdocs serve
+uv run --group docs mkdocs build
 ```
 
 but `bin/gen_docs.sh` will take care of all that plus more!
 
 # Releasing
+
 ```shell
 bin/gen_docs.sh
 vi CHANGELOG.md
-poetry version minor && ver="v$(poetry version -s)"
-git commit -am "Bump version to $ver" && git tag $ver && git push --atomic origin main $ver
-poetry publish --build
+uv version --bump minor && ver="v$(uv version --short)"
+git commit -am "Bump version to $ver" && git tag "$ver" && git push --atomic origin main "$ver"
+uv build
+uv publish
 ```

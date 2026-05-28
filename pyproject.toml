@@ -1,52 +1,58 @@
-[tool.poetry]
+[project]
 name = "taiga-stats"
 version = "1.7.0"
 description = "Generate statistics from Taiga and produce burnup diagrams, CFDs, dependency graphs and more."
-authors = ["Erik Westrup <erik.westrup@icloud.com>"]
+authors = [{ name = "Erik Westrup", email = "erik.westrup@icloud.com" }]
 license = "BSD-3-Clause"
+license-files = ["LICENSE"]
 readme = "README.md"
-homepage = "https://github.com/erikw/taiga-stats"
+requires-python = ">=3.11,<3.13"
 keywords = ["taiga", "generator", "stats", "cfd", "dependency graph"]
 classifiers = [
     "Topic :: Utilities",
     "Topic :: Software Development"
 ]
-include = ["CHANGELOG.md", "LICENSE", "README.md"]
+dependencies = [
+    "matplotlib>=3.10,<4",
+    "packaging>=24.2,<27.0", # Pinned for matplotlib and mkdocs. If not pinned, build on travis fails, but not locally.
+    "python-taiga>=1.0.0,<2",
+]
 
-[tool.poetry.dependencies]
-python = "^3.11, < 3.13"
-matplotlib = "^3.10"
-packaging = ">=24.2,<27.0" # Pinned for matplotlib and mkdocs. If not pinned, build on travis fails, but not locally.
-python-taiga = "^1.0.0"
-single-source = ">=0.2,<0.5"
+[project.urls]
+Homepage = "https://github.com/erikw/taiga-stats"
+Repository = "https://github.com/erikw/taiga-stats"
 
-[tool.poetry.group.dev.dependencies]
-autoflake = "^1.4"
-autoimport = "^0.11"
-black = "25.1.0" # Use same version as super-linter: https://github.com/super-linter/super-linter/blob/main/dependencies/python/black.txt
-pylint = ">=3.3,<5.0"
-ipdb = "^0.13"
-isort = "^5.9"
-pudb = "^2021.2.2"
-ruff = ">=0.11.6,<0.15.0"
-
-
-[tool.poetry.group.docs.dependencies]
-mkdocs = "1.6.0"  # Keep this in sync with docs/requirements.txt used by .readthedocs.yaml
-pyyaml = "^6.0.2" # Pin this dependency of mkdocs as 6.0.2 fixes build issue with deprecated openssl https://github.com/urllib3/urllib3/issues/2168. Remove this line once mkdocs uses this version or higher of pyyaml.
-
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.poetry.scripts]
+[project.scripts]
 # By defining this, we can run
-# $ poetry run taiga-stats
+# $ uv run taiga-stats
 # instead of the longer
-# $ poetry run python -m taiga_stats
+# $ uv run python -m taiga_stats
 # This short name will also be the name of the script being installed to the system when installing the wheel from pip.
 # NOTE python modules should use underscores, python packages not (PEP8)...
-taiga-stats = 'taiga_stats.__main__:main'
+taiga-stats = "taiga_stats.__main__:main"
+
+[dependency-groups]
+dev = [
+    "autoflake>=1.4,<2",
+    "autoimport>=0.11,<0.12",
+    "black==25.1.0", # Use same version as super-linter: https://github.com/super-linter/super-linter/blob/main/dependencies/python/black.txt
+    "ipdb>=0.13,<0.14",
+    "isort>=5.9,<6",
+    "pudb>=2021.2.2,<2022",
+    "pylint>=3.3,<5.0",
+    "ruff>=0.11.6,<0.15.0",
+]
+docs = [
+    "mkdocs==1.6.0", # Keep this in sync with docs/requirements.txt used by .readthedocs.yaml
+    "pyyaml>=6.0.2,<7", # Pin this dependency of mkdocs as 6.0.2 fixes build issue with deprecated openssl https://github.com/urllib3/urllib3/issues/2168. Remove this line once mkdocs uses this version or higher of pyyaml.
+]
+
+[build-system]
+requires = ["hatchling>=1.27.0"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["taiga_stats"]
 
 [tool.isort]
 line_length = 160

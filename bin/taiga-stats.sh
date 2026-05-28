@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Simple wrapper
 
+set -euo pipefail
 
 DIR=$(dirname "$0")
-cd $DIR/..
-poetry run taiga-stats $*
+cd "$DIR/.."
+exec uv run taiga-stats "$@"
