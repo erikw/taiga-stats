@@ -3,7 +3,7 @@
 | Don't edit 　　    |
 | README.md directly!|
 |＿＿＿＿＿＿＿＿＿＿＿|
-(__/) ||
+(\__/) ||
 (•ㅅ•) ||
 / 　 づ
 It will be overwritten by bin/gen_docs.sh.
@@ -11,7 +11,7 @@ It will be overwritten by bin/gen_docs.sh.
 Instead:
 1. edit README.md.in
 2. run $ bin/gen_docs.sh
--->
+ -->
 # Taiga Stats - Your Taiga Statistics Tool [![Post on X](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://x.com/intent/tweet?text=Scrum%20and%20Kanban%20masters;%20generate%20statistics%20from%20your%20Taiga.io%20projects%20with%20this%20python%20tool&url=https://github.com/erikw/taiga-stats&via=erik_westrup&hashtags=taiga,scrum,kanban,statistics)
 [![PyPI version](https://badge.fury.io/py/taiga-stats.svg)](https://badge.fury.io/py/taiga-stats)
 [![Downloads](https://pepy.tech/badge/taiga-stats)](https://pepy.tech/project/taiga-stats)
@@ -28,8 +28,8 @@ Instead:
 [![Latest tag](https://img.shields.io/github/v/tag/erikw/taiga-stats)](https://github.com/erikw/taiga-stats/tags)
 
 <p align="center">
-<!-- Ref: https://dev.to/azure/adding-a-github-codespace-button-to-your-readme-5f6l -->
-<a href="https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=47283228" title="Open in GitHub Codespaces" ><img alt="Open in GitHub Codespaces" src="https://github.com/codespaces/badge.svg"></a>
+    <!-- Ref: https://dev.to/azure/adding-a-github-codespace-button-to-your-readme-5f6l -->
+    <a href="https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=47283228" title="Open in GitHub Codespaces" ><img alt="Open in GitHub Codespaces" src="https://github.com/codespaces/badge.svg"></a>
 </p>
 
 This is a script for all you Scrum||Kanban masters out there who use Taiga and are interested in visualizing progress and generating some automated statistics and graphs.
@@ -148,7 +148,7 @@ dot -T png -o ./dependencies.png ./dependencies.dot
 # Setup
 
 ## Installation
-Make sure to use a supported Python version. See the key `python` in the section `tool.poetry.dependencies` at [pyproject.toml](https://github.com/erikw/taiga-stats/blob/main/pyproject.toml).
+Make sure to use a supported Python version. See `project.requires-python` in [pyproject.toml](https://github.com/erikw/taiga-stats/blob/main/pyproject.toml).
 
 ```shell
 pip install taiga-stats
@@ -158,7 +158,7 @@ taiga-stats -h
 If you use [pipx](https://pypi.org/project/pipx/) to install, you must specify a supported and locally available Python version, like:
 
 ```shell
-pipx install --python python3.9 taiga-stats
+pipx install --python python3.11 taiga-stats
 ```
 
 To use this tool, you need to supply
@@ -178,53 +178,55 @@ vi ~/.taiga-stats.conf
 
 
 # Development
-* Make sure to `$ poetry shell` before using tools like pyright LSP, so that it can find the installed dependency modules
+* `uv` manages the project virtual environment in `.venv`, so you generally do not need to activate it manually. Use `uv run ...` for project commands.
 * Reference for how to structure a Python project: https://realpython.com/pypi-publish-python-package/
 
 ## Setup from Git
 * Clone this git
-```shell
-git clone https://github.com/erikw/taiga-stats.git && cd $(basename "$_" .git)
-```
-* Install Poetry
-```shell
-pip install poetry
-```
+	```shell
+	git clone https://github.com/erikw/taiga-stats.git && cd $(basename "$_" .git)
+	```
+* Install uv
+	```shell
+	curl -LsSf https://astral.sh/uv/install.sh | sh
+	```
 
 * Install project dependencies
-```shell
-poetry install
-```
+	```shell
+	uv sync --all-groups
+	```
+* Dependency management
+	```shell
+	uv add <package>
+	uv add --group dev <package>
+	uv remove <package>
+	uv lock --upgrade
+	```
 * Now taiga-stats should work!
-```shell
-poetry run taiga-stats -h
-# or
-bin/taiga-stats.sh
-```
+	```shell
+	uv run taiga-stats -h
+	# or
+	bin/taiga-stats.sh
+	```
 * To install locally:
-```shell
-poetry build
-pip install dist/taiga_stats-*.whl
-```
+	```shell
+	uv build
+	uv pip install dist/taiga_stats-*.whl
+	```
 
 ## Linting and Formatting
 * Linting: Consider isort, flake8, and pylint as replaced by ruff.
 * Formatting: Consider black as replaced by ruff.
 
 ```shell
-poetry run ruff check
-poetry run ruff format
-
-poetry run isort taiga-stats/
-poetry run pylint taiga-stats/
-poetry run flake8 taiga-stats/
-poetry run black taiga-stats/
+uv run ruff check
+uv run ruff format
 ```
 
 ## Documentation generation
 ```shell
-poetry run mkdocs serve
-poetry run mkdocs build
+uv run --group docs mkdocs serve
+uv run --group docs mkdocs build
 ```
 
 but `bin/gen_docs.sh` will take care of all that plus more!
@@ -233,7 +235,8 @@ but `bin/gen_docs.sh` will take care of all that plus more!
 ```shell
 bin/gen_docs.sh
 vi CHANGELOG.md
-poetry version minor && ver="v$(poetry version -s)"
-git commit -am "Bump version to $ver" && git tag $ver && git push --atomic origin main $ver
-poetry publish --build
+uv version --bump minor && ver="v$(uv version --short)"
+git commit -am "Bump version to $ver" && git tag "$ver" && git push --atomic origin main "$ver"
+uv build
+uv publish
 ```

@@ -6,6 +6,7 @@
 /taiga.conf
 /taiga.conf.template
 /taiga_stats/__pycache__/
+/.venv/
 
 # mkdocs
 /site/

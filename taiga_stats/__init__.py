@@ -1,5 +1,6 @@
-from pathlib import Path
+from importlib.metadata import PackageNotFoundError, version
 
-from single_source import get_version
-
-__version__ = get_version(__name__, Path(__file__).parent.parent)
+try:
+    __version__ = version("taiga-stats")
+except PackageNotFoundError:
+    __version__ = "0.0.0"
