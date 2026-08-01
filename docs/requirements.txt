@@ -27,7 +27,7 @@ packaging==26.2
     # via mkdocs
 pathspec==1.1.1
     # via mkdocs
-platformdirs==4.10.0
+platformdirs==4.11.0
     # via mkdocs-get-deps
 python-dateutil==2.9.0.post0
     # via ghp-import
