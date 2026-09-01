@@ -10,7 +10,7 @@ ghp-import==2.1.0
     # via mkdocs
 jinja2==3.1.6
     # via mkdocs
-markdown==3.10.2
+markdown==3.10.3
     # via mkdocs
 markupsafe==3.0.3
     # via
